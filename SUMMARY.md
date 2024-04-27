@@ -86,6 +86,7 @@
 * [Good Cheatsheets](misc/good-cheatsheets.md)
 * [Spawning a Ubuntu 16.04 Container](misc/spawning-a-ubuntu-16.04-container.md)
 * [VMware LAN](misc/vmware-lan.md)
+* [Configuring NordVPN to VM](misc/configuring-nordvpn-to-vm.md)
 
 ## Buffer Overflow
 
