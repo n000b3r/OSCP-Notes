@@ -47,6 +47,7 @@
 
 ## Exploitation Tools
 
+* [Msfvenom](exploitation-tools/msfvenom.md)
 * [Reverse Shells](exploitation-tools/reverse-shells.md)
 * [Default Creds](exploitation-tools/default-creds.md)
 * [Bruteforce](exploitation-tools/bruteforce.md)
@@ -61,6 +62,7 @@
 
 ## Post-exploitation
 
+* [Disable Firewall & Defender](post-exploitation/disable-firewall-and-defender.md)
 * [Stabilize Shell](post-exploitation/stabilize-shell.md)
 * [Transfer Files](post-exploitation/transfer-files.md)
 * [Writable Locations](post-exploitation/writable-locations.md)
@@ -132,6 +134,7 @@
 
 ## Configurations
 
+* [Fix Kali Not Booting Properly](configurations/fix-kali-not-booting-properly.md)
 * [Config File Locations](configurations/config-file-locations.md)
 * [Setting up Pure-FTPD server](configurations/setting-up-pure-ftpd-server.md)
 * [Vsftpd](configurations/vsftpd.md)
