@@ -151,3 +151,4 @@
 * [32 Bits vs 64 Bits Windows Binaries](configurations/32-bits-vs-64-bits-windows-binaries.md)
 * [Managing users on Windows](configurations/managing-users-on-windows.md)
 * [Troubleshooting Neo4j & BloodHound](configurations/troubleshooting-neo4j-and-bloodhound.md)
+* [Best Diff Tool in Kali Linux](configurations/best-diff-tool-in-kali-linux.md)

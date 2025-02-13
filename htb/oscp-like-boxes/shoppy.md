@@ -46,7 +46,7 @@ Fig 11 shows a simple test for the presence of SQLi in the login page by appendi
 
 <figure><img src="../../.gitbook/assets/image (207).png" alt=""><figcaption><p>Fig 11. No response when SQLi</p></figcaption></figure>
 
-After facing a roadblock when testing for the presence of SQLi, I enumerated further, trying to uncover the underlying framework that built this web app. By going to a non-existent subdirectory, I was greeted by a "Cannot GET /subdirectory\_name_"_ message.&#x20;
+After facing a roadblock when testing for the presence of SQLi, I enumerated further, trying to uncover the underlying framework that built this web app. By going to a non-existent subdirectory, I was greeted by a "Cannot GET /subdirectory\_nam&#x65;_"_ message.&#x20;
 
 <figure><img src="../../.gitbook/assets/image (285).png" alt=""><figcaption><p>Fig 12. Error message when browsing non-existent subdirectories</p></figcaption></figure>
 
