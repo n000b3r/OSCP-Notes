@@ -45,6 +45,11 @@
 * [Bypass IP Restrictions](exploitation/bypass-ip-restrictions.md)
 * [WebDav](exploitation/webdav.md)
 
+***
+
+* [Good Exploit Code](good-exploit-code/README.md)
+  * [OSEP GOOD CODE](good-exploit-code/osep-good-code.md)
+
 ## Exploitation Tools
 
 * [Msfvenom](exploitation-tools/msfvenom.md)
