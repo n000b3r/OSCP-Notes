@@ -48,7 +48,8 @@
 ***
 
 * [Good Exploit Code](good-exploit-code/README.md)
-  * [OSEP GOOD CODE](good-exploit-code/osep-good-code.md)
+  * [AMSI Bypass](good-exploit-code/osep-good-code.md)
+  * [CLM](good-exploit-code/clm.md)
 
 ## Exploitation Tools
 

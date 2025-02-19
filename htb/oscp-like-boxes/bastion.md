@@ -43,7 +43,7 @@ guestfish --ro -a 9b9cfbc4-369e-11e9-a17c-806e6f6e6963.vhd
 
 * filesystem is `/dev/sda1`
 
-<figure><img src="../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 * Mounting VHD
 
