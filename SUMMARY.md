@@ -31,6 +31,7 @@
 * [(6379) Redis](services/6379-redis.md)
 * [(27017) Mongodb](services/27017-mongodb.md)
 * [Ansible](services/ansible.md)
+* [Artifactory](services/artifactory.md)
 * [VoIP](services/voip.md)
 * [GraphQL](services/graphql.md)
 
