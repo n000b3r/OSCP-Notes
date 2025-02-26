@@ -494,7 +494,7 @@ runas /user:corp\jen powershell.exe
 
 <details>
 
-<summary>Stealing Credential Cache Files</summary>
+<summary>Stealing Credential Cache Files (Linux AD)</summary>
 
 * Check for presence with&#x20;
   *   ```bash
@@ -541,7 +541,7 @@ runas /user:corp\jen powershell.exe
 
 <details>
 
-<summary>Creating Keytab files</summary>
+<summary>Creating Keytab files (Linux AD)</summary>
 
 * Create in /tmp/administrator.keytab
 * ```bash
@@ -550,5 +550,34 @@ runas /user:corp\jen powershell.exe
   wkt /tmp/administrator.keytab
   quit
   ```
+
+</details>
+
+<details>
+
+<summary>Creating Credential Cache Files (Linux AD)</summary>
+
+* Acquire TGT for current user
+  *   ```bash
+      kinit
+      ```
+
+
+* List tickets currently stored in user's credential cache file
+  *   ```bash
+      klist
+      ```
+
+
+* Get a list of available SPN from DC
+  *   ```bash
+      ldapsearch -Y GSSAPI -H ldap://dc01.corp1.com -D "Administrator@CORP1.COM" -W -b "dc=corp1,dc=com" "servicePrincipalName=*" servicePrincipalName
+      ```
+
+
+* Request a service ticket from Kerberos for MSSQL SPN
+  * ```bash
+    kvno MSSQLSvc/DC01.corp1.com:1433
+    ```
 
 </details>
