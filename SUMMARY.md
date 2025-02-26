@@ -30,6 +30,7 @@
 * [(5985) WinRM](services/5985-winrm.md)
 * [(6379) Redis](services/6379-redis.md)
 * [(27017) Mongodb](services/27017-mongodb.md)
+* [Ansible](services/ansible.md)
 * [VoIP](services/voip.md)
 * [GraphQL](services/graphql.md)
 

