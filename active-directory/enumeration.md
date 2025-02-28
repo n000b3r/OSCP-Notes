@@ -1,7 +1,5 @@
 # Enumeration
 
-
-
 <details>
 
 <summary>Finding Name of Domain</summary>
@@ -138,7 +136,7 @@ Import-Module .\PowerView.ps1
 ### Enumerate Computers
 
 ```powershell
-Get-DomainComputer
+Get-DomainComputer | select name, dnshostname, operatingsystem
 ```
 
 ### Enumerate Users
