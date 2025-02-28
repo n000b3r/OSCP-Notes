@@ -194,10 +194,6 @@ Get-NetSession -ComputerName files04 -verbose
 
 </details>
 
-```
-nslookup appsrv01.corp1.com
-```
-
 <details>
 
 <summary>Object Permissions</summary>
