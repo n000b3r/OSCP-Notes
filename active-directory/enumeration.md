@@ -139,6 +139,13 @@ Import-Module .\PowerView.ps1
 Get-DomainComputer | select name, dnshostname, operatingsystem
 ```
 
+```bash
+nslookup appsrv01.corp1.com
+
+#Name:    appsrv01.corp1.com
+#Address:  192.168.139.6
+```
+
 ### Enumerate Users
 
 ```powershell
@@ -186,6 +193,10 @@ Get-NetSession -ComputerName files04 -verbose
 ```
 
 </details>
+
+```
+nslookup appsrv01.corp1.com
+```
 
 <details>
 
