@@ -52,7 +52,7 @@ sc sdset scmanager "D:(A;;KA;;;AU)(A;;CC;;;AU)(A;;CCLCRPRC;;;IU)(A;;CCLCRPRC;;;S
 Login PsExec with username and password
 
 ```bash
-impacket-psexec bill:@10.11.1.75
+impacket-psexec corp1/sqlsvc@appsrv01
 ```
 
 * password prompt will appear
