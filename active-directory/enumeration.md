@@ -135,6 +135,12 @@ Download PowerView from [here](https://raw.githubusercontent.com/PowerShellMafia
 Import-Module .\PowerView.ps1
 ```
 
+### Enumerate Computers
+
+```powershell
+Get-DomainComputer
+```
+
 ### Enumerate Users
 
 ```powershell
@@ -315,11 +321,7 @@ Get-NetSession -ComputerName dc01
 
 * SPN is used to associate a service on a specific server to a service account in Active Directory.
 
-<!---->
-
-* Service accounts may also be members of high value groups
-
-<!---->
+- Service accounts may also be members of high value groups
 
 * Some apps may use a set of predefined service accounts like LocalSystem, LocalService, and NetworkService. For more complex applications, a domain user account may be used to provide the needed context while still having access to resources inside the domain.
 
