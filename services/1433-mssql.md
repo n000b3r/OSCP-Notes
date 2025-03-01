@@ -211,8 +211,6 @@ mssql-svc::QUERIER:aaaaaaaaaaaaaaaa:533f791f193e74c54f52806542c622ee:01010000000
             reader.Close();
 ```
 
-\*
-
 </details>
 
 <details>
