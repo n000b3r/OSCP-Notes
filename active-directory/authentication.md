@@ -25,6 +25,8 @@ sekurlsa::logonpasswords
 lsadump::sam
 lsadump::secrets
 lsadump::cache
+
+sekurlsa::tickets
 ```
 
 ```powershell
