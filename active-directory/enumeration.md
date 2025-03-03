@@ -833,3 +833,72 @@ python3 windapsearch.py -d host.domain -u domain\ldapbind -p PASSWORD -U
 ```
 
 </details>
+
+## OSEP Notes below
+
+<details>
+
+<summary>Enumerating Access Rights</summary>
+
+* See what AD object has access rights to the "offsec" user
+  *   ```powershell
+      . .\powerview.ps1
+      Get-ObjectAcl -Identity offsec  
+      ConvertFrom-SID S-1-5-21-3776646582-2086779273-4091361643-553
+      ```
+
+
+* Command that resolve the SID through ConvertFrom-SID
+  * ```powershell
+    Get-ObjectAcl -Identity offsec -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_}
+    ```
+
+</details>
+
+<details>
+
+<summary>Enumerating GenericAll Rights </summary>
+
+* Enumerate all domain users that our current account has GenericAll rights to
+  *   ```powershell
+      Get-DomainUser | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Foreach-Object {if ($_.Identity -eq $("$env:UserDomain\$env:Username")) {$_}}
+      ```
+
+
+
+      <figure><img src="../.gitbook/assets/image (308).png" alt=""><figcaption><p><br></p></figcaption></figure>
+
+
+* Enumerate all domain groups that current account has GenericAll rights to
+  *   ```powershell
+      Get-DomainGroup | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Foreach-Object {if ($_.Identity -eq $("$env:UserDomain\$env:Username")) {$_}}
+      ```
+
+      <figure><img src="../.gitbook/assets/image (310).png" alt=""><figcaption></figcaption></figure>
+
+</details>
+
+<details>
+
+<summary>Enumerating WriteDACL</summary>
+
+* Grants permission to modify the DACL itself
+  *   ```powershell
+      Get-DomainUser | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Foreach-Object {if ($_.Identity -eq $("$env:UserDomain\$env:Username")) {$_}}
+      ```
+
+      <figure><img src="../.gitbook/assets/image (311).png" alt=""><figcaption></figcaption></figure>
+
+</details>
+
+<details>
+
+<summary>Enumerating GenericWrite</summary>
+
+*   ```powershell
+    Get-DomainUser | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Foreach-Object {if ($_.Identity -eq $("$env:UserDomain\$env:Username")) {$_}}
+    ```
+
+    <figure><img src="../.gitbook/assets/image (312).png" alt=""><figcaption></figcaption></figure>
+
+</details>

