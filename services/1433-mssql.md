@@ -187,28 +187,52 @@ mssql-svc::QUERIER:aaaaaaaaaaaaaaaa:533f791f193e74c54f52806542c622ee:01010000000
 <summary>Enumeration</summary>
 
 * Obtaining MSSQL Account Name
+  * If a SQL Server login has **sysadmin** privileges, SQL Server automatically maps them to `dbo` in any database
 
 ```csharp
-            String querylogin = "SELECT SYSTEM_USER;";
-            SqlCommand command = new SqlCommand(querylogin, con);
-            SqlDataReader reader = command.ExecuteReader();
-            reader.Read();
-            Console.WriteLine("Logged in as: " + reader[0]);
-            reader.Close();
-            String querypublicrole = "SELECT IS_SRVROLEMEMBER('public');";
-            command = new SqlCommand(querypublicrole, con);
-            reader = command.ExecuteReader();
-            reader.Read();
-            Int32 role = Int32.Parse(reader[0].ToString());
-            if(role == 1)
-            {
-              Console.WriteLine("User is a member of public role");
-            }
-            else
-            {
-              Console.WriteLine("User is NOT a member of public role");
-            }
-            reader.Close();
+String querylogin = "SELECT SYSTEM_USER;";
+SqlCommand command = new SqlCommand(querylogin, con);
+SqlDataReader reader = command.ExecuteReader();
+reader.Read();
+Console.WriteLine("Logged in as: " + reader[0]);
+reader.Close();
+
+String queryUser = "SELECT USER_NAME();";
+command = new SqlCommand(queryUser, con);
+reader = command.ExecuteReader();
+reader.Read();
+Console.WriteLine("Mapped to the user: " + reader[0]);
+reader.Close();
+
+String queryPublicRole = "SELECT IS_SRVROLEMEMBER('public');";
+command = new SqlCommand(queryPublicRole, con);
+reader = command.ExecuteReader();
+reader.Read();
+if (reader[0].ToString() == "1")
+{
+    Console.WriteLine("User is a member of public role");
+}
+else
+{
+    Console.WriteLine("User is NOT a member of public role");
+}
+reader.Close();
+
+String querySysadminRole = "SELECT IS_SRVROLEMEMBER('sysadmin');";
+command = new SqlCommand(querySysadminRole, con);
+reader = command.ExecuteReader();
+reader.Read();
+if (reader[0].ToString() == "1")
+{
+    Console.WriteLine("User is a member of sysadmin role");
+}
+else
+{
+    Console.WriteLine("User is NOT a member of sysadmin role");
+}
+reader.Close();
+
+con.Close();
 ```
 
 </details>
