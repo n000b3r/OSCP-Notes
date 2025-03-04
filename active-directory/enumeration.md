@@ -902,3 +902,61 @@ python3 windapsearch.py -d host.domain -u domain\ldapbind -p PASSWORD -U
     <figure><img src="../.gitbook/assets/image (312).png" alt=""><figcaption></figcaption></figure>
 
 </details>
+
+<details>
+
+<summary>Enumeration in AD Forest</summary>
+
+```powershell
+nltest /trusted_domains
+([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()
+```
+
+### Powerview
+
+```powershell
+# Uses LDAP to query trust details
+Get-DomainTrust
+# Uses Netlogon API to query trust details (More info)
+Get-DomainTrust -API
+# Enum users in corp1.com domain
+Get-DomainUser -Domain corp1.com 
+    # Find accounts that belong to the enterprise administrator grp
+    Get-DomainUser -Domain corp1.com | where memberof -match "Enterprise Admins"
+# Enum groups in corp1.com domain
+Get-DomainGroup -Domain corp1.com | Select samaccountname
+```
+
+</details>
+
+<details>
+
+<summary>Enumerating Forest Trusts</summary>
+
+* Get all trust relationships for current forest
+  *   ```powershell
+      ([System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()).GetAllTrustRelationships()
+      ```
+
+
+* Enumerating Forest Trusts Using PowerView
+  *   ```powershell
+      Get-ForestTrust
+      Get-DomainTrust -Domain corp1.com
+      ```
+
+
+* Automating Forest Trust Enumeration with PowerView
+  *   ```powershell
+      Get-DomainTrustMapping
+      ```
+
+
+* Identifying Foreign Group Membership
+  * User from another domain or forest that is a member of a group inside the target forest
+  * ```powershell
+    Get-DomainForeignGroupMember -Domain corp2.com
+    Convert-SidToName S-1-5-21-634106289-3621871093-708134407-1110
+    ```
+
+</details>
