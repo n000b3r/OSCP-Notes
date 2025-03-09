@@ -85,6 +85,7 @@
 * [Enumeration](active-directory/enumeration.md)
 * [Authentication](active-directory/authentication.md)
 * [Lateral Movement](active-directory/lateral-movement.md)
+* [Attacking AD](active-directory/attacking-ad.md)
 * [Persistence](active-directory/persistence.md)
 
 ## Misc

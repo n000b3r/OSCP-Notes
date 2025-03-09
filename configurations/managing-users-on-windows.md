@@ -22,7 +22,7 @@ net localgroup administrators bill /add
 
 <details>
 
-<summary>Domain Admin</summary>
+<summary>Domain Admin (Add User to Domain)</summary>
 
 ### Create user named bill and complex password
 
