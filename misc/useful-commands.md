@@ -336,10 +336,14 @@ $EncodedText
 
 <details>
 
-<summary>Print a Specific Line Number</summary>
+<summary>Print Specified lines</summary>
 
 ```bash
+# Single line 43
 sed -n 43p shellcoderunner.ps1 
+
+# Lines 45-52
+sed -n 45,52p shellcode_runner_template.cs
 ```
 
 </details>
