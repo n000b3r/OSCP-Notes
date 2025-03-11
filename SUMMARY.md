@@ -51,6 +51,7 @@
 
 * [Good Exploit Code](good-exploit-code/README.md)
   * [AMSI Bypass](good-exploit-code/osep-good-code.md)
+  * [C# Shellcode Runner](good-exploit-code/c-shellcode-runner.md)
   * [CLM](good-exploit-code/clm.md)
 
 ## Exploitation Tools
