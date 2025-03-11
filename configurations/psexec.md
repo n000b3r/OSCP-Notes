@@ -61,6 +61,16 @@ impacket-psexec corp1/sqlsvc@appsrv01
 
 <details>
 
+<summary>PsExec.exe for Lateral Movement</summary>
+
+```bash
+psexec_64.exe \\dc02 cmd
+```
+
+</details>
+
+<details>
+
 <summary>PTH PsExec (pass-the-hash)</summary>
 
 ```bash

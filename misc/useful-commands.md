@@ -368,3 +368,16 @@ powershell -Command "Start-Process cmd -Verb RunAs"
 ```
 
 </details>
+
+<details>
+
+<summary>Change Linux Owner</summary>
+
+Change to Kali, from root
+
+```bash
+chown -hR kali .
+```
+
+</details>
+

