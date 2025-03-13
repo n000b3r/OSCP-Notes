@@ -46,10 +46,10 @@
 * [Command Injection](exploitation/command-injection.md)
 * [Bypass IP Restrictions](exploitation/bypass-ip-restrictions.md)
 * [WebDav](exploitation/webdav.md)
-* [C# Shellcode Runner](exploitation/c-shellcode-runner.md)
+* [C# Shellcode Runner](good-exploit-code/c-shellcode-runner.md)
 * [Powershell Shellcode Runner](exploitation/powershell-shellcode-runner.md)
-* [AMSI Bypass](exploitation/amsi-bypass.md)
-* [CLM](exploitation/clm.md)
+* [AMSI Bypass](good-exploit-code/osep-good-code.md)
+* [CLM](good-exploit-code/clm.md)
 
 ## Exploitation Tools
 
@@ -69,13 +69,14 @@
 ## Post-exploitation
 
 * [Disable Firewall & Defender](post-exploitation/disable-firewall-and-defender.md)
-* [Stabilize Shell](post-exploitation/stabilize-shell.md)
-* [Transfer Files](post-exploitation/transfer-files.md)
-* [Writable Locations](post-exploitation/writable-locations.md)
-* [Finding Files](post-exploitation/finding-files.md)
+* [Things aft PS Shell](post-exploitation/things-aft-ps-shell.md)
 * [Getting Out of Restrictive Shells](post-exploitation/getting-out-of-restrictive-shells.md)
+* [Finding Files](post-exploitation/finding-files.md)
+* [Writable Locations](post-exploitation/writable-locations.md)
+* [Transfer Files](post-exploitation/transfer-files.md)
 * [Port Forwarding / Pivoting](post-exploitation/port-forwarding-pivoting.md)
 * [Enable RDP](post-exploitation/enable-rdp.md)
+* [Stabilize Shell](post-exploitation/stabilize-shell.md)
 * [Proof.txt](post-exploitation/proof.txt.md)
 
 ## Active Directory

