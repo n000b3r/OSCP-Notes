@@ -49,7 +49,7 @@
 * [C# Shellcode Runner](good-exploit-code/c-shellcode-runner.md)
 * [Powershell Shellcode Runner](exploitation/powershell-shellcode-runner.md)
 * [AMSI Bypass](good-exploit-code/osep-good-code.md)
-* [CLM](good-exploit-code/clm.md)
+* [CLM Bypass](exploitation/clm-bypass.md)
 
 ## Exploitation Tools
 
