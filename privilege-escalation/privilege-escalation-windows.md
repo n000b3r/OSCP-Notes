@@ -980,7 +980,7 @@ x86_64-w64-mingw32-gcc windows_dll.c -shared -o output.dll
 
 In CLIENT01 process monitor:
 
-![](<../.gitbook/assets/image (5).png>)
+![](<../.gitbook/assets/image (5) (1).png>)
 
 * Create malicious msasn1.dll & save to C:\Program Files\FileZilla Server --> Rev shell
   * ```powershell

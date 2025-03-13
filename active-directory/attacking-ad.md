@@ -58,10 +58,10 @@ nslookup appsrv01
     * OR Krbrelayx attack on unconstrained delegation
       *
 
-          <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+          <figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -145,7 +145,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -169,7 +169,7 @@ nslookup appsrv01
 
     * Enumerate the user logged in to MSSQL --> logged in as the domain admin
 
-    <figure><img src="../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -188,7 +188,7 @@ nslookup appsrv01
 
 ## Exploitation 3
 
-![](<../.gitbook/assets/image (3).png>)
+![](<../.gitbook/assets/image (3) (1).png>)
 
 * Obtain a Ticket Granting Ticket (TGT) for the Service Account
   *   ```powershell
@@ -290,7 +290,7 @@ nslookup appsrv01
       ```
 
 
-- **Check if commands are restricted:** ![](<../.gitbook/assets/image (4).png>)
+- **Check if commands are restricted:** ![](<../.gitbook/assets/image (4) (1).png>)
   *   <pre class="language-powershell"><code class="lang-powershell">[System.Security.Principal.WindowsIdentity]::GetCurrent().Name
       # NoLanguageMode --> likely restricted by JEA.
 

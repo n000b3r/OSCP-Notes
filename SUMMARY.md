@@ -46,13 +46,10 @@
 * [Command Injection](exploitation/command-injection.md)
 * [Bypass IP Restrictions](exploitation/bypass-ip-restrictions.md)
 * [WebDav](exploitation/webdav.md)
-
-***
-
-* [Good Exploit Code](good-exploit-code/README.md)
-  * [AMSI Bypass](good-exploit-code/osep-good-code.md)
-  * [C# Shellcode Runner](good-exploit-code/c-shellcode-runner.md)
-  * [CLM](good-exploit-code/clm.md)
+* [C# Shellcode Runner](exploitation/c-shellcode-runner.md)
+* [Powershell Shellcode Runner](exploitation/powershell-shellcode-runner.md)
+* [AMSI Bypass](exploitation/amsi-bypass.md)
+* [CLM](exploitation/clm.md)
 
 ## Exploitation Tools
 
