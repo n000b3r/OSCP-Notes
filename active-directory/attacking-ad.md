@@ -136,13 +136,6 @@ nslookup appsrv01
 
 </details>
 
-```
-mv DC03\$@INFINITY.COM_krbtgt@INFINITY.COM.ccache administrator.ccache
-export KRB5CCNAME=administrator.ccache
-```
-
-
-
 <details>
 
 <summary>Constrained Delegation</summary>
