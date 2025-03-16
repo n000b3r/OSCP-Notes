@@ -339,8 +339,15 @@ namespace SQL
         {
             String sqlServer = "appsrv01.corp1.com";
             String database = "master";
-
+            
+            // Username and Password Login
+            // string userid = "webapp11";
+            // string password = "P@ssw0rd123!";
+            // String conString = "Server = " + sqlServer + "; Database = " + database + "; user id= " + userid + "; password= " + password;
+            
+            // Windows Authentication Login
             String conString = "Server = " + sqlServer + "; Database = " + database + "; Integrated Security = True;";
+            
             SqlConnection con = new SqlConnection(conString);
 
             try
