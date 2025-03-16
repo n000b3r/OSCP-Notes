@@ -25,7 +25,7 @@ Using the arguments `--script vuln`, I found the target to be vulnerable to `MS0
 
 3. Edit the following section inside the `zzz_exploit.py` file.
 
-<figure><img src="../../.gitbook/assets/image (11) (1).png" alt=""><figcaption><p>Fig 5. Before editing <code>zzz_exploit.py</code> file</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (11) (1) (1).png" alt=""><figcaption><p>Fig 5. Before editing <code>zzz_exploit.py</code> file</p></figcaption></figure>
 
 <figure><img src="../../.gitbook/assets/image (220).png" alt=""><figcaption><p>Fig 6. After editing <code>zzz_exploit.py</code> file</p></figcaption></figure>
 

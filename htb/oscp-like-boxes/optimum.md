@@ -2,7 +2,7 @@
 
 ### Full port scan
 
-<figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### HTTPFileServer 2.3 RCE
 

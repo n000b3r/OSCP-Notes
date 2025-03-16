@@ -999,7 +999,7 @@ x86_64-w64-mingw32-gcc windows_dll.c -shared -o output.dll
 
 In CLIENT01 process monitor:
 
-![](<../.gitbook/assets/image (5) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1).png>)
 
 * Create malicious msasn1.dll & save to C:\Program Files\FileZilla Server --> Rev shell
   * ```powershell
@@ -1010,7 +1010,7 @@ In CLIENT01 process monitor:
     ```
     *
 
-        <figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+        <figure><img src="../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 
   * Start Filezilla server

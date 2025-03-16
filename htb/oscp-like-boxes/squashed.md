@@ -44,7 +44,7 @@ The directories can be mounted using the commands `mount -t nfs 10.10.11.191:/ho
 
 Using the command `ls -ld` I was able to view the permissions for the 2 shares. For the `mapped` directory which maps to the `/home/ross` directory, it is owned by the UID 1001 and belongs to the group with the ID 1001. For the `mapped_www` directory which maps to the `/var/www/html` directory, it is owned by the UID 2017, and belongs to the group with the ID of www-data.
 
-<figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption><p>Fig 9. File permissions</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (13) (1).png" alt=""><figcaption><p>Fig 9. File permissions</p></figcaption></figure>
 
 ### Exploit: NFS Imitation
 

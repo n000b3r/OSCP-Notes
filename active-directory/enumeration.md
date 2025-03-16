@@ -122,7 +122,7 @@ Serving HTTP on localhost port 80 (http://localhost:80/) ...
 
 Start `neo4j console` and start `bloodhound`
 
-Upload the zip file to ![](../.gitbook/assets/image.png)
+Upload the zip file to ![](<../.gitbook/assets/image (13).png>)
 
 </details>
 

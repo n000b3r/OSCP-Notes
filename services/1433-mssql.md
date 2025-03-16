@@ -184,7 +184,91 @@ mssql-svc::QUERIER:aaaaaaaaaaaaaaaa:533f791f193e74c54f52806542c622ee:01010000000
 
 <details>
 
-<summary>Enumeration</summary>
+<summary>Adding Local Admin Account to MSSQL Server</summary>
+
+Follow guide [here](https://hex64.net/blog/how-to-recover-sa-password-on-microsoft-sql-server/)
+
+1. Go to Sql Server Configuration Manager
+
+![](../.gitbook/assets/image.png)
+
+2. Stop the SQL server
+
+![](<../.gitbook/assets/image (1).png>)
+
+3. Right click --> Properties
+
+![](<../.gitbook/assets/image (2).png>)
+
+4. Add startup parameter "-m" --> apply --> ok
+
+![](<../.gitbook/assets/image (3).png>)
+
+5. Restart the server
+
+![](<../.gitbook/assets/image (4).png>)
+
+6. Open sqlcmd --> RUN AS ADMINISTRATOR
+
+![](<../.gitbook/assets/image (5).png>)
+
+7. Create new Windows Authentication login for bill user on MSSQL server
+
+```sql
+EXEC sp_addsrvrolemember 'SQL11\bill', 'sysadmin'
+go
+```
+
+8. Remove the -m options from the startup parameters
+
+![](<../.gitbook/assets/image (6).png>)
+
+9. Restart the MSSQL server
+10. Go to Microsoft SQL Server Management Studio & use Windows Authentication login
+
+![](<../.gitbook/assets/image (8).png>)
+
+</details>
+
+<details>
+
+<summary>Enumeration within SQL Server Management Studio</summary>
+
+* View the users present on MSSQL Server
+  *
+
+      <figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+
+* View the users required to access linked servers
+  *
+
+      <figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption><p>webapp11 acc required to access SQL27</p></figcaption></figure>
+
+
+
+</details>
+
+<details>
+
+<summary>Changing Password Using SQL Server Management Studio </summary>
+
+* Logins --> \<Username to change pw> --> Properties
+  *
+
+      <figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
+
+* Change password to attacker's defined password "P@ssw0rd123!"
+  *
+
+      <figure><img src="../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+
+</details>
+
+<details>
+
+<summary>Enumeration With Code</summary>
 
 * Obtaining MSSQL Account Name
   * If a SQL Server login has **sysadmin** privileges, SQL Server automatically maps them to `dbo` in any database
@@ -326,7 +410,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 <summary>Privilege Escalation</summary>
 
-* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1).png>)
+* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String query = "SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE';";
       SqlCommand command = new SqlCommand(query, con);
@@ -342,7 +426,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 * Impersonate "sa" using EXECUTE AS LOGIN&#x20;
   * Impersonates a server-level login.
-  * ![](<../.gitbook/assets/image (2) (1) (1) (1).png>)
+  * ![](<../.gitbook/assets/image (2) (1) (1) (1) (1).png>)
   *   ```csharp
       String querylogin = "SELECT SYSTEM_USER;";
       SqlCommand command = new SqlCommand(querylogin, con);
@@ -366,7 +450,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 
 * Impersonate using EXECUTE AS USER
-  * Impersonates a database user within a single database. ![](<../.gitbook/assets/image (4) (1) (1) (1).png>)
+  * Impersonates a database user within a single database. ![](<../.gitbook/assets/image (4) (1) (1) (1) (1).png>)
   * ```csharp
     String querylogin = "SELECT USER_NAME();";
     SqlCommand command = new SqlCommand(querylogin, con);
@@ -499,7 +583,7 @@ reader.Close();
 * SQL server links are not bidirectional by default
 * Possible to use a bidirectional link to elevate privileges on the same SQL server
 
-- Finding linked servers on SQL server ![](<../.gitbook/assets/image (5) (1) (1) (1).png>)
+- Finding linked servers on SQL server ![](<../.gitbook/assets/image (5) (1) (1) (1) (1).png>)
   * Eg: APPSRV01 linked to DC01
     *   ```csharp
         String execCmd = "EXEC sp_linkedservers;";
@@ -552,7 +636,7 @@ reader.Close();
       ```
 
 
-- Check if DC01 also links back to APPSrv01 ![](<../.gitbook/assets/image (6) (1) (1).png>)
+- Check if DC01 also links back to APPSrv01 ![](<../.gitbook/assets/image (6) (1) (1) (1).png>)
   *   ```csharp
       String execCmd = "EXEC ('sp_linkedservers') AT DC01;";
 
