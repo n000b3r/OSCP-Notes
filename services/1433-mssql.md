@@ -606,6 +606,13 @@ reader.Close();
         ```
 
 
+  * Using sqlcmd
+    * ```sql
+      :setvar SQLCMDMAXVARTYPEWIDTH 30
+      :setvar SQLCMDMAXFIXEDTYPEWIDTH 30
+      EXEC sp_linkedservers
+      GO
+      ```
 - Execute query on linked server
   *   ```csharp
       String execCmd = "select version from openquery(\"dc01\", 'select @@version as version')";
@@ -682,3 +689,4 @@ reader.Close();
     ```
 
 </details>
+
