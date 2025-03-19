@@ -123,6 +123,8 @@ amrois
 * Using an existing SSH connection to gain access to another machine
 * Allows for the sharing of multiple SSH session over a single network connection
 
+### MAY NEED TO PERIODICALLY `ls -la` the .ssh/controlmaster directory
+
 **ControlMaster feature**
 
 * In \~/.ssh/config
