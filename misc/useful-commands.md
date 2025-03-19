@@ -380,3 +380,24 @@ chown -hR kali .
 
 </details>
 
+<details>
+
+<summary>John Pot File </summary>
+
+```bash
+~/.john/john.pot
+```
+
+</details>
+
+<details>
+
+<summary>Difference in TTL for Ping</summary>
+
+```
+TTL: 63 --> Linux
+TTL: 127 --> Windows
+```
+
+</details>
+
