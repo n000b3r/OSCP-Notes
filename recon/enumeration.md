@@ -64,17 +64,11 @@ host 10.11.1.116 10.11.1.220
 
 * /robots.txt
 
-<!---->
-
-* /.htaccess
-
-<!---->
+- /.htaccess
 
 * /.htpasswd
 
-<!---->
-
-* /sitemap.xml
+- /sitemap.xml
 
 </details>
 
@@ -120,7 +114,7 @@ broken by default, fix here: [https://www.youtube.com/watch?v=IBlTdguhgfY\&t=670
 
 <summary>Dirsearch</summary>
 
-<pre class="language-shell"><code class="lang-shell"><strong>dirsearch -u &#x3C;ip> -X -x 400,500 -r -f -t 100 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
+<pre class="language-shell"><code class="lang-shell"><strong>dirsearch -u &#x3C;ip> -x 400,500 -r -f -t 100 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
 </strong></code></pre>
 
 ```shell
