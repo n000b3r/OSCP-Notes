@@ -232,6 +232,17 @@ go
 
 <details>
 
+<summary>Enumerate Registered SPNs for MSSQL</summary>
+
+```powershell
+# Enumeration for any registered SPNs for MSSQL in prod.corp1.com
+setspn -T prod -Q MSSQLSvc/*
+```
+
+</details>
+
+<details>
+
 <summary>Enumeration within SQL Server Management Studio</summary>
 
 * View the users present on MSSQL Server
