@@ -401,3 +401,16 @@ TTL: 127 --> Windows
 
 </details>
 
+<details>
+
+<summary>NT Auth Vs NT System</summary>
+
+NT Auth --> computer object part of AD --> mimikatz will obtain domain creds
+
+NT System (Local Admin):
+
+* If on Domain Controller --> will obtain domain creds
+* If on non-DC --> will only obtain local creds
+
+</details>
+

