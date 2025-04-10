@@ -6,19 +6,17 @@
 
 * Reset the box and try running exploit again
 
-<!---->
-
-* Enumerate all ports (including UDP)
+- Enumerate all ports (including UDP)
   * Banner grabbing: `nc -v <Victim IP> <Port>`
   * Google/[HackTricks ](https://book.hacktricks.xyz/welcome/readme)each service version
   * Manually probe each service/ Input location/ URL path
   * Testing out with default creds or common creds (admin:admin)
   * `autorecon <target>`
-* Password Reuse (try with previously obtained passwords)
-* Try login with (`admin:<name of box>`, `<name of box>:<name of box>`)
-* Brute-Force all login (with rockyou.txt)
-* Trying to access the port using a browser (http\[s]://\<Victim IP>)
-* Is the port a rabbit hole or actually exploitable?
+- Password Reuse (try with previously obtained passwords)
+- Try login with (`admin:<name of box>`, `<name of box>:<name of box>`)
+- Brute-Force all login (with rockyou.txt)
+- Trying to access the port using a browser (http\[s]://\<Victim IP>)
+- Is the port a rabbit hole or actually exploitable?
 
 </details>
 
@@ -37,9 +35,7 @@
 * Is `/cgi-bin` writable --> shellshock?
 * Check source code of pages (look for comments)
 
-<!---->
-
-* For LFI,
+- For LFI,
   * What Services are Running? (Eg: Filezilla FTP, SSH, Apache)
     * Guess File Locations (Eg: config files, SSH keys, password files)
 
@@ -76,6 +72,7 @@
 
 <summary>AD</summary>
 
+* Impacket-secretsdump for all domain users and spray their passwords/hashes on all domain hosts using nxc
 * If got file upload restrictions --> use Evil-WinRM's download/upload functionality
 * If victim unable to reach attacker --> Setup reverse port forward to remote server
 * If unable to PrivEsc --> think about lateral movement (To IIS user, kerberoasting)
@@ -92,9 +89,9 @@
 
 <summary>Cheatsheet for Reference</summary>
 
-[https://blog.aghanim.net/?page\_id=1809](https://blog.aghanim.net/?page\_id=1809)
+[https://blog.aghanim.net/?page\_id=1809](https://blog.aghanim.net/?page_id=1809)
 
-[https://gitlab.com/lagarian.smith/oscp-cheat-sheet/-/blob/master/OSCP\_Notes.md](https://gitlab.com/lagarian.smith/oscp-cheat-sheet/-/blob/master/OSCP\_Notes.md#port-25-smtp)
+[https://gitlab.com/lagarian.smith/oscp-cheat-sheet/-/blob/master/OSCP\_Notes.md](https://gitlab.com/lagarian.smith/oscp-cheat-sheet/-/blob/master/OSCP_Notes.md#port-25-smtp)
 
 [https://www.otacanonline.com/oscp-methodology](https://www.otacanonline.com/oscp-methodology)
 

