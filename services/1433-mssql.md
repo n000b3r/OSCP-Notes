@@ -236,7 +236,7 @@ go
 
 ```powershell
 # Enumeration for any registered SPNs for MSSQL in prod.corp1.com
-setspn -T prod -Q MSSQLSvc/*
+setspn -T <domain> -Q MSSQLSvc/*
 ```
 
 </details>
@@ -255,6 +255,21 @@ setspn -T prod -Q MSSQLSvc/*
   *   Server Objects --> \<Linked Server Name>
 
       <figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption><p>webapp11 acc required to access SQL27</p></figcaption></figure>
+
+
+*   If ... is not configured for RPC for linked server, do the following or `EXEC sp_serveroption 'SQL03', 'rpc out', 'true';`
+
+    * Server Objects --> Linked Servers --> Right-click on SQL03 and click on "Properties"
+    *
+
+        <figure><img src="../.gitbook/assets/image (321).png" alt=""><figcaption></figcaption></figure>
+
+
+    *   "Server Options" --> "RPC" and "RPC Out" to True --> click ok
+
+        <figure><img src="../.gitbook/assets/image (322).png" alt=""><figcaption></figcaption></figure>
+
+
 
 
 

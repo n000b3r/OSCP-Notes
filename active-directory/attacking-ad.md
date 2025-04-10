@@ -282,12 +282,6 @@ nslookup appsrv01
 
 </details>
 
-```
-Get-DomainComputer -Domain ops.comply.com | Get-ObjectAcl -ResolveGUIDs | Foreach-Object { $_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_ } | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
-```
-
-
-
 <details>
 
 <summary>Exploiting Just Enough Administration (JEA)</summary>

