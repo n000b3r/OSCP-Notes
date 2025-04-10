@@ -414,3 +414,19 @@ NT System (Local Admin):
 
 </details>
 
+<details>
+
+<summary>nxcdb (NetExec Database)</summary>
+
+```bash
+nxcdb
+workspace create <name>
+proto smb
+creds
+```
+
+```bash
+workspace list
+```
+
+</details>

