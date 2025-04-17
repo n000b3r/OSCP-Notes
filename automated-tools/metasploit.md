@@ -35,6 +35,12 @@ execute -i -H -f "cmd"
 
 <summary>Migrate Process</summary>
 
+### Migrate from 32bit process to 64bit
+
+```
+migrate -N explorer.exe
+```
+
 ### Create Hidden instance of Notepad & Migration
 
 ```bash

