@@ -258,14 +258,17 @@ tasklist /SVC
 ## Check if LAPS is installed Locally
 
 ```powershell
-# Identify if installed to Program Files
+# Identify if LAPS installed to Program Files
 Get-ChildItem 'C:\Program Files\LAPS\CSE\Admpwd.dll'
 Get-ChildItem 'C:\Program Files (x86)\LAPS\CSE\Admpwd.dll'
 dir 'C:\Program Files\LAPS\CSE\'
 dir 'C:\Program Files (x86)\LAPS\CSE\'
 
-# Identify if installed by checking the AD Object
-Get-ADObject 'CN=ms-mcs-admpwd,CN=Schema,CN=Configuration,DC=DC01,DC=Security,CN=Local'
+# Enumerate domain computers using LAPS via PowerView
+Get-DomainComputer -Domain domain.com -LDAPFilter '(ms-Mcs-AdmPwdExpirationtime=*)'
+
+# Identify which groups can view LAPS passwords
+Get-DomainOU -Domain domain.com | Get-DomainObjectAcl -ResolveGUIDs | Where-Object {($_.ObjectAceType -like 'ms-Mcs-AdmPwd') -and ($_.ActiveDirectoryRights -match 'ReadProperty')} | ForEach-Object { $_ | Add-Member NoteProperty 'IdentityName' $(Convert-SidToName $_.SecurityIdentifier); $_ }
 ```
 
 ## Exploitation
