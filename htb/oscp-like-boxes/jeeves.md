@@ -14,7 +14,7 @@ Starting off with an Nmap scan, I found that ports 80,135,445 and 50000 were ope
 
 Visiting the webpage, I was greeted by a Error 404 page.
 
-<figure><img src="../../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (16) (1).png" alt=""><figcaption></figcaption></figure>
 
 Next, I searched for subdomains using dirbuster with `/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt` wordlist. I found the `/askjeeves` subdirectory.
 
@@ -63,7 +63,7 @@ Running `john keepass_hash --wordlist=/usr/share/wordlists/rockyou.txt` to crack
 
 Using the password to view the password database, I found the following entries.
 
-<figure><img src="../../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 I found the following passwords
 
@@ -89,7 +89,7 @@ I managed to login as the `administrator`.
 
 Heading to `c:\users\administrator\desktop` for the root flag, I instead found `hm.txt`
 
-<figure><img src="../../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (15) (1).png" alt=""><figcaption></figcaption></figure>
 
 This could indicate that the flag is present as an Alternate Data Stream. Using `dir /r`, I was able to view the streams present in the directory.&#x20;
 

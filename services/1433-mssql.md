@@ -206,27 +206,27 @@ Follow guide [here](https://hex64.net/blog/how-to-recover-sa-password-on-microso
 
 1. Go to Sql Server Configuration Manager
 
-![](<../.gitbook/assets/image (1) (1) (1).png>)
+![](<../.gitbook/assets/image (1) (1) (1) (1).png>)
 
 2. Stop the SQL server
 
-![](<../.gitbook/assets/image (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (1) (1) (1) (1) (1).png>)
 
 3. Right click --> Properties
 
-![](<../.gitbook/assets/image (2) (1).png>)
+![](<../.gitbook/assets/image (2) (1) (1).png>)
 
 4. Add startup parameter "-m" --> apply --> ok
 
-![](<../.gitbook/assets/image (3) (1).png>)
+![](<../.gitbook/assets/image (3) (1) (1).png>)
 
 5. Restart the server
 
-![](<../.gitbook/assets/image (4).png>)
+![](<../.gitbook/assets/image (4) (1).png>)
 
 6. Open sqlcmd --> RUN AS ADMINISTRATOR
 
-![](<../.gitbook/assets/image (5).png>)
+![](<../.gitbook/assets/image (5) (1).png>)
 
 7. Create new Windows Authentication login for bill user on MSSQL server
 
@@ -237,12 +237,12 @@ go
 
 8. Remove the -m options from the startup parameters
 
-![](<../.gitbook/assets/image (6).png>)
+![](<../.gitbook/assets/image (6) (1).png>)
 
 9. Restart the MSSQL server
 10. Go to Microsoft SQL Server Management Studio & use Windows Authentication login
 
-![](<../.gitbook/assets/image (8).png>)
+![](<../.gitbook/assets/image (8) (1).png>)
 
 </details>
 
@@ -264,13 +264,13 @@ setspn -T <domain> -Q MSSQLSvc/*
 * View the users present on MSSQL Server
   *
 
-      <figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * View the users required to access linked servers
   *   Server Objects --> \<Linked Server Name>
 
-      <figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption><p>webapp11 acc required to access SQL27</p></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (10) (1).png" alt=""><figcaption><p>webapp11 acc required to access SQL27</p></figcaption></figure>
 
 
 *   If ... is not configured for RPC for linked server, do the following or `EXEC sp_serveroption 'SQL03', 'rpc out', 'true';`
@@ -298,13 +298,13 @@ setspn -T <domain> -Q MSSQLSvc/*
 * Logins --> \<Username to change pw> --> Properties
   *
 
-      <figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Change password to attacker's defined password "P@ssw0rd123!"
   *
 
-      <figure><img src="../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -517,7 +517,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 <summary>Privilege Escalation</summary>
 
-* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String query = "SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE';";
       SqlCommand command = new SqlCommand(query, con);
@@ -533,7 +533,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 * Impersonate "sa" using EXECUTE AS LOGIN&#x20;
   * Impersonates a server-level login.
-  * ![](<../.gitbook/assets/image (2) (1) (1) (1) (1) (1).png>)
+  * ![](<../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String querylogin = "SELECT SYSTEM_USER;";
       SqlCommand command = new SqlCommand(querylogin, con);
@@ -557,7 +557,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 
 * Impersonate using EXECUTE AS USER
-  * Impersonates a database user within a single database. ![](<../.gitbook/assets/image (4) (1) (1) (1) (1).png>)
+  * Impersonates a database user within a single database. ![](<../.gitbook/assets/image (4) (1) (1) (1) (1) (1).png>)
   * ```csharp
     String querylogin = "SELECT USER_NAME();";
     SqlCommand command = new SqlCommand(querylogin, con);
@@ -690,7 +690,7 @@ reader.Close();
 * SQL server links are not bidirectional by default
 * Possible to use a bidirectional link to elevate privileges on the same SQL server
 
-- Finding linked servers on SQL server ![](<../.gitbook/assets/image (5) (1) (1) (1) (1).png>)
+- Finding linked servers on SQL server ![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1).png>)
   * Eg: APPSRV01 linked to DC01
     *   ```csharp
         String execCmd = "EXEC sp_linkedservers;";
@@ -751,7 +751,7 @@ reader.Close();
       ```
 
 
-- Check if DC01 also links back to APPSrv01 ![](<../.gitbook/assets/image (6) (1) (1) (1).png>)
+- Check if DC01 also links back to APPSrv01 ![](<../.gitbook/assets/image (6) (1) (1) (1) (1).png>)
   *   ```csharp
       String execCmd = "EXEC ('sp_linkedservers') AT DC01;";
 

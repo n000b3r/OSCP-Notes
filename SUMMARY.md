@@ -34,6 +34,7 @@
 * [Artifactory](services/artifactory.md)
 * [VoIP](services/voip.md)
 * [GraphQL](services/graphql.md)
+* [Gitlab](services/gitlab.md)
 
 ## Exploitation
 

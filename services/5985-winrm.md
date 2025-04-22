@@ -6,11 +6,7 @@
 
 * Remotely communicate and interface with hosts
 
-<!---->
-
-* Execute commands remotely on systems that are not local to you but are network accessible
-
-<!---->
+- Execute commands remotely on systems that are not local to you but are network accessible
 
 * Monitor, manage and configure servers, operating systems and client machines from a remote location
 
@@ -76,6 +72,20 @@ download c:\temp\20230511182430_BloodHound.zip /oscp/ad/20230511182430_BloodHoun
 
 ```bash
 upload reverse.exe
+```
+
+</details>
+
+<details>
+
+<summary>Enter-PSSession</summary>
+
+```powershell
+$cred = New-Object System.Management.Automation.PSCredential ("cowmotors\svc_web", $password)
+
+$session = Enter-PSSession -computername "WEB02" -credential $cred
+
+$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "cowmotors.com\svc_web",$passwd
 ```
 
 </details>
