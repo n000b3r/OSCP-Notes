@@ -71,6 +71,7 @@
 
 * [Disable Firewall & Defender](post-exploitation/disable-firewall-and-defender.md)
 * [Things aft PS Shell](post-exploitation/things-aft-ps-shell.md)
+* [Local Admin Lateral Movement](post-exploitation/local-admin-lateral-movement.md)
 * [Getting Out of Restrictive Shells](post-exploitation/getting-out-of-restrictive-shells.md)
 * [Finding Files](post-exploitation/finding-files.md)
 * [Writable Locations](post-exploitation/writable-locations.md)
