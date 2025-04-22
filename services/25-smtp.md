@@ -123,3 +123,12 @@ swaks --to will@example.com --server 192.168.131.159 --body "Hello, check out my
 
 </details>
 
+<details>
+
+<summary>Send Email via SendEmail</summary>
+
+```bash
+sendemail -t jobs@cowmotors-int.com -f bill@cowmotors-int.com -s WEB03.cowmotors-int.com -m "CV" -u "CV" -a cv.doc -v
+```
+
+</details>

