@@ -29,6 +29,7 @@
 * [(5800|5801|5900|5901) VNC](services/5800-or-5801-or-5900-or-5901-vnc.md)
 * [(5985) WinRM](services/5985-winrm.md)
 * [(6379) Redis](services/6379-redis.md)
+* [(10000) Webmin](services/10000-webmin.md)
 * [(27017) Mongodb](services/27017-mongodb.md)
 * [Ansible](services/ansible.md)
 * [Artifactory](services/artifactory.md)
