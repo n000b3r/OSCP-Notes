@@ -270,7 +270,7 @@ setspn -T <domain> -Q MSSQLSvc/*
 * View the users required to access linked servers
   *   Server Objects --> \<Linked Server Name>
 
-      <figure><img src="../.gitbook/assets/image (10) (1).png" alt=""><figcaption><p>webapp11 acc required to access SQL27</p></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (10) (1) (1).png" alt=""><figcaption><p>webapp11 acc required to access SQL27</p></figcaption></figure>
 
 
 *   If ... is not configured for RPC for linked server, do the following or `EXEC sp_serveroption 'SQL03', 'rpc out', 'true';`
@@ -298,7 +298,7 @@ setspn -T <domain> -Q MSSQLSvc/*
 * Logins --> \<Username to change pw> --> Properties
   *
 
-      <figure><img src="../.gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (11) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Change password to attacker's defined password "P@ssw0rd123!"

@@ -145,7 +145,7 @@ nslookup appsrv01
 * S4U2Self --> Allows a service to request Kerberos TGS for any user, including domain admin, without needing their passwords or hash
 * S4U2Proxy --> Allows a service to take a TGS from S4U2Self and exchange it for a TGS to a backend service
 
-![](<../.gitbook/assets/image (11) (1) (1).png>)
+![](<../.gitbook/assets/image (11) (1) (1) (1).png>)
 
 ## Enumeration
 
@@ -420,7 +420,7 @@ nslookup appsrv01
 * View the group policies in [\\\corp.com\SysVol\corp.com\Policies\\{99EC2AB4-0FD4-406E-8FDA-BE451DEB2AA6}\Machine\Preferences\Groups](file://corp.com/SysVol/corp.com/Policies/%7B99EC2AB4-0FD4-406E-8FDA-BE451DEB2AA6%7D/Machine/Preferences/Groups)
   *
 
-      <figure><img src="../.gitbook/assets/image (10) (1) (1).png" alt=""><figcaption><p>Adding la_web to local admin group (RID: 544) on WEB01</p></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (10) (1) (1) (1).png" alt=""><figcaption><p>Adding la_web to local admin group (RID: 544) on WEB01</p></figcaption></figure>
 
 
 *   ```powershell

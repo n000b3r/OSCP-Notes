@@ -694,11 +694,11 @@ i686-w64-mingw32-gcc adduser.c -o adduser.exe
 
 Right click "always\_install\_elevated\_add\_bill" --> Properties
 
-<figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
 
 Change TargetPlatform to x64
 
-<figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
 
 Right click "always\_install\_elevated\_add\_bill" --> View --> Custom Actions
 

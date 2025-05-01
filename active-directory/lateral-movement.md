@@ -889,7 +889,7 @@ nslookup appsrv01
 * S4U2Self --> Allows a service to request Kerberos TGS for any user, including domain admin, without needing their passwords or hash
 * S4U2Proxy --> Allows a service to take a TGS from S4U2Self and exchange it for a TGS to a backend service
 
-![](<../.gitbook/assets/image (11) (1) (1).png>)
+![](<../.gitbook/assets/image (11) (1) (1) (1).png>)
 
 ## Enumeration
 
