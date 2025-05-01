@@ -22,19 +22,19 @@ python3 zabbix_session_exp.py -t https://192.168.210.13 -u admin
 
 Uncomment lines 60 and 62 to show the session cookies
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 Rerun the command `python3 zabbix_session_exp.py -t https://192.168.210.13 -u admin`
 
 * Copy the zbx\_signed\_session cookie and add it to the cookies for the webpage
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 Press the SSO login option --> successful login
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -73,7 +73,7 @@ nc -lvp 80
 
 `cat /usr/local/etc/zabbix_server.conf` & removing commented out lines:
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 
 ### Connecting to MySQL DB for zabbix
 
