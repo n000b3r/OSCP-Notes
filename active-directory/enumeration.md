@@ -12,7 +12,7 @@ nxc smb 172.16.155.0/24 --generate-hosts-file hosts.txt
 nxc winrm 172.16.155.0/24
 ```
 
-<figure><img src="../.gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```powershell
 # Using PowerView to double-check
@@ -157,6 +157,8 @@ The following will generate `20230425015352_BloodHound.zip`
 
 ```bash
 SharpHound.exe -c all
+# If LDAP Auth Error:
+ .\sharphound.exe --ldapusername marcus --ldappassword P@ssw0rd123!
 
 # OR
 Import-Module ..\Sharphound.ps1

