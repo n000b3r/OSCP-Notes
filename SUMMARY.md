@@ -37,6 +37,10 @@
 * [GraphQL](services/graphql.md)
 * [Gitlab](services/gitlab.md)
 
+***
+
+* [Zabbix](zabbix.md)
+
 ## Exploitation
 
 * [LFI/RFI](exploitation/lfi-rfi.md)

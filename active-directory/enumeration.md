@@ -12,7 +12,7 @@ nxc smb 172.16.155.0/24 --generate-hosts-file hosts.txt
 nxc winrm 172.16.155.0/24
 ```
 
-<figure><img src="../.gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```powershell
 # Using PowerView to double-check
@@ -177,7 +177,7 @@ Serving HTTP on localhost port 80 (http://localhost:80/) ...
 192.168.231.175 - - [25/Apr/2023 05:13:14] "POST / HTTP/1.1" 200 -
 ```
 
-Start `neo4j console` and start `bloodhound`
+Start `neo4j start` and start `bloodhound`
 
 Upload the zip file to ![](<../.gitbook/assets/image (13) (1).png>)
 

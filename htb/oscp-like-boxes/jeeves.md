@@ -63,7 +63,7 @@ Running `john keepass_hash --wordlist=/usr/share/wordlists/rockyou.txt` to crack
 
 Using the password to view the password database, I found the following entries.
 
-<figure><img src="../../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 I found the following passwords
 
