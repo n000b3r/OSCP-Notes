@@ -104,6 +104,24 @@ for /L %i in (1,1,255) do @ping -n 1 -w 200 172.21.10.%i > nul && echo 192.168.1
 
 <details>
 
+<summary>ARP Scan</summary>
+
+For Linux:
+
+```bash
+arp | grep -v "incomplete"
+```
+
+For Windows:
+
+```bash
+arp -a
+```
+
+</details>
+
+<details>
+
 <summary>Port Knock</summary>
 
 ### Look at /etc/knockd.conf (Port Knock configurations)

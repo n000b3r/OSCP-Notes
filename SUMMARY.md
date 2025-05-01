@@ -63,6 +63,10 @@
 * [Library files + lnk Rev Shell](exploitation-tools/library-files-+-lnk-rev-shell.md)
 * [OpenDocument Text Macro/ Obtain NTLMv2 Hash](exploitation-tools/opendocument-text-macro-obtain-ntlmv2-hash.md)
 
+***
+
+* [PDF to NTLMv2 hash](pdf-to-ntlmv2-hash.md)
+
 ## Privilege Escalation
 
 * [Privilege Escalation (Linux)](privilege-escalation/privilege-escalation-linux.md)
