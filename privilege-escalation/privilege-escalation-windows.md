@@ -654,11 +654,11 @@ msiexec /quiet /qn /i C:\PrivEsc\reverse.msi
 
 Open an existing random project in Visual Studio 2022-> go to Extensions tab -> Manage extensions
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Install "Microsoft Visual Studio Installer Projects 2022" --> Restart VS to complete the installation
 
-<figure><img src="../.gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Create a adduser.c file
 

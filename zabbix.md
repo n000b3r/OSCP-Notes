@@ -8,7 +8,7 @@
 
 * Hover around "Help" button --> will refer to the respective zabbix version documentation
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Use [https://github.com/Mr-xn/cve-2022-23131](https://github.com/Mr-xn/cve-2022-23131)
 
@@ -85,7 +85,7 @@ show tables;
 select * from users;
 ```
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Cracking Zabbix's bcrypt hash:
 

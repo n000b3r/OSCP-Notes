@@ -206,15 +206,15 @@ Follow guide [here](https://hex64.net/blog/how-to-recover-sa-password-on-microso
 
 1. Go to Sql Server Configuration Manager
 
-![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 2. Stop the SQL server
 
-![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 3. Right click --> Properties
 
-![](<../.gitbook/assets/image (2) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png>)
 
 4. Add startup parameter "-m" --> apply --> ok
 
@@ -517,7 +517,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 <summary>Privilege Escalation</summary>
 
-* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+* Enumerate which logins allow impersonation ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String query = "SELECT distinct b.name FROM sys.server_permissions a INNER JOIN sys.server_principals b ON a.grantor_principal_id = b.principal_id WHERE a.permission_name = 'IMPERSONATE';";
       SqlCommand command = new SqlCommand(query, con);
@@ -533,7 +533,7 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
 * Impersonate "sa" using EXECUTE AS LOGIN&#x20;
   * Impersonates a server-level login.
-  * ![](<../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+  * ![](<../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
   *   ```csharp
       String querylogin = "SELECT SYSTEM_USER;";
       SqlCommand command = new SqlCommand(querylogin, con);
