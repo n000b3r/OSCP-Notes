@@ -244,3 +244,15 @@ Exploiting
       ```
 
 </details>
+
+<details>
+
+<summary>Host's SSH Keys</summary>
+
+Does not belong to individual user, but rather, the SSH keys for the computer host
+
+Public key: `/etc/ssh/ssh_host_rsa_key.pub`
+
+Private key: `/etc/ssh/ssh_host_rsa_key`
+
+</details>
