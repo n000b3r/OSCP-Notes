@@ -1032,6 +1032,8 @@ nslookup appsrv01
 
 <summary>Extra SID Attack</summary>
 
+## FOR CHILD DOMAIN TO PARENT DOMAIN EG (prod.corp1.com to corp1.com)
+
 ## Using KRBTGT
 
 * Extracts krbtgt hash for creating a Golden Ticket
