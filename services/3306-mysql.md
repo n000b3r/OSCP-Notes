@@ -18,4 +18,10 @@ sqlitebrowser user.bak
 mysql -h <ip of sql server> -P <port> -u <username> -p'password' <database name>
 ```
 
+Use mssqldump if mysql is not available
+
+```bash
+mysqldump -u theseus -p --all-databases > out.sql 
+```
+
 </details>
