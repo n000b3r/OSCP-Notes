@@ -133,6 +133,8 @@ dirsearch -u http://192.168.206.156:8000/ipphone_files --cookie="PHPSESSID=cjetu
 
 ```bash
 ffuf -u http://shoppy.htb/ -H "Host: FUZZ.shoppy.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -fw <no. of words for default page>
+
+gobuster vhost -u http://forge.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt --append-domain | grep -v 302
 ```
 
 Can try wordlist`/usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt`
