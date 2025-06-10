@@ -116,10 +116,10 @@ go build
 kerbrute --dc 10.10.10.175 -d EGOTISTICAL-BANK.LOCAL --hash-file hashes.txt --downgrade userenum potential_usernames.txt
 ```
 
-### Get-NPUsers
+### Impacket-GetNPUsers
 
 ```bash
-impacket-GetNPUsers -usersfile users.txt -dc-ip 10.10.10.175 EGOTISTICAL-BANK.LOCAL/
+impacket-GetNPUsers -usersfile usernames -dc-ip 10.10.10.161 htb.local/
 ```
 
 ```bash

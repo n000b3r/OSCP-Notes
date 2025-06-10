@@ -8,11 +8,11 @@ Download  [https://github.com/TBGSecurity/splunk\_shells/archive/1.2.tar.gz](htt
 
 Click on "Search & Reporting"
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 "App: Search & Reporting" --> Manage Apps
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 "Install app from file"
 

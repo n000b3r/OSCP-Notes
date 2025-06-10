@@ -85,7 +85,7 @@ show tables;
 select * from users;
 ```
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Cracking Zabbix's bcrypt hash:
 

