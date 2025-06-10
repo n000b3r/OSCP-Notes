@@ -797,16 +797,6 @@ BruteForce $duration $threshold $passwords
 
 <details>
 
-<summary>Anonymous Credential LDAP Dumping</summary>
-
-```bash
-ldapsearch -LLL -x -H ldap:// -b ‘’ -s base ‘(objectclass=*)’
-```
-
-</details>
-
-<details>
-
 <summary>Impacket Look Up SID</summary>
 
 ```bash
@@ -817,10 +807,10 @@ ldapsearch -LLL -x -H ldap:// -b ‘’ -s base ‘(objectclass=*)’
 
 <details>
 
-<summary>Windapsearch</summary>
+<summary>Anonymous LDAP User Enumeration</summary>
 
 ```bash
-python3 windapsearch.py -d host.domain -u domain\ldapbind -p PASSWORD -U
+python3 windapsearch.py -d forest.htb.local --custom "objectClass=*"
 ```
 
 </details>
