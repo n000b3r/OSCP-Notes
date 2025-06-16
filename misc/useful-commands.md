@@ -430,3 +430,13 @@ workspace list
 ```
 
 </details>
+
+<details>
+
+<summary>Fixing KRB_AP_ERR_SKEW(Clock skew too great) error</summary>
+
+```
+sudo rdate -n 10.10.11.147
+```
+
+</details>
