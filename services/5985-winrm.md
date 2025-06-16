@@ -89,3 +89,17 @@ $cred = new-object -typename System.Management.Automation.PSCredential -argument
 ```
 
 </details>
+
+<details>
+
+<summary>Login via PFX File</summary>
+
+```bash
+openssl pkcs12 -in legacyy_dev_auth.pfx -clcerts -nokeys -out publicCert.pem
+openssl pkcs12 -in legacyy_dev_auth.pfx -nocerts -out priv-key.pem -nodes
+
+# Since port 5986 (WinRM with SSL) is open instead of 5985 (WinRM):
+evil-winrm -i 10.10.11.152 -c publicCert.pem -k priv-key.pem -S
+```
+
+</details>
