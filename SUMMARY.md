@@ -19,6 +19,7 @@
 * [(135) RPC](services/135-rpc.md)
 * [(139,445) SMB](services/139-445-smb.md)
 * [(161,162) SNMP](services/161-162-snmp.md)
+* [(389) LDAP](services/389-ldap.md)
 * [(873) RSYNC](services/873-rsync.md)
 * [(1433) MSSQL](services/1433-mssql.md)
 * [(1541) Oracle TNS Listener](services/1541-oracle-tns-listener.md)

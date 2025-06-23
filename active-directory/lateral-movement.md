@@ -1037,7 +1037,7 @@ nslookup appsrv01
 * Use ccache file
   * ```
     mv administrator@cifs_jump09.ops.comply.com@OPS.COMPLY.COM.ccache new_admin.ccache
-    KRB5CCNAME=/home/kali/Documents/offsec/challenges/5/new_admin.ccache
+    export KRB5CCNAME=/home/kali/Documents/offsec/challenges/5/new_admin.ccache
     ```
 * Execute Commands as Administrator
   * ```powershell
