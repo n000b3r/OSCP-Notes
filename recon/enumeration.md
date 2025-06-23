@@ -125,6 +125,12 @@ dirsearch -u 172.16.64.140/project --auth-type=basic --auth=YWRtaW46YWRtaW4= -X 
 dirsearch -u http://192.168.206.156:8000/ipphone_files --cookie="PHPSESSID=cjetu00a7pouinp0oj9v01r6r0" -X -i 200,301 -r -f -t 100 -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt
 ```
 
+Through a socks proxy (chisel port forwarding + proxychains)
+
+```bash
+dirsearch -u http://127.0.0.1:8000 -x 400,500 -r -f -t 100 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt --proxy socks5://127.0.0.1:1080
+```
+
 </details>
 
 <details>
