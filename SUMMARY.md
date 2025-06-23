@@ -75,6 +75,7 @@
 ***
 
 * [PDF to NTLMv2 hash](pdf-to-ntlmv2-hash.md)
+* [Steal NTLMv2 From SMB Folder](steal-ntlmv2-from-smb-folder.md)
 
 ## Privilege Escalation
 
