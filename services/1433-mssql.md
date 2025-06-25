@@ -196,6 +196,30 @@ mssql-svc::QUERIER:aaaaaaaaaaaaaaaa:533f791f193e74c54f52806542c622ee:01010000000
 
 </details>
 
+<details>
+
+<summary>Manual MSSQL Commands</summary>
+
+```sql
+# Enumerate all Databases
+SELECT name, database_id FROM sys.databases;
+USE <targetDB>;
+
+# Enumerate all tables in specified database:
+SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE';
+
+# Enumerate all columns in specified table:
+SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = N'<schema>' AND TABLE_NAME = N'<tableName>' ORDER BY ORDINAL_POSITION;
+
+# Dump all fields of specified table:
+SELECT * FROM <schema>.<tableName>;
+
+# Dump selective fields:
+SELECT username,password FROM dbo.users;
+```
+
+</details>
+
 ## OSEP CODE BELOW!
 
 <details>

@@ -228,7 +228,7 @@ php
 
 <details>
 
-<summary>Wfuzz</summary>
+<summary>Wfuzzf</summary>
 
 ```bash
 wfuzz -w wordlist/general/common.txt http://testphp.vulnweb.com/FUZZ
@@ -321,5 +321,20 @@ python ssh-username-enum.py <IP> -w <wordlist>
 ```
 
 * Wordlist: [https://github.com/pentestmonkey/yaptest/blob/master/ssh-usernames.txt](https://github.com/pentestmonkey/yaptest/blob/master/ssh-usernames.txt)
+
+</details>
+
+<details>
+
+<summary>Fuzzing Endpoints (Searching for LFI)</summary>
+
+Eg: [https://streamio.htb/admin/?user=](https://streamio.htb/admin/?user=), [https://streamio.htb/admin/?message=](https://streamio.htb/admin/?message=)
+
+```bash
+# Fuzzing other endpoints
+ffuf -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -u 'https://streamio.htb/admin/?FUZZ=' -b PHPSESSID=mjsjfrb7o82c82voh1l7l964ek --fs <error page file size>
+```
+
+
 
 </details>
