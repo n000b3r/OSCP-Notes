@@ -440,3 +440,23 @@ sudo rdate -n 10.10.11.147
 ```
 
 </details>
+
+<details>
+
+<summary>Fixing KDC_ERR_WRONG_REALM error</summary>
+
+```
+# WRONG (USING IP ADDR) FOR KERBEROS AUTH:
+nxc smb 10.10.11.168 -u miscsvc -p ScrambledEggs9900 -k --shares
+
+# RIGHT (USING FQDN)
+nxc smb dc1.scrm.local -u miscsvc -p ScrambledEggs9900 -k --shares
+```
+
+In /etc/hosts (must be like this):
+
+```
+10.10.11.168	dc1.scrm.local scrm.local
+```
+
+</details>
