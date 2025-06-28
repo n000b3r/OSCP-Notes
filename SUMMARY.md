@@ -62,6 +62,7 @@
 ***
 
 * [WSDL](wsdl.md)
+* [YSoSerial.Net](ysoserial.net.md)
 
 ## Exploitation Tools
 

@@ -218,6 +218,16 @@ SELECT * FROM <schema>.<tableName>;
 SELECT username,password FROM dbo.users;
 ```
 
+Alternative commands:
+
+```sql
+impacket-mssqlclient administrator@dc1.scrm.local -k -no-pass
+
+SELECT name FROM sys.databases;
+SELECT TABLE_NAME FROM ScrambleHR.INFORMATION_SCHEMA.TABLES;
+SELECT * FROM ScrambleHR.dbo.UserImport
+```
+
 </details>
 
 ## OSEP CODE BELOW!
