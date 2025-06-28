@@ -228,6 +228,12 @@ SELECT TABLE_NAME FROM ScrambleHR.INFORMATION_SCHEMA.TABLES;
 SELECT * FROM ScrambleHR.dbo.UserImport
 ```
 
+Check if current user has sysadmin rights:
+
+```
+select IS_SRVROLEMEMBER ('sysadmin')
+```
+
 </details>
 
 ## OSEP CODE BELOW!
