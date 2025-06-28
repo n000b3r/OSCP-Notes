@@ -108,6 +108,10 @@
 * [Attacking AD](active-directory/attacking-ad.md)
 * [Persistence](active-directory/persistence.md)
 
+***
+
+* [Active Directory Certificate Services (ADCS)](active-directory-certificate-services-adcs.md)
+
 ## Misc
 
 * [Useful Commands](misc/useful-commands.md)

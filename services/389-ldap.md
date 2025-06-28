@@ -51,6 +51,9 @@ ldapdomaindump -u security.local\\<User> -p '<Password>' ldap://<IP>
 
 # Without credentials
 ldapdomaindump ldap://<IP>
+
+# LDAP With SSL/TLS
+ldapdomaindump -u sequel.htb\\sql_svc -p 'REGGIE1234ronnie' ldaps://10.10.11.202
 ```
 
 </details>

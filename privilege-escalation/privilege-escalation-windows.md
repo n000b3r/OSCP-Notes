@@ -662,11 +662,11 @@ msiexec /quiet /qn /i C:\PrivEsc\reverse.msi
 
 Open an existing random project in Visual Studio 2022-> go to Extensions tab -> Manage extensions
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Install "Microsoft Visual Studio Installer Projects 2022" --> Restart VS to complete the installation
 
-<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Create a adduser.c file
 
@@ -686,11 +686,11 @@ Compile it&#x20;
 i686-w64-mingw32-gcc adduser.c -o adduser.exe
 ```
 
-<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (6) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
@@ -1151,7 +1151,7 @@ x86_64-w64-mingw32-gcc windows_dll.c -shared -o output.dll
 
 In CLIENT01 process monitor:
 
-![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 * Create malicious msasn1.dll & save to C:\Program Files\FileZilla Server --> Rev shell
   * ```powershell

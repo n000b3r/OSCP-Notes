@@ -12,7 +12,7 @@ nxc smb 172.16.155.0/24 --generate-hosts-file hosts.txt
 nxc winrm 172.16.155.0/24
 ```
 
-<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```powershell
 # Using PowerView to double-check
