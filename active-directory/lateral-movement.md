@@ -1314,7 +1314,7 @@ net group 'CORE STAFF'
 
 Currently have sqlsvc account --> want to request a TGS ticket for administrator.
 
-```
+```bash
 # Converting password to NTLM hash
 echo -n 'Pegasus60' | iconv -t utf16le | openssl md4
 
