@@ -445,7 +445,7 @@ sudo rdate -n 10.10.11.147
 
 <summary>Fixing KDC_ERR_WRONG_REALM error</summary>
 
-```
+```bash
 # WRONG (USING IP ADDR) FOR KERBEROS AUTH:
 nxc smb 10.10.11.168 -u miscsvc -p ScrambledEggs9900 -k --shares
 
