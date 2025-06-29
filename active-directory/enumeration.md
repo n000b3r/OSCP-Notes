@@ -103,6 +103,9 @@ Get-NetSession -ComputerName files04 -verbose
 ```bash
 wget https://raw.githubusercontent.com/jseidl/usernamer/master/usernamer.py
 python2.7 usernamer.py -f full_names.txt > potential_usernames.txt
+
+---OR---
+username-anarchy --input-file full_names > usernames.txt
 ```
 
 ### Kerbrute
@@ -141,6 +144,11 @@ hashcat -m 18200 -a 0 hash.txt rockyou.txt
 ```bash
 # Generate JSON files
 python3 -m bloodhound -d hutch.offsec -u fmcsorley -p CrabSharkJellyfish192 -c all -ns 192.168.165.122 --zip
+
+# ORRR Bloodhound using Kerberos
+git clone https://github.com/jazzpizazz/BloodHound.py-Kerberos
+./bloodhound.py -u m.lovegod -k -d absolute.htb -dc dc.absolute.htb -ns 10.10.11.181 --dns-tcp --zip -c All
+
 
 neo4j console
 ```

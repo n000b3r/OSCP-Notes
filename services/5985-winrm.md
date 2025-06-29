@@ -139,4 +139,32 @@ sudo rdate -n 10.10.11.168
 evil-winrm -r scrm.local -i dc1.scrm.local
 ```
 
+
+
+\----OR----
+
+```
+[libdefaults]
+    default_realm = ABSOLUTE.HTB
+    kdc_timesync = 1
+    ccache_type = 4
+    forwardable = true
+    proxiable = true
+    fcc-mit-ticketflags = true
+[realms]
+    ABSOLUTE.HTB = {
+        kdc = dc.absolute.htb
+        admin_server = dc.absolute.htb
+        default_domain = absolute.htb
+    }
+```
+
+```
+kinit <username>
+```
+
+```
+evil-winrm -i dc.absolute.htb -r ABSOLUTE.HTB
+```
+
 </details>
