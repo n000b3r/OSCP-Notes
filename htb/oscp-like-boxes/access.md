@@ -26,7 +26,7 @@ Trying to unzip the file, I obtained `unsupported compression method 99`. Search
 
 Using the command `7z x Access\ Control.zip`, I found that it requires a password to unzip.
 
-<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Trying the password obtained from `auth_user` table (access4u@security), I managed to successfully unzip the folder.
 

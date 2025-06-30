@@ -460,3 +460,13 @@ In /etc/hosts (must be like this):
 ```
 
 </details>
+
+<details>
+
+<summary>Filter to get only unique entries in a file</summary>
+
+```bash
+sort hashes | uniq > uniq_hashes
+```
+
+</details>

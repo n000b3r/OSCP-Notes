@@ -12,7 +12,7 @@ nxc smb 172.16.155.0/24 --generate-hosts-file hosts.txt
 nxc winrm 172.16.155.0/24
 ```
 
-<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```powershell
 # Using PowerView to double-check
@@ -143,7 +143,7 @@ hashcat -m 18200 -a 0 hash.txt rockyou.txt
 
 ```bash
 # Generate JSON files
-python3 -m bloodhound -d hutch.offsec -u fmcsorley -p CrabSharkJellyfish192 -c all -ns 192.168.165.122 --zip
+bloodhound-python -c ALL -u sbauer -p 'D3veL0pM3nT!' -d megacorp.local -ns 10.10.10.179 --zip
 
 # ORRR Bloodhound using Kerberos
 git clone https://github.com/jazzpizazz/BloodHound.py-Kerberos
