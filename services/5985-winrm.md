@@ -81,11 +81,9 @@ upload reverse.exe
 <summary>Enter-PSSession</summary>
 
 ```powershell
+$Password = ConvertTo-SecureString "iydgTvmujl6f" -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ("cowmotors\svc_web", $password)
-
 $session = Enter-PSSession -computername "WEB02" -credential $cred
-
-$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "cowmotors.com\svc_web",$passwd
 ```
 
 </details>

