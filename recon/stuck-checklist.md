@@ -38,6 +38,7 @@
 - For LFI,
   * What Services are Running? (Eg: Filezilla FTP, SSH, Apache)
     * Guess File Locations (Eg: config files, SSH keys, password files)
+- Always check if command injection is possible (inject in one place, and clicking other parts of website to see if it has command injection)
 
 </details>
 
