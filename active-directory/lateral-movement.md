@@ -1049,7 +1049,7 @@ nslookup appsrv01
 
 <details>
 
-<summary>Extra SID Attack</summary>
+<summary>Extra SID Attack (MOVING FROM CHILD TO PARENT DOMAIN)</summary>
 
 ## FOR CHILD DOMAIN TO PARENT DOMAIN EG (prod.corp1.com to corp1.com)
 
@@ -1255,6 +1255,8 @@ User's NTLM hash might be displayed:
 <details>
 
 <summary>Trust Exploitation Against Parent Domain</summary>
+
+EITHER USE [KRBTGT ](lateral-movement.md#extra-sid-attack-moving-from-child-to-parent-domain)or trust key listed below...
 
 Already compromised `internal.zsm.local` --> trying to compromise parent domain `zsm.local`
 
