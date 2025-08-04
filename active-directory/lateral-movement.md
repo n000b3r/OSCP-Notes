@@ -1053,6 +1053,8 @@ nslookup appsrv01
 
 ## FOR CHILD DOMAIN TO PARENT DOMAIN EG (prod.corp1.com to corp1.com)
 
+CAN ALSO DO FROM PARENT TO CHILD DOMAIN (eg: final.com to dev.final.com)
+
 ## Using KRBTGT
 
 * Extracts krbtgt hash for creating a Golden Ticket
