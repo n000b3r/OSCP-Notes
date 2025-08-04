@@ -128,23 +128,15 @@
           <figure><img src="../.gitbook/assets/image (305).png" alt=""><figcaption></figcaption></figure>
 
 
-* In Ansible victim:
-  * Copy original encrypted vault string to text file
-    *
 
-        <figure><img src="../.gitbook/assets/image (306).png" alt=""><figcaption></figcaption></figure>
+### Decrypting using vault password
 
+* On attacker: Pipe the encrypted vault string to ansible-vault decrypt
+  *   ```
+      cat vault_password | ansible-vault decrypt
+      ```
 
-  * Pipe the encrypted vault string to ansible-vault decrypt
-    *   ```
-        cat pw.txt | ansible-vault decrypt
-        ```
-
-
-
-        *
-
-            <figure><img src="../.gitbook/assets/image (307).png" alt=""><figcaption></figcaption></figure>
+      <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 

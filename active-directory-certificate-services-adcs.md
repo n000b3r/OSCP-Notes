@@ -22,7 +22,7 @@ nxc ldap 10.10.11.202 -u ryan.cooper -p NuclearMosquito3 -M adcs
 .\Certify.exe cas
 ```
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
