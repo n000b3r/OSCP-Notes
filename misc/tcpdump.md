@@ -7,6 +7,9 @@ description: >-
 # Tcpdump
 
 ```bash
+# Determine the network interface name
+ifconfig
+
 # Sniff for all traffic
 tcpdump -i <network name> -w file.pca
 
