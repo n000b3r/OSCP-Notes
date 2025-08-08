@@ -10,6 +10,6 @@ description: >-
 # Sniff for all traffic
 tcpdump -i <network name> -w file.pca
 
-# Sniff for FTP traffic
+# Sniff for FTP traffic (-s0 captures the entire packet, not just the default first 96 bytes)
 tcpdump -s0 -i <network name> port ftp
 ```
