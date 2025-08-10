@@ -58,6 +58,7 @@
 * [Powershell Shellcode Runner](exploitation/powershell-shellcode-runner.md)
 * [AMSI Bypass](good-exploit-code/osep-good-code.md)
 * [CLM Bypass](exploitation/clm-bypass.md)
+* [JScript](exploitation/jscript.md)
 
 ***
 
