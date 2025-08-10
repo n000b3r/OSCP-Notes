@@ -71,6 +71,7 @@
 * [Default Creds](exploitation-tools/default-creds.md)
 * [Bruteforce](exploitation-tools/bruteforce.md)
 * [Macro Word Doc](exploitation-tools/macro-word-doc.md)
+* [iCalendar Phishing](exploitation-tools/icalendar-phishing.md)
 * [Library files + lnk Rev Shell](exploitation-tools/library-files-+-lnk-rev-shell.md)
 * [OpenDocument Text Macro/ Obtain NTLMv2 Hash](exploitation-tools/opendocument-text-macro-obtain-ntlmv2-hash.md)
 
