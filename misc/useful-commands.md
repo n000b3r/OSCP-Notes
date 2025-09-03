@@ -543,7 +543,7 @@ vim /etc/fstab
 # Append following line to /etc/fstab
 vmhgfs-fuse /mnt/hgfs  fuse  defaults,allow_other,_netdev  0   0
 
-# Save the file and reboot VM
+# Save the file and reboot VM --> Shared Folder in /mnt/hgfs
 ```
 
 </details>
