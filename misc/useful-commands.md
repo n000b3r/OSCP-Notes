@@ -521,3 +521,29 @@ d:\firefox_download\yt-dlp.exe www.youtube.com/watch?list=PLPBVZbjvnjVkIgFavcRiB
 ```
 
 </details>
+
+<details>
+
+<summary>Fixing missing VMware shared folder in Kali</summary>
+
+Follow steps in: [https://www.configserverfirewall.com/ubuntu-linux/vmware-shared-folder-ubuntu-vm/](https://www.configserverfirewall.com/ubuntu-linux/vmware-shared-folder-ubuntu-vm/)
+
+```bash
+# Install VMware Tools
+sudo apt install open-vm-tools open-vm-tools-desktop -y
+
+# Display the list of shared folders you have enabled
+vmware-hgfsclient *
+
+# Back up /etc/fstab first to avoid problems if something goes wrong
+sudo cp /etc/fstab /etc/fstab.bak
+
+vim /etc/fstab
+
+# Append following line to /etc/fstab
+vmhgfs-fuse /mnt/hgfs  fuse  defaults,allow_other,_netdev  0   0
+
+# Save the file and reboot VM
+```
+
+</details>
