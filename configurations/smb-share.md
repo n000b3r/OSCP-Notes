@@ -24,8 +24,7 @@ copy \\appsrv01\PublicShare\mimikatz.exe .
 <summary>GUI Method</summary>
 
 * Right click --> New --> Folder --> name it
-  * ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)\
-
+  * ![](<../.gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png>)<br>
 * Right click folder --> Properties --> Sharing --> Advanced Sharing --> Share this folder --> Permissions
   *
 

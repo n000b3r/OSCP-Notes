@@ -1,7 +1,6 @@
 # Best Diff Tool in Kali Linux
 
-STOP USING `diff`use `meld`instead!\
-
+STOP USING `diff`use `meld`instead!<br>
 
 ```
 apt install meld
