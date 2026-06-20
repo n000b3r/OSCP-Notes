@@ -155,6 +155,7 @@ Can try wordlist`/usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000
 <summary>Wpscan</summary>
 
 ```bash
+docker run -it --rm --network host wpscanteam/wpscan --url http://blocky.htb --enumerate u,ap,at,cb,dbe
 wpscan --url somewebsite.com --enumerate u,ap,at,cb,dbe
 ```
 
