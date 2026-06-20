@@ -12,6 +12,16 @@ sudo vmhgfs-fuse .host:/ /mnt/hgfs/ -o allow_other -o uid=1000
 
 <details>
 
+<summary>Local Cyberchef on port 7777</summary>
+
+```
+docker run -d -p 7777:8080 ghcr.io/gchq/cyberchef:latest
+```
+
+</details>
+
+<details>
+
 <summary>Powershell Download Cradle (Download &#x26; Execute)</summary>
 
 ```powershell
@@ -168,16 +178,11 @@ xclip -selection c /usr/share/webshells/php/php-reverse-shell.php
 <summary>Terminator Shortcuts</summary>
 
 * Ctrl-Shift-E: Split the view vertically.
-
-- Ctrl-Shift-O: Split the view horizontally.
-
+* Ctrl-Shift-O: Split the view horizontally.
 * Ctrl-Shift-P: Focus on the previous view.
-
-- Ctrl-Shift-N: Focus on the next view.
-
+* Ctrl-Shift-N: Focus on the next view.
 * Ctrl-D: Close the view where the focus is on.
-
-- Ctrl-Shift-Q: Exit terminator.
+* Ctrl-Shift-Q: Exit terminator.
 
 </details>
 
