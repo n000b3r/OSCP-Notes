@@ -152,6 +152,18 @@ Can try wordlist`/usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000
 
 <details>
 
+<summary>CORS Origin Fuzzing</summary>
+
+```shellscript
+docker run --rm --network host -v /:/host -it ghcr.io/xmendez/wfuzz wfuzz -w /host/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -H "Origin: http://FUZZ.crossfit.htb" --filter "r.headers.response~'Access-Control-Allow-Origin'" http://gym-club.crossfit.htb/
+```
+
+Signals that the server has established a trust relationship with that specific origin (eg: ftp.crossfit.htb)
+
+</details>
+
+<details>
+
 <summary>Wpscan</summary>
 
 ```bash
@@ -226,10 +238,13 @@ php
 
 <details>
 
-<summary>Wfuzzf</summary>
+<summary>Wfuzz</summary>
 
 ```bash
 wfuzz -w wordlist/general/common.txt http://testphp.vulnweb.com/FUZZ
+
+# Using Docker
+docker run --rm --network host -v /:/host -it ghcr.io/xmendez/wfuzz wfuzz -w /host/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -H "Origin: http://FUZZ.crossfit.htb" --filter "r.headers.response~'Access-Control-Allow-Origin'" http://gym-club.crossfit.htb/
 ```
 
 ```
