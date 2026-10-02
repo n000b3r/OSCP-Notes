@@ -59,6 +59,7 @@
 * [AMSI Bypass](good-exploit-code/osep-good-code.md)
 * [CLM Bypass](exploitation/clm-bypass.md)
 * [JScript](exploitation/jscript.md)
+* [ZipSlip](exploitation/zipslip.md)
 
 ***
 
