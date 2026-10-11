@@ -552,3 +552,14 @@ vmhgfs-fuse /mnt/hgfs  fuse  defaults,allow_other,_netdev  0   0
 ```
 
 </details>
+
+<details>
+
+<summary>IP Address for CentOS</summary>
+
+```
+hostname -I
+```
+
+</details>
+
