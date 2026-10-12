@@ -563,3 +563,12 @@ hostname -I
 
 </details>
 
+<details>
+
+<summary>Rdesktop RDP to host</summary>
+
+```
+rdesktop -a 16 -z -r sound:remote -x b -D -u root -p root 192.168.184.122
+```
+
+</details>
